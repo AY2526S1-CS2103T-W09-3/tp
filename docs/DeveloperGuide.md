@@ -286,7 +286,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | first-time user                            | have demo/sample data preloaded | explore features without starting from scratch                       |
 | `* * *`  | admin                                      | add and delete contacts (students, tutors, parents) | maintain an up-to-date contact database              |
 | `* * *`  | admin                                      | prevent duplicate student records when adding | keep the data accurate                               |
-| `* * *`  | admin                                      | update teachers' contact information | always have their latest details                                    |
+| `* * *`  | admin                                      | update any contact's information | always have their latest details                                    |
 | `* * *`  | admin                                      | view all contacts              | have easy access to all information                                   |
 | `* * *`  | admin                                      | search for parents by their child's name | quickly locate linked contacts                         |
 | `* * *`  | admin                                      | filter tutors and students by subjects | plan and allocate classes                                    |
@@ -419,16 +419,50 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-**Use case: UC05 - Delete a contact**
+**Use case: UC05 - Edit a contact**
+
+**MSS**
+
+1.  Admin searches for the contact by name or lists all contacts
+2.  TutBook displays the contact(s)
+3.  Admin enters edit command with contact index and new field values
+4.  TutBook validates the new values
+5.  TutBook updates the contact information
+6.  TutBook displays success message with updated details
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. Contact not found.
+    * 2a1. TutBook shows error message "Contact not found."
+
+      Use case ends.
+
+* 3a. Invalid index provided.
+    * 3a1. TutBook shows error message "Invalid index. Please use a visible contact index."
+
+      Use case resumes at step 3.
+
+* 4a. Invalid field values (e.g., invalid email or phone format).
+    * 4a1. TutBook shows specific validation error message.
+
+      Use case resumes at step 3.
+
+* 4b. Duplicate contact would be created (same name and phone as existing).
+    * 4b1. TutBook shows error message "This change would create a duplicate contact."
+
+      Use case resumes at step 3.
+
+**Use case: UC06 - Delete a contact**
 
 **MSS**
 
 1.  Admin requests to list all contacts
 2.  TutBook shows a list of contacts
 3.  Admin requests to delete a specific contact by index or by name and phone
-4.  TutBook requests confirmation
-5.  Admin confirms deletion
-6.  TutBook deletes the contact
+4.  TutBook deletes the contact
+5.  TutBook displays confirmation message
 
     Use case ends.
 
@@ -448,7 +482,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 2.
 
-**Use case: UC06 - View all students assigned to a tutor**
+**Use case: UC07 - View all students assigned to a tutor**
 
 **MSS**
 
@@ -492,10 +526,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 11. The application should work on systems with minimum 4GB RAM and 100MB free disk space
 
 #### Reliability Requirements
-12. The system should have 99.5% uptime during operational hours
+12. The system should not lose any data when terminated unexpectedly (e.g., power failure)
 13. Data should be automatically saved after each successful command execution
 14. The system should be able to recover from crashes without data loss (persistent storage)
-15. Backup functionality should be available to prevent complete data loss
+15. The system should validate data integrity when loading saved files and reject corrupted data
 
 #### Security Requirements
 16. Contact information should be stored locally only (no cloud sync for privacy)
@@ -504,7 +538,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### Scalability Requirements
 19. The architecture should support future addition of new contact types without major restructuring
-20. The system should support batch operations for importing/exporting contacts (future enhancement)
+20. The system should handle batch operations efficiently when processing multiple contacts simultaneously
 21. Database design should allow for easy addition of new fields to existing contact types
 
 #### Maintainability Requirements
@@ -518,26 +552,34 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 27. No installation process should be required beyond having Java installed
 28. User data should be stored in a platform-independent format (JSON)
 
+#### Data Integrity Requirements
+29. The system should prevent creation of orphaned relationships when contacts are deleted
+30. All contact fields should be validated before saving to prevent data corruption
+31. The system should maintain referential integrity between linked contacts (parent-student, tutor-student)
+
 #### Accessibility Requirements
-29. The application should support keyboard-only navigation
-30. Font size in the UI should be readable (minimum 11pt)
-31. Color schemes should have sufficient contrast for readability
+32. The application should support keyboard-only navigation
+33. Font size in the UI should be readable (minimum 11pt)
+34. Color schemes should have sufficient contrast for readability
 
 ### Glossary
 
 * **Admin**: A tuition centre administrator or manager who uses TutBook to manage contacts and operations
 * **Academic Year**: The year level of a student (e.g., Primary 1, Secondary 3, JC 1)
 * **Class**: A scheduled tuition session with assigned tutor(s) and student(s) for a specific subject
+* **CLI**: Command Line Interface - A text-based interface where users interact with the system through typed commands
 * **Contact**: A person entry in TutBook, which can be a Student, Tutor, or Parent
+* **CRUD**: Create, Read, Update, Delete - The four basic operations for managing data
 * **Demo Data**: Pre-populated sample data provided for new users to explore TutBook features
 * **Duplicate Contact**: A contact entry that has the same name AND phone number as an existing contact
 * **Enrolled Subjects**: The subjects that a student is taking tuition for
 * **Filter**: A search operation that shows only contacts matching specific criteria (e.g., role, subject)
+* **JSON**: JavaScript Object Notation - A lightweight data format used for storing and exchanging data
 * **Link**: A relationship connection between different contact types (e.g., parent-student, tutor-student)
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **MSS**: Main Success Scenario - The normal flow of events in a use case where nothing goes wrong
 * **Parent**: A contact type representing the parent or guardian of a student
 * **Performance Remarks**: Notes about a student's academic progress and areas needing improvement
-* **Private contact detail**: A contact detail that is not meant to be shared with others
 * **Role**: The type of contact - Student, Tutor, or Parent
 * **Student**: A contact type representing someone receiving tuition
 * **Subject**: An academic subject taught at the tuition centre (e.g., Mathematics, English, Physics)
