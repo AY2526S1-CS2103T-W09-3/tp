@@ -16,8 +16,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/aliensarefake)]
 [[portfolio](team/aliensarefake.md)]
 
-* Role: Developer
-* Responsibilities: Backend Development + Testing
+* Role: Developer & Quality Assurance Lead
+* Responsibilities: Backend Architecture, API Development, Test Strategy, Code Quality
 
 ### Jane Doe
 
