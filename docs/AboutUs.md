@@ -16,18 +16,18 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/aliensarefake)]
 [[portfolio](team/aliensarefake.md)]
 
-- Role: Developer
-- Responsibilities: Backend Development + Testing
+* Role: Team Lead
+* Responsibilities: Backend Architecture, API Development, Test Strategy, Code Quality
 
-### Jane Doe
+### Algebananazzzzz
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/algebananazzzzz.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/algebananazzzzz)]
+[[portfolio](team/algebananazzzzz.md)]
 
-- Role: Team Lead
-- Responsibilities: UI
+* Role: Developer
+* Responsibilities: UI
 
 ### Don Lee Hong Hao
 
@@ -48,12 +48,12 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 - Role: Developer
 - Responsibilities: Dev Ops + Threading
 
-### James Doe
+### Hon Yi Hao
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/yihao03.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/yihao03)]
+[[portfolio](team/yihao.md)]
 
-- Role: Developer
-- Responsibilities: UI
+* Role: Integration
+* Responsibilities: In charge of versioning of the code, maintaining the code repository, integrating various parts of the software to create a whole.
