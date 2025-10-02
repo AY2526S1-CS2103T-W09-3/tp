@@ -19,6 +19,16 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Team Lead
 * Responsibilities: Backend Architecture, API Development, Test Strategy, Code Quality
 
+### Damian Liew Cho Xiang
+
+<img src="images/damiancxliew.png" width="200px">
+
+[[github](http://github.com/damiancxliew)]
+[[portfolio](team/damiancxliew.md)]
+
+* Role: Code Quality
+* Responsibilities: Looks after code quality, ensures adherence to coding standards, etc.
+
 ### Algebananazzzzz
 
 <img src="images/algebananazzzzz.png" width="200px">
