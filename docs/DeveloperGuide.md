@@ -262,13 +262,18 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
+* Tuition centre administrators and managers
+* has a need to manage a significant number of contacts (students, tutors, parents)
+* needs to track relationships between different contact types
+* manages class schedules and student-tutor assignments
+* handles administrative tasks like attendance tracking and fee management
 * prefer desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
+* values efficiency and comprehensive information access
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: Streamline tuition centre management by providing a centralized system to manage contacts, track relationships between students, tutors and parents, and access all critical information at a glance - all through an efficient CLI interface that's faster than traditional GUI applications
 
 
 ### User stories
@@ -277,27 +282,153 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
 | -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| `* * *`  | first-time user                            | have clear list of commands   | learn the features quickly                                            |
+| `* * *`  | first-time user                            | have demo/sample data preloaded | explore features without starting from scratch                       |
+| `* * *`  | admin                                      | add and delete contacts (students, tutors, parents) | maintain an up-to-date contact database              |
+| `* * *`  | admin                                      | prevent duplicate student records when adding | keep the data accurate                               |
+| `* * *`  | admin                                      | update teachers' contact information | always have their latest details                                    |
+| `* * *`  | admin                                      | view all contacts              | have easy access to all information                                   |
+| `* * *`  | admin                                      | search for parents by their child's name | quickly locate linked contacts                         |
+| `* * *`  | admin                                      | filter tutors and students by subjects | plan and allocate classes                                    |
+| `* * *`  | admin                                      | see contacts of students and tutors for each class | track the status of each class                    |
+| `* * *`  | admin                                      | see all assigned students under teachers' profiles | manage their classes easily                       |
+| `* *`    | admin                                      | link parents to multiple children | only need one contact profile to manage all tuition-related information |
+| `* *`    | admin                                      | assign tutors to multiple subjects | reflect real-world teaching responsibilities                      |
+| `* *`    | admin                                      | record attendance for each student | don't need a separate sheet                                       |
+| `* *`    | admin                                      | add performance remarks to students' profiles | monitor academic progress over time                     |
+| `* *`    | admin                                      | tag contacts with labels      | inform tutors to plan follow-ups effectively                         |
+| `* *`    | admin                                      | generate lists of students by academic year | plan exam preparation sessions                          |
+| `* *`    | admin                                      | view tuition schedule          | easily keep track of lesson dates                                     |
+| `*`      | admin                                      | import existing contact lists from Excel/CSV | quickly set up the system without retyping data         |
+| `*`      | admin                                      | export the entire address book in JSON format | back up the data safely                              |
+| `*`      | admin                                      | merge duplicate contacts       | maintain a clean and accurate address book                           |
+| `*`      | admin                                      | track outstanding fees by parents | follow up with reminders                                          |
+| `*`      | admin                                      | view monthly payout summaries  | have transparency on how payments are calculated                      |
+| `*`      | admin                                      | be warned if any classes clash | schedule classes without discrepancies                               |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `TutBook` and the **Actor** is the `admin`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: UC01 - Add a new student**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  Admin enters command to add a new student with name, role, phone, and email
+2.  TutBook validates the input data
+3.  TutBook checks for duplicate contacts
+4.  TutBook adds the student to the database
+5.  TutBook displays success message with student details
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. Invalid input format (e.g., invalid phone number or email).
+    * 2a1. TutBook shows an error message with the specific validation failure.
+
+      Use case ends.
+
+* 3a. Duplicate contact detected (same name and phone number).
+    * 3a1. TutBook shows error message "Contact already exists. Cannot add duplicate."
+
+      Use case ends.
+
+**Use case: UC02 - Link parent to student**
+
+**MSS**
+
+1.  Admin searches for the student by name
+2.  TutBook displays the student's profile
+3.  Admin searches for the parent by name
+4.  TutBook displays the parent's profile
+5.  Admin enters command to link parent to student
+6.  TutBook creates the relationship link
+7.  TutBook displays success message
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. Student not found.
+    * 2a1. TutBook shows error message "Student not found."
+
+      Use case ends.
+
+* 4a. Parent not found.
+    * 4a1. TutBook shows error message "Parent not found."
+
+      Use case ends.
+
+* 6a. Link already exists.
+    * 6a1. TutBook shows message "This relationship already exists."
+
+      Use case ends.
+
+**Use case: UC03 - Search for tutor by subject**
+
+**MSS**
+
+1.  Admin enters filter command with subject parameter
+2.  TutBook searches for all tutors teaching the specified subject
+3.  TutBook displays a list of matching tutors with their details
+4.  Admin views the filtered results
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. No tutors found for the specified subject.
+    * 2a1. TutBook shows message "No tutors found teaching [subject]."
+
+      Use case ends.
+
+* 1a. Invalid subject format.
+    * 1a1. TutBook shows error message with valid subject format.
+
+      Use case ends.
+
+**Use case: UC04 - Record student attendance**
+
+**MSS**
+
+1.  Admin searches for the student by name
+2.  TutBook displays the student's profile
+3.  Admin enters attendance command with date and status (present/absent)
+4.  TutBook validates the date format
+5.  TutBook records the attendance
+6.  TutBook displays confirmation message
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. Student not found.
+    * 2a1. TutBook shows error message "Student not found."
+
+      Use case ends.
+
+* 4a. Invalid date format.
+    * 4a1. TutBook shows error message "Date must be in YYYY-MM-DD format."
+
+      Use case resumes at step 3.
+
+* 5a. Attendance already recorded for this date.
+    * 5a1. TutBook asks for confirmation to overwrite.
+    * 5a2. Admin confirms or cancels.
+
+      Use case ends.
+
+**Use case: UC05 - Delete a contact**
+
+**MSS**
+
+1.  Admin requests to list all contacts
+2.  TutBook shows a list of contacts
+3.  Admin requests to delete a specific contact by index or by name and phone
+4.  TutBook requests confirmation
+5.  Admin confirms deletion
+6.  TutBook deletes the contact
 
     Use case ends.
 
@@ -305,28 +436,116 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The list is empty.
 
-  Use case ends.
+      Use case ends.
 
 * 3a. The given index is invalid.
-
-    * 3a1. AddressBook shows an error message.
+    * 3a1. TutBook shows error message "Invalid index. Please use a visible contact index."
 
       Use case resumes at step 2.
 
-*{More to be added}*
+* 3b. Multiple contacts match the given name.
+    * 3b1. TutBook shows error message "Multiple contacts match this name. Please specify phone number or use index."
+
+      Use case resumes at step 2.
+
+**Use case: UC06 - View all students assigned to a tutor**
+
+**MSS**
+
+1.  Admin enters command to view tutor with tutor's name
+2.  TutBook searches for the tutor
+3.  TutBook retrieves all students assigned to this tutor
+4.  TutBook displays the tutor's profile with list of assigned students
+5.  Admin views the student list with their subjects and schedules
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. Tutor not found.
+    * 2a1. TutBook shows error message "Tutor not found."
+
+      Use case ends.
+
+* 3a. No students assigned to this tutor.
+    * 3a1. TutBook displays tutor profile with message "No students currently assigned."
+
+      Use case ends.
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+#### Performance Requirements
+1. The system should respond to any user command within 2 seconds under normal load conditions
+2. Should be able to hold up to 1000 contacts (combination of students, tutors, and parents) without noticeable sluggishness in performance for typical usage
+3. Search operations should return results within 1 second for databases with up to 1000 contacts
+4. The application should start up within 5 seconds on standard hardware
 
-*{More to be added}*
+#### Usability Requirements
+5. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse
+6. New users should be able to learn basic operations (add, delete, search, view) within 15 minutes with the help documentation
+7. Error messages should clearly indicate what went wrong and how to fix it
+8. Command syntax should be consistent across all features
+
+#### Compatibility Requirements
+9. Should work on any _mainstream OS_ (Windows 10/11, macOS 10.14+, Ubuntu 20.04+) as long as it has Java `17` or above installed
+10. Data files should be portable across different operating systems
+11. The application should work on systems with minimum 4GB RAM and 100MB free disk space
+
+#### Reliability Requirements
+12. The system should have 99.5% uptime during operational hours
+13. Data should be automatically saved after each successful command execution
+14. The system should be able to recover from crashes without data loss (persistent storage)
+15. Backup functionality should be available to prevent complete data loss
+
+#### Security Requirements
+16. Contact information should be stored locally only (no cloud sync for privacy)
+17. The application should not require administrative privileges to run
+18. Data files should be stored in a user-accessible format (JSON) but with data validation on load
+
+#### Scalability Requirements
+19. The architecture should support future addition of new contact types without major restructuring
+20. The system should support batch operations for importing/exporting contacts (future enhancement)
+21. Database design should allow for easy addition of new fields to existing contact types
+
+#### Maintainability Requirements
+22. Code should follow standard Java coding conventions
+23. All public methods should have comprehensive JavaDoc documentation
+24. Test coverage should be at least 70% for critical components
+25. The application should use standard design patterns for extensibility
+
+#### Portability Requirements
+26. The application should be distributed as a single JAR file
+27. No installation process should be required beyond having Java installed
+28. User data should be stored in a platform-independent format (JSON)
+
+#### Accessibility Requirements
+29. The application should support keyboard-only navigation
+30. Font size in the UI should be readable (minimum 11pt)
+31. Color schemes should have sufficient contrast for readability
 
 ### Glossary
 
+* **Admin**: A tuition centre administrator or manager who uses TutBook to manage contacts and operations
+* **Academic Year**: The year level of a student (e.g., Primary 1, Secondary 3, JC 1)
+* **Class**: A scheduled tuition session with assigned tutor(s) and student(s) for a specific subject
+* **Contact**: A person entry in TutBook, which can be a Student, Tutor, or Parent
+* **Demo Data**: Pre-populated sample data provided for new users to explore TutBook features
+* **Duplicate Contact**: A contact entry that has the same name AND phone number as an existing contact
+* **Enrolled Subjects**: The subjects that a student is taking tuition for
+* **Filter**: A search operation that shows only contacts matching specific criteria (e.g., role, subject)
+* **Link**: A relationship connection between different contact types (e.g., parent-student, tutor-student)
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Parent**: A contact type representing the parent or guardian of a student
+* **Performance Remarks**: Notes about a student's academic progress and areas needing improvement
 * **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Role**: The type of contact - Student, Tutor, or Parent
+* **Student**: A contact type representing someone receiving tuition
+* **Subject**: An academic subject taught at the tuition centre (e.g., Mathematics, English, Physics)
+* **Tag**: A label attached to contacts for categorization (e.g., "Exam Prep", "Needs Support")
+* **Tuition Centre**: An educational institution providing supplementary academic instruction
+* **Tutor**: A contact type representing a teacher at the tuition centre
+* **TutBook**: The address book application specifically designed for tuition centre management
+* **Validation**: The process of checking if user input meets the required format and constraints
 
 --------------------------------------------------------------------------------------------------------------------
 
