@@ -16,8 +16,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/aliensarefake)]
 [[portfolio](team/aliensarefake.md)]
 
-* Role: Developer
-* Responsibilities: Backend Development + Testing
+* Role: Team Lead
+* Responsibilities: Backend Architecture, API Development, Test Strategy, Code Quality
 
 ### Damian Liew Cho Xiang
 
@@ -28,6 +28,16 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Code Quality
 * Responsibilities: Looks after code quality, ensures adherence to coding standards, etc.
+
+### Algebananazzzzz
+
+<img src="images/algebananazzzzz.png" width="200px">
+
+[[github](http://github.com/algebananazzzzz)]
+[[portfolio](team/algebananazzzzz.md)]
+
+* Role: Developer
+* Responsibilities: UI
 
 ### Johnny Doe
 
