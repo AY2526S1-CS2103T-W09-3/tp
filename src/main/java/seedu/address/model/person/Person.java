@@ -39,13 +39,13 @@ public abstract class Person {
     }
 
     public static Person newPerson(Name name, Phone phone, Email email,
-                    Address address, Set<Tag> tags, String role) {
-        switch (role.toLowerCase()) {
-        case "student":
+                    Address address, Set<Tag> tags, PersonType role) {
+        switch (role) {
+        case STUDENT:
             return new Student(name, phone, email, address, tags);
-        case "tutor":
+        case TUTOR:
             return new Tutor(name, phone, email, address, tags);
-        case "parent":
+        case PARENT:
             return new Parent(name, phone, email, address, tags);
         default:
             throw new IllegalArgumentException("Invalid role: " + role);
@@ -123,5 +123,7 @@ public abstract class Person {
                         .add("email", email).add("address", address)
                         .add("tags", tags).toString();
     }
+
+    public abstract PersonType getPersonType();
 
 }

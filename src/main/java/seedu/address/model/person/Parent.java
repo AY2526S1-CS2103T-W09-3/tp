@@ -29,4 +29,9 @@ public class Parent extends Person {
     void addChild(Student child) {
         children.add(child);
     }
+
+    @Override
+    public PersonType getPersonType() {
+        return PersonType.PARENT;
+    }
 }

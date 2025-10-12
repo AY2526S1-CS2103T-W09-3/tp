@@ -1,7 +1,6 @@
 package seedu.address.model.person;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
 
 import seedu.address.model.tag.Tag;
@@ -33,5 +32,10 @@ public class Student extends Person {
     public void addParent(Parent parent) {
         parents.add(parent);
         parent.addChild(this);
+    }
+
+    @Override
+    public PersonType getPersonType() {
+        return PersonType.STUDENT;
     }
 }

@@ -1,13 +1,10 @@
 package seedu.address.model.person;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import seedu.address.model.tag.Tag;
 
 public class Tutor extends Person {
-    private ArrayList<Student> students = new ArrayList<>();
-
     /**
      * Constructs a {@code Tutor}.
      *
@@ -20,5 +17,10 @@ public class Tutor extends Person {
     public Tutor(Name name, Phone phone, Email email, Address address,
                     Set<Tag> tags) {
         super(name, phone, email, address, tags);
+    }
+
+    @Override
+    public PersonType getPersonType() {
+        return PersonType.TUTOR;
     }
 }
