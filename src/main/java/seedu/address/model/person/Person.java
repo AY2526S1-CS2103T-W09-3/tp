@@ -11,8 +11,8 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
- * Represents a Person in the address book. Guarantees: details are present and
- * not null, field values are validated, immutable.
+ * Represents a Person in the address book.
+ * Guarantees: details are present and not null, field values are validated, immutable.
  */
 public abstract class Person {
 
@@ -53,14 +53,12 @@ public abstract class Person {
      * @param address Address of the person.
      * @param tags Set of tags associated with the person.
      * @param role The role determining the concrete subtype to instantiate.
-     * @return A {@link Student}, {@link Tutor}, or {@link Parent} instance as
-     *             specified by {@code role}.
-     * @throws IllegalArgumentException if {@code role} is not a supported
-     *             {@link PersonType}.
+     * @return A {@link Student}, {@link Tutor}, or {@link Parent} instance as specified by {@code role}.
+     * @throws IllegalArgumentException if {@code role} is not a supported {@link PersonType}.
      * @throws NullPointerException if any parameter is null.
      */
-    public static Person newPerson(Name name, Phone phone, Email email, Address address,
-                    Set<Tag> tags, PersonType role) {
+    public static Person newPerson(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+                    PersonType role) {
         switch (role) {
         case STUDENT:
             return new Student(name, phone, email, address, tags);
@@ -124,8 +122,7 @@ public abstract class Person {
      * notion of equality between two persons.
      *
      * @param otherPerson The other person to compare against.
-     * @return true if both refer to the same instance, or both have the same
-     *             {@link Name}.
+     * @return true if both refer to the same instance, or both have the same {@link Name}.
      */
     public boolean isSamePerson(Person otherPerson) {
         if (otherPerson == this) {
@@ -154,9 +151,8 @@ public abstract class Person {
         }
 
         Person otherPerson = (Person) other;
-        return name.equals(otherPerson.name) && phone.equals(otherPerson.phone)
-                        && email.equals(otherPerson.email) && address.equals(otherPerson.address)
-                        && tags.equals(otherPerson.tags);
+        return name.equals(otherPerson.name) && phone.equals(otherPerson.phone) && email.equals(otherPerson.email)
+                        && address.equals(otherPerson.address) && tags.equals(otherPerson.tags);
     }
 
     /**
