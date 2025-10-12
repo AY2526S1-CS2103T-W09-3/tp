@@ -16,44 +16,44 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/aliensarefake)]
 [[portfolio](team/aliensarefake.md)]
 
-* Role: Developer
-* Responsibilities: Backend Development + Testing
-
-### Jane Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
 * Role: Team Lead
-* Responsibilities: UI
+* Responsibilities: Backend Architecture, API Development, Test Strategy, Code Quality
 
-### Johnny Doe
+### Damian Liew Cho Xiang
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/damiancxliew.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/damiancxliew)]
+[[portfolio](team/damiancxliew.md)]
 
-* Role: Developer
-* Responsibilities: Data
+* Role: Code Quality
+* Responsibilities: Looks after code quality, ensures adherence to coding standards, etc.
 
-### Jean Doe
+### Algebananazzzzz
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/algebananazzzzz.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
-
-### James Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/algebananazzzzz)]
+[[portfolio](team/algebananazzzzz.md)]
 
 * Role: Developer
 * Responsibilities: UI
+
+### Don Lee Hong Hao
+
+<img src="images/donleehh.png" width="200px">
+
+[[github](http://github.com/DonLeeHH)] [[portfolio](team/donleehh.md)]
+
+- Role: Developer
+- Responsibilities: Data
+
+### Hon Yi Hao
+
+<img src="images/yihao03.png" width="200px">
+
+[[github](http://github.com/yihao03)]
+[[portfolio](team/yihao.md)]
+
+* Role: Integration
+* Responsibilities: In charge of versioning of the code, maintaining the code repository, integrating various parts of the software to create a whole.
