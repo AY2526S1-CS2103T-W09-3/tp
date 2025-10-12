@@ -17,8 +17,7 @@ public class RoleTest {
     @Test
     public void constructor_invalidRole_throwsIllegalArgumentException() {
         String invalidRole = "";
-        assertThrows(IllegalArgumentException.class,
-                        () -> new Role(invalidRole));
+        assertThrows(IllegalArgumentException.class, () -> new Role(invalidRole));
     }
 
     @Test

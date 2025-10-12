@@ -35,8 +35,7 @@ public abstract class Person {
      * @param tags Set of tags associated with the person. Must not be null.
      * @throws NullPointerException if any parameter is null.
      */
-    public Person(Name name, Phone phone, Email email, Address address,
-                    Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -60,8 +59,8 @@ public abstract class Person {
      *             {@link PersonType}.
      * @throws NullPointerException if any parameter is null.
      */
-    public static Person newPerson(Name name, Phone phone, Email email,
-                    Address address, Set<Tag> tags, PersonType role) {
+    public static Person newPerson(Name name, Phone phone, Email email, Address address,
+                    Set<Tag> tags, PersonType role) {
         switch (role) {
         case STUDENT:
             return new Student(name, phone, email, address, tags);
@@ -156,8 +155,7 @@ public abstract class Person {
 
         Person otherPerson = (Person) other;
         return name.equals(otherPerson.name) && phone.equals(otherPerson.phone)
-                        && email.equals(otherPerson.email)
-                        && address.equals(otherPerson.address)
+                        && email.equals(otherPerson.email) && address.equals(otherPerson.address)
                         && tags.equals(otherPerson.tags);
     }
 
@@ -180,9 +178,8 @@ public abstract class Person {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("name", name).add("phone", phone)
-                        .add("email", email).add("address", address)
-                        .add("tags", tags).toString();
+        return new ToStringBuilder(this).add("name", name).add("phone", phone).add("email", email)
+                        .add("address", address).add("tags", tags).toString();
     }
 
     /**
