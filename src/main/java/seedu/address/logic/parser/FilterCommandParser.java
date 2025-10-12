@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON_TYPE;
 
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -16,7 +16,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         requireNonNull(args);
         // In v1.3: tokenize(args, PREFIX_ROLE) and validate role.
         // For S1, we simply return a stub command.
-        ArgumentTokenizer.tokenize(args, PREFIX_ROLE); // no-op to reserve syntax shape
+        ArgumentTokenizer.tokenize(args, PREFIX_PERSON_TYPE); // no-op to reserve syntax shape
         return new FilterCommand();
     }
 }
