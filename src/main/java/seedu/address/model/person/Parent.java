@@ -36,8 +36,11 @@ public class Parent extends Person {
      *
      * @param child the student to associate with this parent
      */
-    void addChild(Student child) {
-        children.add(child);
+    public void addChild(Student child) {
+        if (!children.contains(child)) {
+            children.add(child);
+            child.addParent(this);
+        }
     }
 
     public ArrayList<Student> getChildren() {
