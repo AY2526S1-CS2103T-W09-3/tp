@@ -45,8 +45,10 @@ public class Student extends Person {
      * @param parent the parent to associate with this student; must not be null
      */
     public void addParent(Parent parent) {
-        parents.add(parent);
-        parent.addChild(this);
+        if (!parents.contains(parent)) {
+            parents.add(parent);
+            parent.addChild(this); // maintain bidirectional link
+        }
     }
 
     /**
