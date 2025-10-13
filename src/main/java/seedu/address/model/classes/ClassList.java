@@ -86,4 +86,27 @@ public class ClassList implements Iterable<Class> {
     public void clear() {
         internalList.clear();
     }
+
+
+    /**
+     * Returns a string representation of all classes in this list.
+     *
+     * @return formatted string of class names and tutors
+     */
+    @Override
+    public String toString() {
+        if (internalList.isEmpty()) {
+            return "[No classes available]";
+        }
+
+        StringBuilder sb = new StringBuilder("ClassList:\n");
+        for (Class c : internalList) {
+            sb.append(" - ")
+                    .append(c.getClassName())
+                    .append(" (Tutor: ")
+                    .append(c.getTutor().getName())
+                    .append(")\n");
+        }
+        return sb.toString().trim();
+    }
 }
