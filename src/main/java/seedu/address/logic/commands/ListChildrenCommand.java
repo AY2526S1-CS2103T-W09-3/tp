@@ -5,9 +5,8 @@ import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
 
 import seedu.address.model.Model;
-import seedu.address.model.person.PersonType;
-import seedu.address.model.person.Student;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonType;
 
 /**
  * Lists all children in the address book to the user.
