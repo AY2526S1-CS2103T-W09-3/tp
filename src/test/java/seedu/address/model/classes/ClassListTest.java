@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -108,6 +109,22 @@ public class ClassListTest {
         assertEquals(0, classList.size());
         assertFalse(classList.contains(class1));
         assertFalse(classList.contains(class2));
+    }
+
+    @Test
+    @DisplayName("getClassList returns all classes and is unmodifiable")
+    void getClassList_returnsUnmodifiableList() {
+        classList.addClass(class1);
+        classList.addClass(class2);
+
+        List<Class> list = classList.getClassList();
+        assertEquals(2, list.size());
+        assertTrue(list.contains(class1));
+        assertTrue(list.contains(class2));
+
+        // Ensure unmodifiable
+        assertThrows(UnsupportedOperationException.class, () -> list.add(class1));
+        assertThrows(UnsupportedOperationException.class, () -> list.remove(class1));
     }
 
     @Test

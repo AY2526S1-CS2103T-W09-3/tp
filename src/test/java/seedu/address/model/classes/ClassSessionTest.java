@@ -68,6 +68,34 @@ public class ClassSessionTest {
     }
 
     @Test
+    @DisplayName("Get and set session name, date/time, and location")
+    void gettersSetters_workCorrectly() {
+        parentClass.addStudent(alice);
+
+        LocalDateTime time = LocalDateTime.of(2025, 10, 15, 14, 0);
+        ClassSession session = new ClassSession(parentClass, "Week 5 Tutorial", time, "COM1-B201");
+
+        // getParentClass
+        assertEquals(parentClass, session.getParentClass());
+
+        // getSessionName / setSessionName
+        assertEquals("Week 5 Tutorial", session.getSessionName());
+        session.setSessionName("Updated Week 5 Tutorial");
+        assertEquals("Updated Week 5 Tutorial", session.getSessionName());
+
+        // getDateTime / setDateTime
+        assertEquals(time, session.getDateTime());
+        LocalDateTime newTime = time.plusHours(2);
+        session.setDateTime(newTime);
+        assertEquals(newTime, session.getDateTime());
+
+        // getLocation / setLocation
+        assertEquals("COM1-B201", session.getLocation());
+        session.setLocation("COM1-B202");
+        assertEquals("COM1-B202", session.getLocation());
+    }
+
+    @Test
     @DisplayName("Constructor initializes attendance for all enrolled students")
     void constructor_initializesAttendance() {
         ClassSession session = new ClassSession(
