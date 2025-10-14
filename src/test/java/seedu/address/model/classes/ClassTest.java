@@ -1,6 +1,8 @@
 package seedu.address.model.classes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -10,14 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import seedu.address.model.person.Student;
-import seedu.address.model.person.Tutor;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.Email;
-import seedu.address.model.person.Address;
+import seedu.address.model.person.Student;
+import seedu.address.model.person.Tutor;
 import seedu.address.model.tag.Tag;
-
 /**
  * Unit tests for {@link Class}.
  */

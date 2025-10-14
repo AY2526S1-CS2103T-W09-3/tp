@@ -222,8 +222,7 @@ public class ClassSession {
         return String.format(
                 "%s on %s%s %s",
                 sessionName,
-                dateFormatted,
-                (location != null && !location.isEmpty()) ? " @ " + location : "",
+                dateFormatted, (location != null && !location.isEmpty()) ? " @ " + location : "",
                 attendanceRecord.isEmpty() ? "" : attendanceSummary
         ).trim();
     }
