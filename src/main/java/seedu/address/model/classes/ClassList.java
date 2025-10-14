@@ -11,11 +11,11 @@ import java.util.List;
 public class ClassList implements Iterable<Class> {
 
     /** Internal list of classes. */
-    private final List<Class> internalList;
+    private final List<Class> classes;
 
     /** Constructs an empty ClassList. */
     public ClassList() {
-        this.internalList = new ArrayList<>();
+        this.classes = new ArrayList<>();
     }
 
     /**
@@ -28,7 +28,7 @@ public class ClassList implements Iterable<Class> {
         if (contains(newClass)) {
             throw new IllegalArgumentException("Duplicate class: " + newClass.getClassName());
         }
-        internalList.add(newClass);
+        classes.add(newClass);
     }
 
     /**
@@ -38,7 +38,7 @@ public class ClassList implements Iterable<Class> {
      * @return true if the class was removed successfully
      */
     public boolean removeClass(Class target) {
-        return internalList.remove(target);
+        return classes.remove(target);
     }
 
     /**
@@ -48,7 +48,7 @@ public class ClassList implements Iterable<Class> {
      * @return true if the class exists, false otherwise
      */
     public boolean contains(Class toCheck) {
-        return internalList.contains(toCheck);
+        return classes.contains(toCheck);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ClassList implements Iterable<Class> {
      * @return an unmodifiable list of classes
      */
     public List<Class> getClassList() {
-        return List.copyOf(internalList);
+        return List.copyOf(classes);
     }
 
     /**
@@ -68,7 +68,7 @@ public class ClassList implements Iterable<Class> {
      */
     @Override
     public Iterator<Class> iterator() {
-        return internalList.iterator();
+        return classes.iterator();
     }
 
     /**
@@ -77,14 +77,14 @@ public class ClassList implements Iterable<Class> {
      * @return the size of the class list
      */
     public int size() {
-        return internalList.size();
+        return classes.size();
     }
 
     /**
      * Clears all classes from the list.
      */
     public void clear() {
-        internalList.clear();
+        classes.clear();
     }
 
 
@@ -95,12 +95,12 @@ public class ClassList implements Iterable<Class> {
      */
     @Override
     public String toString() {
-        if (internalList.isEmpty()) {
+        if (classes.isEmpty()) {
             return "[No classes available]";
         }
 
         StringBuilder sb = new StringBuilder("ClassList:\n");
-        for (Class c : internalList) {
+        for (Class c : classes) {
             sb.append(" - ")
                     .append(c.getClassName())
                     .append(" (Tutor: ")
