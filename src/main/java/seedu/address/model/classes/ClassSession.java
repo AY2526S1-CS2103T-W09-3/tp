@@ -147,10 +147,6 @@ public class ClassSession {
      * This method is automatically called during construction.
      */
     public void initializeAttendance() {
-        if (parentClass == null) {
-            throw new IllegalStateException("Parent class not set for session: " + sessionName);
-        }
-
         for (Student s : parentClass.getStudents()) {
             attendanceRecord.putIfAbsent(s, false);
         }

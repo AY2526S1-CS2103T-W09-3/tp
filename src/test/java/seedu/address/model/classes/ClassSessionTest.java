@@ -198,6 +198,7 @@ public class ClassSessionTest {
         assertTrue(summary.contains("(0/2 present)"));
     }
 
+
     @Test
     @DisplayName("Throws exception when constructed with null parent class")
     void constructor_nullParent_throwsException() {
@@ -205,4 +206,61 @@ public class ClassSessionTest {
                 new ClassSession(null, "Week 1", LocalDateTime.now(), "COM1")
         );
     }
+
+    @Test
+    @DisplayName("toString omits location when null")
+    void toString_omitsLocation_whenNull() {
+        ClassSession s = new ClassSession(parentClass, "Lesson 3", LocalDateTime.now(), null);
+        s.initializeAttendance();
+        String result = s.toString();
+        assertFalse(result.contains("@"), "Expected no '@' when location is null");
+    }
+
+    @Test
+    @DisplayName("toString omits attendance summary when record empty")
+    void toString_omitsAttendanceSummary_whenEmptyRecord() {
+        ClassSession s = new ClassSession(parentClass, "Lesson 4", LocalDateTime.now(), "COM1");
+        // do not initialize attendance to keep it empty
+        String result = s.toString();
+        assertFalse(result.contains("present"), "Expected no attendance summary for empty attendanceRecord");
+    }
+
+    @Test
+    @DisplayName("equals returns true for same object instance")
+    void equals_sameInstance_returnsTrue() {
+        ClassSession s = new ClassSession(parentClass, "Lesson X", LocalDateTime.now(), "COM1");
+        assertTrue(s.equals(s));
+    }
+
+    @Test
+    @DisplayName("equals returns false for null object")
+    void equals_null_returnsFalse() {
+        ClassSession s = new ClassSession(parentClass, "Lesson X", LocalDateTime.now(), "COM1");
+        assertFalse(s.equals(null));
+    }
+
+    @Test
+    @DisplayName("equals returns false for different object type")
+    void equals_differentType_returnsFalse() {
+        ClassSession s = new ClassSession(parentClass, "Lesson X", LocalDateTime.now(), "COM1");
+        assertFalse(s.equals("Not a session"));
+    }
+
+    @Test
+    @DisplayName("equals returns false for different parent class")
+    void equals_differentParent_returnsFalse() {
+        Class anotherClass = new Class(tutor, "CS2103T T13");
+        ClassSession s1 = new ClassSession(parentClass, "Lesson X", LocalDateTime.of(2025, 10, 20, 9, 0), "COM1");
+        ClassSession s2 = new ClassSession(anotherClass, "Lesson X", LocalDateTime.of(2025, 10, 20, 9, 0), "COM1");
+        assertNotEquals(s1, s2);
+    }
+
+    @Test
+    @DisplayName("equals returns false for different session name")
+    void equals_differentName_returnsFalse() {
+        ClassSession s1 = new ClassSession(parentClass, "Lesson A", LocalDateTime.of(2025, 10, 21, 9, 0), "COM1");
+        ClassSession s2 = new ClassSession(parentClass, "Lesson B", LocalDateTime.of(2025, 10, 21, 9, 0), "COM1");
+        assertNotEquals(s1, s2);
+    }
+
 }
