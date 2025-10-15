@@ -2,28 +2,37 @@ package seedu.address.model.classroom;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Represents a tuition class identified by its {@link ClassName}.
+ */
 public class TuitionClass {
     private final ClassName name;
 
+    /**
+     * Creates a {@code TuitionClass} with the given name.
+     * @param name non-null class name
+     */
     public TuitionClass(ClassName name) {
         requireNonNull(name);
         this.name = name;
     }
 
-    public ClassName getName() { return name; }
+    public ClassName getName() {
+        return name;
+    }
 
     /** Identity check: same class name means same class. */
     public boolean isSameClass(TuitionClass other) {
         return other != null && name.equals(other.name);
     }
 
-    @Override public String toString() { 
+    @Override public String toString() {
         return name.toString(); }
 
     @Override public boolean equals(Object o) {
         return o == this || (o instanceof TuitionClass && name.equals(((TuitionClass) o).name));
     }
 
-    @Override public int hashCode() { 
+    @Override public int hashCode() {
         return name.hashCode(); }
 }

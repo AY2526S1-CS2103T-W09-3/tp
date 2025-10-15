@@ -30,7 +30,8 @@ class JsonSerializableAddressBook {
      * Constructs a {@code JsonSerializableAddressBook} with the given persons.
      */
     @JsonCreator
-    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons, @JsonProperty("classes") List<JsonAdaptedClass> classes) {
+    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons,
+                                       @JsonProperty("classes") List<JsonAdaptedClass> classes) {
         this.persons.addAll(persons);
         this.classes.addAll(classes);
     }
@@ -64,7 +65,7 @@ class JsonSerializableAddressBook {
             if (addressBook.hasClass(model)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_CLASS);
             }
-            addressBook.addClass(model);    
+            addressBook.addClass(model);
         }
         return addressBook;
     }

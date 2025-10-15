@@ -7,6 +7,9 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.classroom.ClassName;
 import seedu.address.model.classroom.TuitionClass;
 
+/**
+ * Jackson-friendly version of {@link TuitionClass}.
+ */
 public class JsonAdaptedClass {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Class's %s field is missing!";
 
@@ -21,6 +24,10 @@ public class JsonAdaptedClass {
         this.name = source.getName().value;
     }
 
+    /**
+     * Converts this Jackson-friendly object to the model's {@code TuitionClass}.
+     * @throws IllegalValueException if any field is invalid or missing
+     */
     public TuitionClass toModelType() throws IllegalValueException {
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "name"));

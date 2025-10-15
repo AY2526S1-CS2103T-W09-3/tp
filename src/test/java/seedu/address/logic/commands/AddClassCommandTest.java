@@ -41,7 +41,8 @@ public class AddClassCommandTest {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         model.addClass(validClass);
 
-        assertThrows(CommandException.class, AddClassCommand.MESSAGE_DUPLICATE_CLASS, () -> addClassCommand.execute(model));
+        assertThrows(CommandException.class, AddClassCommand.MESSAGE_DUPLICATE_CLASS, (
+                ) -> addClassCommand.execute(model));
     }
 
     @Test

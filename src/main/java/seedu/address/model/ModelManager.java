@@ -120,7 +120,7 @@ public class ModelManager implements Model {
         addressBook.addClass(c);
         updateFilteredClassList(PREDICATE_SHOW_ALL_CLASSES);
     }
-    
+
     @Override
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
@@ -131,8 +131,8 @@ public class ModelManager implements Model {
     //=========== Filtered Person List Accessors =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} or list of {@code TuitionClass} backed by the internal list of
-     * {@code versionedAddressBook}
+     * Returns an unmodifiable view of the list of {@code Person} or list of {@code TuitionClass}
+     * backed by the internal list of {@code versionedAddressBook}
      */
     @Override
     public ObservableList<Person> getFilteredPersonList() {
