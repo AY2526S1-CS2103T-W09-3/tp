@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.model.AddressBook;
+import seedu.address.model.classroom.ClassName;
+import seedu.address.model.classroom.TuitionClass;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonType;
 
@@ -75,6 +77,8 @@ public class TypicalPersons {
         for (Person person : getTypicalPersons()) {
             ab.addPerson(person);
         }
+        // Add a sample class for completeness
+        ab.addClass(new TuitionClass(new ClassName("Sec1-Math-A")));
         return ab;
     }
 

@@ -64,5 +64,8 @@
       "role": "STUDENT",
       "tags": []
     }
-  ]
+  ],
+  "classes" : [ {
+    "name" : "Sec1-Math-A"
+  } ]
 }
