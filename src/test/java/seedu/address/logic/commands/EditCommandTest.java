@@ -24,7 +24,10 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Parent;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonType;
+import seedu.address.model.person.Student;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 
@@ -187,16 +190,16 @@ public class EditCommandTest {
 
         // Create parent and student
         Person parent = new PersonBuilder().withName("Parent").withPhone("91234567")
-                .withPersonType(seedu.address.model.person.PersonType.PARENT).build();
+                .withPersonType(PersonType.PARENT).build();
         Person student = new PersonBuilder().withName("Student").withPhone("98765432")
-                .withPersonType(seedu.address.model.person.PersonType.STUDENT).build();
+                .withPersonType(PersonType.STUDENT).build();
 
         modelWithRelationships.addPerson(parent);
         modelWithRelationships.addPerson(student);
 
         // Establish relationship
-        seedu.address.model.person.Student studentCast = (seedu.address.model.person.Student) student;
-        seedu.address.model.person.Parent parentCast = (seedu.address.model.person.Parent) parent;
+        Student studentCast = (Student) student;
+        Parent parentCast = (Parent) parent;
         studentCast.addParent(parentCast);
 
         // Edit student's phone
@@ -210,10 +213,8 @@ public class EditCommandTest {
         Person editedStudent = modelWithRelationships.getFilteredPersonList().get(1);
 
         // Verify bidirectional relationship maintained
-        assertTrue(((seedu.address.model.person.Student) editedStudent).getParents()
-                .contains(parent));
-        assertTrue(((seedu.address.model.person.Parent) parent).getChildren()
-                .contains(editedStudent));
+        assertTrue(((Student) editedStudent).getParents().contains(parent));
+        assertTrue(((Parent) parent).getChildren().contains(editedStudent));
     }
 
     @Test
@@ -222,16 +223,16 @@ public class EditCommandTest {
 
         // Create parent and student
         Person parent = new PersonBuilder().withName("Parent").withPhone("91234567")
-                .withPersonType(seedu.address.model.person.PersonType.PARENT).build();
+                .withPersonType(PersonType.PARENT).build();
         Person student = new PersonBuilder().withName("Student").withPhone("98765432")
-                .withPersonType(seedu.address.model.person.PersonType.STUDENT).build();
+                .withPersonType(PersonType.STUDENT).build();
 
         modelWithRelationships.addPerson(parent);
         modelWithRelationships.addPerson(student);
 
         // Establish relationship
-        seedu.address.model.person.Parent parentCast = (seedu.address.model.person.Parent) parent;
-        seedu.address.model.person.Student studentCast = (seedu.address.model.person.Student) student;
+        Parent parentCast = (Parent) parent;
+        Student studentCast = (Student) student;
         parentCast.addChild(studentCast);
 
         // Edit parent's phone
@@ -245,10 +246,8 @@ public class EditCommandTest {
         Person editedParent = modelWithRelationships.getFilteredPersonList().get(0);
 
         // Verify bidirectional relationship maintained
-        assertTrue(((seedu.address.model.person.Parent) editedParent).getChildren()
-                .contains(student));
-        assertTrue(((seedu.address.model.person.Student) student).getParents()
-                .contains(editedParent));
+        assertTrue(((Parent) editedParent).getChildren().contains(student));
+        assertTrue(((Student) student).getParents().contains(editedParent));
     }
 
     @Test
@@ -257,21 +256,21 @@ public class EditCommandTest {
 
         // Create parent and student
         Person parent = new PersonBuilder().withName("Parent").withPhone("91234567")
-                .withPersonType(seedu.address.model.person.PersonType.PARENT).build();
+                .withPersonType(PersonType.PARENT).build();
         Person student = new PersonBuilder().withName("Student").withPhone("98765432")
-                .withPersonType(seedu.address.model.person.PersonType.STUDENT).build();
+                .withPersonType(PersonType.STUDENT).build();
 
         modelWithRelationships.addPerson(parent);
         modelWithRelationships.addPerson(student);
 
         // Establish relationship
-        seedu.address.model.person.Student studentCast = (seedu.address.model.person.Student) student;
-        seedu.address.model.person.Parent parentCast = (seedu.address.model.person.Parent) parent;
+        Student studentCast = (Student) student;
+        Parent parentCast = (Parent) parent;
         studentCast.addParent(parentCast);
 
         // Change student to tutor
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withPersonType(seedu.address.model.person.PersonType.TUTOR).build();
+                .withPersonType(PersonType.TUTOR).build();
         EditCommand editCommand = new EditCommand(Index.fromOneBased(2), descriptor);
 
         editCommand.execute(modelWithRelationships);
@@ -280,7 +279,31 @@ public class EditCommandTest {
         Person parentFromModel = modelWithRelationships.getFilteredPersonList().get(0);
 
         // Verify parent no longer has student as child
-        assertEquals(0, ((seedu.address.model.person.Parent) parentFromModel).getChildren().size());
+        assertEquals(0, ((Parent) parentFromModel).getChildren().size());
+    }
+
+    @Test
+    public void execute_editTutor_noRelationshipLogic() throws Exception {
+        Model modelWithRelationships = new ModelManager(new AddressBook(), new UserPrefs());
+
+        // Create a tutor
+        Person tutor = new PersonBuilder().withName("Tutor").withPhone("91234567")
+                .withPersonType(PersonType.TUTOR).build();
+
+        modelWithRelationships.addPerson(tutor);
+
+        // Edit tutor's phone
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withPhone("99999999").build();
+        EditCommand editCommand = new EditCommand(Index.fromOneBased(1), descriptor);
+
+        editCommand.execute(modelWithRelationships);
+
+        // Get edited tutor
+        Person editedTutor = modelWithRelationships.getFilteredPersonList().get(0);
+
+        // Verify tutor was edited (no relationship logic should execute for tutors)
+        assertEquals(PersonType.TUTOR, editedTutor.getPersonType());
     }
 
     @Test
@@ -289,21 +312,21 @@ public class EditCommandTest {
 
         // Create parent and student
         Person parent = new PersonBuilder().withName("Parent").withPhone("91234567")
-                .withPersonType(seedu.address.model.person.PersonType.PARENT).build();
+                .withPersonType(PersonType.PARENT).build();
         Person student = new PersonBuilder().withName("Student").withPhone("98765432")
-                .withPersonType(seedu.address.model.person.PersonType.STUDENT).build();
+                .withPersonType(PersonType.STUDENT).build();
 
         modelWithRelationships.addPerson(parent);
         modelWithRelationships.addPerson(student);
 
         // Establish relationship
-        seedu.address.model.person.Parent parentCast = (seedu.address.model.person.Parent) parent;
-        seedu.address.model.person.Student studentCast = (seedu.address.model.person.Student) student;
+        Parent parentCast = (Parent) parent;
+        Student studentCast = (Student) student;
         parentCast.addChild(studentCast);
 
         // Change parent to tutor
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withPersonType(seedu.address.model.person.PersonType.TUTOR).build();
+                .withPersonType(PersonType.TUTOR).build();
         EditCommand editCommand = new EditCommand(Index.fromOneBased(1), descriptor);
 
         editCommand.execute(modelWithRelationships);
@@ -312,7 +335,7 @@ public class EditCommandTest {
         Person studentFromModel = modelWithRelationships.getFilteredPersonList().get(1);
 
         // Verify student no longer has parent
-        assertEquals(0, ((seedu.address.model.person.Student) studentFromModel).getParents().size());
+        assertEquals(0, ((Student) studentFromModel).getParents().size());
     }
 
 }
