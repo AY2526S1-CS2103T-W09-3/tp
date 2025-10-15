@@ -1,6 +1,9 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_OLD_CLASS;
 
 import seedu.address.logic.commands.EditClassCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -16,20 +19,19 @@ public class EditClassCommandParser implements Parser<EditClassCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public EditClassCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
+        requireNonNull(args);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_OLD_CLASS, PREFIX_CLASS);
+
+        if (!argMultimap.getValue(PREFIX_OLD_CLASS).isPresent()
+                || !argMultimap.getValue(PREFIX_CLASS).isPresent()
+                || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditClassCommand.MESSAGE_USAGE));
         }
 
-        String[] classNames = trimmedArgs.split("\\s+", 2);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_OLD_CLASS, PREFIX_CLASS);
 
-        if (classNames.length != 2) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditClassCommand.MESSAGE_USAGE));
-        }
-
-        String oldClassName = classNames[0];
-        String newClassName = classNames[1];
+        String oldClassName = argMultimap.getValue(PREFIX_OLD_CLASS).get();
+        String newClassName = argMultimap.getValue(PREFIX_CLASS).get();
 
         return new EditClassCommand(oldClassName, newClassName);
     }

@@ -60,4 +60,9 @@ public class DeleteClassCommand extends Command {
         DeleteClassCommand otherCommand = (DeleteClassCommand) other;
         return className.equals(otherCommand.className);
     }
+
+    @Override
+    public int hashCode() {
+        return className.hashCode();
+    }
 }

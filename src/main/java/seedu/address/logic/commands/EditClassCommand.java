@@ -16,8 +16,8 @@ public class EditClassCommand extends Command {
     public static final String COMMAND_WORD = "editclass";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the name of an existing class.\n"
-            + "Parameters: OLD_CLASS_NAME NEW_CLASS_NAME\n"
-            + "Example: " + COMMAND_WORD + " Sec2-Math-A Sec3-Math-A";
+            + "Parameters: o/OLD_CLASS_NAME c/NEW_CLASS_NAME\n"
+            + "Example: " + COMMAND_WORD + " o/Sec2-Math-A c/Sec3-Math-A";
 
     public static final String MESSAGE_EDIT_CLASS_SUCCESS = "Edited class from %1$s to %2$s";
     public static final String MESSAGE_CLASS_NOT_FOUND = "Class %1$s does not exist";
@@ -72,5 +72,10 @@ public class EditClassCommand extends Command {
         EditClassCommand otherCommand = (EditClassCommand) other;
         return oldClassName.equals(otherCommand.oldClassName)
                 && newClassName.equals(otherCommand.newClassName);
+    }
+
+    @Override
+    public int hashCode() {
+        return oldClassName.hashCode() + newClassName.hashCode();
     }
 }

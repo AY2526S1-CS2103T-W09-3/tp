@@ -1,0 +1,42 @@
+# Manual Test Script for EditClass and DeleteClass Commands
+# Run these commands in the application to verify functionality
+
+# 1. First, add some test classes
+addclass Math101
+addclass Physics201
+addclass Chemistry301
+addclass Biology401
+addclass Advanced Math
+
+# 2. Test EditClass - Successful case
+# Should rename Math101 to Mathematics101
+editclass o/Math101 c/Mathematics101
+
+# 3. Test EditClass - Non-existent class (should show error)
+editclass o/NonExistentClass c/NewName
+
+# 4. Test EditClass - Duplicate class name (should show error)
+editclass o/Physics201 c/Chemistry301
+
+# 5. Test EditClass with spaces in name (CRITICAL TEST)
+# Should successfully rename class with spaces in name
+editclass o/Advanced Math c/Honors Mathematics
+
+# 6. Test EditClass with spaces in both names
+editclass o/Honors Mathematics c/AP Calculus
+
+# 7. Test DeleteClass - Successful case
+# Should delete Chemistry301
+deleteclass Chemistry301
+
+# 8. Test DeleteClass - Non-existent class (should show error)
+deleteclass NonExistentClass
+
+# 9. Test DeleteClass with class that was renamed
+deleteclass Mathematics101
+
+# 10. Test DeleteClass with spaces in name
+deleteclass AP Calculus
+
+# 11. Verify final state with listclasses
+listclasses
