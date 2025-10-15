@@ -49,6 +49,25 @@ public class UniqueClassList implements Iterable<TuitionClass> {
     }
 
     /**
+     * Replaces the tuition class {@code target} in the list with {@code editedClass}.
+     */
+    public void setClass(TuitionClass target, TuitionClass editedClass) {
+        requireNonNull(target);
+        requireNonNull(editedClass);
+
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new ClassNotFoundException();
+        }
+
+        if (!target.isSameClass(editedClass) && contains(editedClass)) {
+            throw new DuplicateClassException();
+        }
+
+        internalList.set(index, editedClass);
+    }
+
+    /**
      * Removes the equivalent tuition class from the list.
      */
     public void remove(TuitionClass toRemove) {

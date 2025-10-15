@@ -150,6 +150,20 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Replaces the given tuition class {@code target} in the list with {@code editedClass}.
+     * <p>
+     * {@code target} must exist in the address book.
+     * The identity of {@code editedClass} must not be the same as another existing class.
+     *
+     * @param target       Class to replace.
+     * @param editedClass New class replacing the target.
+     */
+    public void setClass(TuitionClass target, TuitionClass editedClass) {
+        requireNonNull(editedClass);
+        classes.setClass(target, editedClass);
+    }
+
+    /**
      * Removes {@code tuitionClass} from this {@code AddressBook}.
      * <p>
      * {@code tuitionClass} must exist in the address book.
