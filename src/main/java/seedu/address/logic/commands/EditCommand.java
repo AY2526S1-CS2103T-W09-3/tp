@@ -103,27 +103,25 @@ public class EditCommand extends Command {
 
         if (personType == PersonType.STUDENT) {
             Student studentToEdit = (Student) personToEdit;
-            Student editedStudent = (Student) editedPerson;
             if (isTypeEdited) {
-                // Map through parents and remove this student)
+                // Type changed, remove this student from all parents
                 studentToEdit.removeChildFromParents();
             } else {
+                // Type unchanged, update bidirectional relationships
+                Student editedStudent = (Student) editedPerson;
                 studentToEdit.editParentToChildMappings(editedStudent);
             }
         } else if (personType == PersonType.PARENT) {
             Parent parentToEdit = (Parent) personToEdit;
-            Parent editedParent = (Parent) editedPerson;
             if (isTypeEdited) {
-                // Map through parents and remove this student)
+                // Type changed, remove this parent from all children
                 parentToEdit.removeParentFromChildren();
             } else {
+                // Type unchanged, update bidirectional relationships
+                Parent editedParent = (Parent) editedPerson;
                 parentToEdit.editChildToParentMappings(editedParent);
             }
         }
-        // If role has changed (and if student / parent)
-        // Need to remove it from student/parent relationship
-        // If not, setParent or setChild accordingly
-        // To do that, need to loop through each parent and setChild.
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS,
                         Messages.format(editedPerson)));
     }

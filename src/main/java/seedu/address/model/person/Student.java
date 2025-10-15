@@ -56,6 +56,10 @@ public class Student extends Person {
         }
     }
 
+    public ArrayList<Parent> getParents() {
+        return parents;
+    }
+
     /**
      * Changes the parent to the newly appointed parent
      */
