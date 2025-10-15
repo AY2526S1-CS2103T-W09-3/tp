@@ -1,9 +1,14 @@
 package seedu.address.model.person;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
 import java.util.ArrayList;
 import java.util.Set;
 
+import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
+
 
 /**
  * Represents a Student in the address book. A Student is a {@link Person} that
@@ -49,6 +54,60 @@ public class Student extends Person {
             parents.add(parent);
             parent.addChild(this); // maintain bidirectional link
         }
+    }
+
+    public ArrayList<Parent> getParents() {
+        return parents;
+    }
+
+    /**
+     * Changes the parent to the newly appointed parent
+     */
+    public void setParent(Parent target, Parent editedParent) {
+        requireAllNonNull(target, editedParent);
+
+        int index = parents.indexOf(target);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+
+        if (!target.isSamePerson(editedParent) && parents.contains(editedParent)) {
+            throw new DuplicatePersonException();
+        }
+
+        parents.set(index, editedParent);
+    }
+
+
+    /**
+     * Changes all parent's child to point to the newly editedChild instead
+     * and populates the editedChild's parents list.
+     */
+    public void editParentToChildMappings(Student editedChild) {
+        parents.forEach(parent -> {
+            parent.setChild(this, editedChild);
+            editedChild.parents.add(parent);
+        });
+    }
+
+    /**
+     * Remove parent from parents list
+     */
+    public void removeParent(Parent parentToRemove) {
+
+        int index = parents.indexOf(parentToRemove);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+
+        parents.remove(index);
+    }
+
+    /**
+     * Remove child from parents' list of children
+     */
+    public void removeChildFromParents() {
+        parents.forEach(parent -> parent.removeChild(this));
     }
 
     /**

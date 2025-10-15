@@ -1,8 +1,12 @@
 package seedu.address.model.person;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
 import java.util.ArrayList;
 import java.util.Set;
 
+import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -46,6 +50,54 @@ public class Parent extends Person {
     public ArrayList<Student> getChildren() {
         return children;
     }
+
+    public void setChild(Student target, Student editedChild) {
+        requireAllNonNull(target, editedChild);
+
+        int index = children.indexOf(target);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+
+        if (!target.isSamePerson(editedChild) && children.contains(editedChild)) {
+            throw new DuplicatePersonException();
+        }
+
+        children.set(index, editedChild);
+    }
+
+
+    /**
+     * Changes all children's parent to point to the newly editedParent instead
+     * and populates the editedParent's children list.
+     */
+    public void editChildToParentMappings(Parent editedParent) {
+        children.forEach(child -> {
+            child.setParent(this, editedParent);
+            editedParent.children.add(child);
+        });
+    }
+
+    /**
+     * Remove this parent from children's parents list
+     */
+    public void removeParentFromChildren() {
+        children.forEach(child -> child.removeParent(this));
+    }
+
+    /**
+     * Remove child from children list
+     */
+    public void removeChild(Student childToRemove) {
+        int index = children.indexOf(childToRemove);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+
+        children.remove(index);
+    }
+
+
 
     /**
      * Returns the type of this person.

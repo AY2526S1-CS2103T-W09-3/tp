@@ -97,4 +97,148 @@ public class StudentTest {
                         + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
+
+    @Test
+    public void addParent_validParent_success() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent parent = (Parent) new PersonBuilder().withPersonType(PersonType.PARENT).build();
+
+        student.addParent(parent);
+
+        assertTrue(student.getParents().contains(parent));
+        assertEquals(1, student.getParents().size());
+    }
+
+    @Test
+    public void addParent_duplicateParent_notAdded() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent parent = (Parent) new PersonBuilder().withPersonType(PersonType.PARENT).build();
+
+        student.addParent(parent);
+        student.addParent(parent); // Try to add duplicate
+
+        assertEquals(1, student.getParents().size());
+    }
+
+    @Test
+    public void setParent_validParent_success() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent oldParent = (Parent) new PersonBuilder().withName("Old Parent")
+                .withPersonType(PersonType.PARENT).build();
+        Parent newParent = (Parent) new PersonBuilder().withName("New Parent")
+                .withPersonType(PersonType.PARENT).build();
+
+        student.addParent(oldParent);
+        student.setParent(oldParent, newParent);
+
+        assertFalse(student.getParents().contains(oldParent));
+        assertTrue(student.getParents().contains(newParent));
+        assertEquals(1, student.getParents().size());
+    }
+
+    @Test
+    public void setParent_nonExistentParent_throwsPersonNotFoundException() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent existingParent = (Parent) new PersonBuilder().withName("Existing")
+                .withPersonType(PersonType.PARENT).build();
+        Parent nonExistentParent = (Parent) new PersonBuilder().withName("Non Existent")
+                .withPersonType(PersonType.PARENT).build();
+        Parent newParent = (Parent) new PersonBuilder().withName("New")
+                .withPersonType(PersonType.PARENT).build();
+
+        student.addParent(existingParent);
+
+        assertThrows(seedu.address.model.person.exceptions.PersonNotFoundException.class, () ->
+                student.setParent(nonExistentParent, newParent));
+    }
+
+    @Test
+    public void setParent_duplicateParent_throwsDuplicatePersonException() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent parent1 = (Parent) new PersonBuilder().withName("Parent 1")
+                .withPersonType(PersonType.PARENT).build();
+        Parent parent2 = (Parent) new PersonBuilder().withName("Parent 2")
+                .withPersonType(PersonType.PARENT).build();
+
+        student.addParent(parent1);
+        student.addParent(parent2);
+
+        assertThrows(seedu.address.model.person.exceptions.DuplicatePersonException.class, () ->
+                student.setParent(parent1, parent2));
+    }
+
+    @Test
+    public void editParentToChildMappings_updatesParentsAndPopulatesNewStudent() {
+        Student oldStudent = (Student) new PersonBuilder().withName("Old Student")
+                .withPersonType(PersonType.STUDENT).build();
+        Student newStudent = (Student) new PersonBuilder().withName("New Student")
+                .withPersonType(PersonType.STUDENT).build();
+        Parent parent1 = (Parent) new PersonBuilder().withName("Parent 1")
+                .withPersonType(PersonType.PARENT).build();
+        Parent parent2 = (Parent) new PersonBuilder().withName("Parent 2")
+                .withPersonType(PersonType.PARENT).build();
+
+        // Set up bidirectional relationships
+        oldStudent.addParent(parent1);
+        oldStudent.addParent(parent2);
+
+        // Edit student
+        oldStudent.editParentToChildMappings(newStudent);
+
+        // Verify new student has all parents
+        assertEquals(2, newStudent.getParents().size());
+        assertTrue(newStudent.getParents().contains(parent1));
+        assertTrue(newStudent.getParents().contains(parent2));
+    }
+
+    @Test
+    public void removeParent_validParent_success() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent parent = (Parent) new PersonBuilder().withPersonType(PersonType.PARENT).build();
+
+        student.addParent(parent);
+        student.removeParent(parent);
+
+        assertFalse(student.getParents().contains(parent));
+        assertEquals(0, student.getParents().size());
+    }
+
+    @Test
+    public void removeParent_nonExistentParent_throwsPersonNotFoundException() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent parent = (Parent) new PersonBuilder().withPersonType(PersonType.PARENT).build();
+
+        assertThrows(seedu.address.model.person.exceptions.PersonNotFoundException.class, () ->
+                student.removeParent(parent));
+    }
+
+    @Test
+    public void removeChildFromParents_removesChildFromAllParents() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        Parent parent1 = (Parent) new PersonBuilder().withName("Parent 1")
+                .withPersonType(PersonType.PARENT).build();
+        Parent parent2 = (Parent) new PersonBuilder().withName("Parent 2")
+                .withPersonType(PersonType.PARENT).build();
+
+        // Set up relationships
+        student.addParent(parent1);
+        student.addParent(parent2);
+
+        // Verify parents have student
+        assertTrue(parent1.getChildren().contains(student));
+        assertTrue(parent2.getChildren().contains(student));
+
+        // Remove student from parents
+        student.removeChildFromParents();
+
+        // Verify student removed from all parents
+        assertFalse(parent1.getChildren().contains(student));
+        assertFalse(parent2.getChildren().contains(student));
+    }
+
+    @Test
+    public void getPersonType_returnsStudent() {
+        Student student = (Student) new PersonBuilder().withPersonType(PersonType.STUDENT).build();
+        assertEquals(PersonType.STUDENT, student.getPersonType());
+    }
 }

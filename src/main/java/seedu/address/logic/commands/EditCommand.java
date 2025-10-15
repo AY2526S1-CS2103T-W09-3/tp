@@ -24,10 +24,13 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Parent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonType;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Student;
 import seedu.address.model.tag.Tag;
+
 
 /**
  * Edits the details of an existing person in the address book.
@@ -88,6 +91,37 @@ public class EditCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        // TODO:
+        // Check if person is student / parent
+        PersonType personType = personToEdit.getPersonType();
+        PersonType editedType = editedPerson.getPersonType();
+        boolean isTypeEdited = false;
+
+        if (!editedType.equals(personType)) {
+            isTypeEdited = true;
+        }
+
+        if (personType == PersonType.STUDENT) {
+            Student studentToEdit = (Student) personToEdit;
+            if (isTypeEdited) {
+                // Type changed, remove this student from all parents
+                studentToEdit.removeChildFromParents();
+            } else {
+                // Type unchanged, update bidirectional relationships
+                Student editedStudent = (Student) editedPerson;
+                studentToEdit.editParentToChildMappings(editedStudent);
+            }
+        } else if (personType == PersonType.PARENT) {
+            Parent parentToEdit = (Parent) personToEdit;
+            if (isTypeEdited) {
+                // Type changed, remove this parent from all children
+                parentToEdit.removeParentFromChildren();
+            } else {
+                // Type unchanged, update bidirectional relationships
+                Parent editedParent = (Parent) editedPerson;
+                parentToEdit.editChildToParentMappings(editedParent);
+            }
+        }
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS,
                         Messages.format(editedPerson)));
     }
