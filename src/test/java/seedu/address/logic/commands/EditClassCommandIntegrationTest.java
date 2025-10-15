@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +44,7 @@ public class EditClassCommandIntegrationTest {
 
         // Verify the class is edited
         TuitionClass editedClass = new TuitionClass(new ClassName("Mathematics101"));
-        assert(model.hasClass(editedClass));
+        assertTrue(model.hasClass(editedClass));
     }
 
     @Test
@@ -81,12 +83,12 @@ public class EditClassCommandIntegrationTest {
         new EditClassCommand("Chemistry301", "Chem301").execute(model);
 
         // Verify all edits
-        assert(model.hasClass(new TuitionClass(new ClassName("Mathematics101"))));
-        assert(model.hasClass(new TuitionClass(new ClassName("Physics202"))));
-        assert(model.hasClass(new TuitionClass(new ClassName("Chem301"))));
-        assert(!model.hasClass(new TuitionClass(new ClassName("Math101"))));
-        assert(!model.hasClass(new TuitionClass(new ClassName("Physics201"))));
-        assert(!model.hasClass(new TuitionClass(new ClassName("Chemistry301"))));
+        assertTrue(model.hasClass(new TuitionClass(new ClassName("Mathematics101"))));
+        assertTrue(model.hasClass(new TuitionClass(new ClassName("Physics202"))));
+        assertTrue(model.hasClass(new TuitionClass(new ClassName("Chem301"))));
+        assertFalse(model.hasClass(new TuitionClass(new ClassName("Math101"))));
+        assertFalse(model.hasClass(new TuitionClass(new ClassName("Physics201"))));
+        assertFalse(model.hasClass(new TuitionClass(new ClassName("Chemistry301"))));
     }
 
     @Test
@@ -99,7 +101,7 @@ public class EditClassCommandIntegrationTest {
         editClassCommand.execute(model);
 
         // Verify
-        assert(model.hasClass(new TuitionClass(new ClassName("Advanced Math 101"))));
+        assertTrue(model.hasClass(new TuitionClass(new ClassName("Advanced Math 101"))));
     }
 
     @Test
@@ -112,7 +114,7 @@ public class EditClassCommandIntegrationTest {
         editClassCommand.execute(model);
 
         // Verify
-        assert(!model.hasClass(new TuitionClass(new ClassName("Advanced Math 101"))));
-        assert(model.hasClass(new TuitionClass(new ClassName("Honors Mathematics 201"))));
+        assertFalse(model.hasClass(new TuitionClass(new ClassName("Advanced Math 101"))));
+        assertTrue(model.hasClass(new TuitionClass(new ClassName("Honors Mathematics 201"))));
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,7 @@ public class DeleteClassCommandIntegrationTest {
         assertEquals(expectedMessage, result.getFeedbackToUser());
 
         // Verify the class is deleted
-        assert(!model.hasClass(classToDelete));
+        assertFalse(model.hasClass(classToDelete));
     }
 
     @Test
@@ -67,9 +68,9 @@ public class DeleteClassCommandIntegrationTest {
         new DeleteClassCommand("Chemistry301").execute(model);
 
         // Verify all are deleted
-        assert(!model.hasClass(class1));
-        assert(!model.hasClass(class2));
-        assert(!model.hasClass(class3));
+        assertFalse(model.hasClass(class1));
+        assertFalse(model.hasClass(class2));
+        assertFalse(model.hasClass(class3));
     }
 
     @Test
@@ -95,7 +96,7 @@ public class DeleteClassCommandIntegrationTest {
         deleteClassCommand.execute(model);
 
         // Verify deletion
-        assert(!model.hasClass(classWithSpaces));
+        assertFalse(model.hasClass(classWithSpaces));
     }
 
     @Test
