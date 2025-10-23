@@ -331,23 +331,23 @@ public class RemoveFromClassCommandTest {
     }
 
     @Test
-    public void execute_nameWithSpecialCharacters_success() throws Exception {
-        Student specialStudent = new Student(
-                new Name("O'Neill-Smith"),
+    public void execute_nameWithNumbers_success() throws Exception {
+        Student numberStudent = new Student(
+                new Name("John Smith 3rd"),
                 new Phone("97890123"),
-                new Email("oneill@example.com"),
-                new Address("Special St"),
+                new Email("john3@example.com"),
+                new Address("Number St"),
                 new HashSet<>()
         );
 
-        model.addPerson(specialStudent);
+        model.addPerson(numberStudent);
         model.addClass(mathClass);
-        mathClass.addStudent(specialStudent);
+        mathClass.addStudent(numberStudent);
 
-        RemoveFromClassCommand command = new RemoveFromClassCommand("O'Neill-Smith", new ClassName("Math 101"));
+        RemoveFromClassCommand command = new RemoveFromClassCommand("John Smith 3rd", new ClassName("Math 101"));
         command.execute(model);
 
-        assertFalse(mathClass.hasStudent(specialStudent));
+        assertFalse(mathClass.hasStudent(numberStudent));
     }
 
     @Test

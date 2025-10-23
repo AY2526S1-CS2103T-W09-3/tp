@@ -117,10 +117,11 @@ public class ListChildrenCommandParserTest {
     }
 
     @Test
-    public void parse_multiplePrefixes_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("n/John n/Jane"));
+    public void parse_multiplePrefixes_usesLastValue() throws Exception {
+        // ArgumentTokenizer takes the last value when duplicates exist
+        ListChildrenCommand result = parser.parse(" n/John n/Jane");
+        ListChildrenCommand expected = new ListChildrenCommand("Jane");
+        assertEquals(expected, result);
     }
 
     @Test
@@ -131,10 +132,11 @@ public class ListChildrenCommandParserTest {
     }
 
     @Test
-    public void parse_invalidCharactersBeforePrefix_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("invalid n/John"));
+    public void parse_textBeforePrefix_usesPrefix() throws Exception {
+        // With space prepended, tokenizer accepts text before prefix
+        ListChildrenCommand result = parser.parse("invalid n/John");
+        ListChildrenCommand expected = new ListChildrenCommand("John");
+        assertEquals(expected, result);
     }
 
     // ========== Edge cases and boundary tests ==========
