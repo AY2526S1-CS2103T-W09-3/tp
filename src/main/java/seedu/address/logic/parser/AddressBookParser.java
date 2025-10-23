@@ -26,6 +26,8 @@ import seedu.address.logic.commands.LinkCommand;
 import seedu.address.logic.commands.ListChildrenCommand;
 import seedu.address.logic.commands.ListClassCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.ListParentsCommand;
+import seedu.address.logic.commands.RemoveFromClassCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -95,6 +97,9 @@ public class AddressBookParser {
         case ListChildrenCommand.COMMAND_WORD:
             return new ListChildrenCommandParser().parse(arguments);
 
+        case ListParentsCommand.COMMAND_WORD:
+            return new ListParentsCommandParser().parse(arguments);
+
         case ListClassCommand.COMMAND_WORD:
             return new ListClassCommand();
 
@@ -112,6 +117,9 @@ public class AddressBookParser {
 
         case LinkCommand.COMMAND_WORD:
             return new LinkCommandParser().parse(arguments);
+
+        case RemoveFromClassCommand.COMMAND_WORD:
+            return new RemoveFromClassCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
