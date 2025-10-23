@@ -86,7 +86,7 @@ public class ListParentsCommandParserTest {
                 + "Parameters: [n/CHILD_NAME]\n"
                 + "Examples:\n"
                 + "  parents\n"
-                + "  parents n/Alice Tan", () ->
+                + "  parents n/Jane Smith", () ->
                 parser.parse("n/"));
     }
 
@@ -97,7 +97,7 @@ public class ListParentsCommandParserTest {
                 + "Parameters: [n/CHILD_NAME]\n"
                 + "Examples:\n"
                 + "  parents\n"
-                + "  parents n/Alice Tan", () ->
+                + "  parents n/Jane Smith", () ->
                 parser.parse("n/   "));
     }
 
@@ -108,7 +108,7 @@ public class ListParentsCommandParserTest {
                 + "Parameters: [n/CHILD_NAME]\n"
                 + "Examples:\n"
                 + "  parents\n"
-                + "  parents n/Alice Tan", () ->
+                + "  parents n/Jane Smith", () ->
                 parser.parse("some random text"));
     }
 
@@ -119,7 +119,7 @@ public class ListParentsCommandParserTest {
                 + "Parameters: [n/CHILD_NAME]\n"
                 + "Examples:\n"
                 + "  parents\n"
-                + "  parents n/Alice Tan", () ->
+                + "  parents n/Jane Smith", () ->
                 parser.parse("Alice Tan"));
     }
 
@@ -130,7 +130,7 @@ public class ListParentsCommandParserTest {
                 + "Parameters: [n/CHILD_NAME]\n"
                 + "Examples:\n"
                 + "  parents\n"
-                + "  parents n/Alice Tan", () ->
+                + "  parents n/Jane Smith", () ->
                 parser.parse("p/Alice Tan"));
     }
 
@@ -149,7 +149,7 @@ public class ListParentsCommandParserTest {
                 + "Parameters: [n/CHILD_NAME]\n"
                 + "Examples:\n"
                 + "  parents\n"
-                + "  parents n/Alice Tan", () ->
+                + "  parents n/Jane Smith", () ->
                 parser.parse("n/"));
     }
 

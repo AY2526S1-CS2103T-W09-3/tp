@@ -76,72 +76,72 @@ public class RemoveFromClassCommandParserTest {
     @Test
     public void parse_missingPersonName_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" c/Math 101"));
     }
 
     @Test
     public void parse_missingClassName_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" n/John Doe"));
     }
 
     @Test
     public void parse_missingBothFields_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(""));
     }
 
     @Test
     public void parse_emptyPersonName_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "Person name cannot be empty. removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "Person name cannot be empty. removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" n/ c/Math 101"));
     }
 
     @Test
     public void parse_emptyClassName_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "Class name cannot be empty. removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "Class name cannot be empty. removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" n/John Doe c/"));
     }
 
     @Test
     public void parse_emptyBothFields_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "Person name cannot be empty. removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "Person name cannot be empty. removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" n/ c/"));
     }
 
     @Test
     public void parse_whitespaceOnlyPersonName_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "Person name cannot be empty. removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "Person name cannot be empty. removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" n/   c/Math 101"));
     }
 
     @Test
     public void parse_whitespaceOnlyClassName_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "Class name cannot be empty. removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "Class name cannot be empty. removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse(" n/John Doe c/   "));
     }
 
@@ -160,18 +160,17 @@ public class RemoveFromClassCommandParserTest {
     @Test
     public void parse_invalidPreamble_throwsParseException() {
         assertThrows(ParseException.class, "Invalid command format! \n"
-                + "removefromclass: Removes a student or tutor from a class.\n"
-                + "Parameters: n/NAME c/CLASS\n"
-                + "Example: removefromclass n/Alice Tan c/Math 101", () ->
+                + "removeClass: Removes a student or tutor from a class.\n"
+                + "Parameters: n/PERSON_NAME c/CLASS_NAME\n"
+                + "Example: removeClass n/John Doe c/Math 101", () ->
                 parser.parse("extra text n/John Doe c/Math 101"));
     }
 
     @Test
-    public void parse_noSpaceBeforePrefix_success() throws Exception {
-        // This should still work as tokenizer handles it
-        RemoveFromClassCommand result = parser.parse("n/John Doe c/Math 101");
-        RemoveFromClassCommand expected = new RemoveFromClassCommand("John Doe", new ClassName("Math 101"));
-        assertEquals(expected, result);
+    public void parse_noSpaceBeforePrefix_throwsParseException() {
+        // Without leading space, preamble won't be empty
+        assertThrows(ParseException.class, () ->
+                parser.parse("n/John Doe c/Math 101"));
     }
 
     // ========== Edge cases and boundary tests ==========
