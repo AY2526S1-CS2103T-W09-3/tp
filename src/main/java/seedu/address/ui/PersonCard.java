@@ -1,10 +1,15 @@
 package seedu.address.ui;
 
+import java.util.stream.Collectors;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonType;
+import seedu.address.model.person.Student;
+import seedu.address.model.person.Tutor;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -37,6 +42,8 @@ public class PersonCard extends UiPart<Region> {
     private Label email;
     @FXML
     private Label role;
+    @FXML
+    private Label enrolledClasses;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -54,5 +61,27 @@ public class PersonCard extends UiPart<Region> {
         String roleType = person.getPersonType().toString();
         role.setText(roleType);
         role.getStyleClass().add("role-" + roleType.toLowerCase());
+
+        // Display enrolled classes for students and tutors
+        if (person.getPersonType() == PersonType.STUDENT) {
+            Student student = (Student) person;
+            String classes = student.getTuitionClasses().stream()
+                    .map(tc -> tc.getClassName())
+                    .collect(Collectors.joining(", "));
+            enrolledClasses.setText(classes.isEmpty() ? "No classes" : classes);
+            enrolledClasses.setVisible(true);
+            enrolledClasses.setManaged(true);
+        } else if (person.getPersonType() == PersonType.TUTOR) {
+            Tutor tutor = (Tutor) person;
+            String classes = tutor.getTuitionClasses().stream()
+                    .map(tc -> tc.getClassName())
+                    .collect(Collectors.joining(", "));
+            enrolledClasses.setText(classes.isEmpty() ? "No classes" : classes);
+            enrolledClasses.setVisible(true);
+            enrolledClasses.setManaged(true);
+        } else {
+            enrolledClasses.setVisible(false);
+            enrolledClasses.setManaged(false);
+        }
     }
 }
