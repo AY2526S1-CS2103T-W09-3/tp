@@ -4,8 +4,10 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Parent;
@@ -30,6 +32,8 @@ public class ListChildrenCommand extends Command {
     public static final String MESSAGE_SUCCESS_FILTERED = "Listed children for parent: %s";
     public static final String MESSAGE_PARENT_NOT_FOUND = "Parent not found: %s";
 
+    private static final Logger logger = LogsCenter.getLogger(ListChildrenCommand.class);
+
     private final String parentName;
 
     /**
@@ -49,6 +53,7 @@ public class ListChildrenCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        logger.info("Executing ListChildrenCommand" + (parentName != null ? " for parent: " + parentName : ""));
 
         if (parentName == null) {
             return listAllChildren(model);
@@ -88,6 +93,7 @@ public class ListChildrenCommand extends Command {
                 .orElse(null);
 
         if (parent == null) {
+            logger.warning("Parent not found: " + parentName);
             throw new CommandException(String.format(MESSAGE_PARENT_NOT_FOUND, parentName));
         }
 
