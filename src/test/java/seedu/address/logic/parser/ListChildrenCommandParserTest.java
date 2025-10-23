@@ -1,10 +1,12 @@
 package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.ListChildrenCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
 
 public class ListChildrenCommandParserTest {
 
@@ -43,19 +45,13 @@ public class ListChildrenCommandParserTest {
     }
 
     @Test
-    public void parse_emptyParentName_returnsListAllChildrenCommand() throws Exception {
-        ListChildrenCommand result = parser.parse("n/");
-        ListChildrenCommand expected = new ListChildrenCommand();
-
-        assertEquals(expected, result);
+    public void parse_emptyParentName_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parse("n/"));
     }
 
     @Test
-    public void parse_emptyParentNameWithWhitespace_returnsListAllChildrenCommand() throws Exception {
-        ListChildrenCommand result = parser.parse("n/   ");
-        ListChildrenCommand expected = new ListChildrenCommand();
-
-        assertEquals(expected, result);
+    public void parse_emptyParentNameWithWhitespace_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parse("n/   "));
     }
 
     @Test
@@ -67,18 +63,12 @@ public class ListChildrenCommandParserTest {
     }
 
     @Test
-    public void parse_textWithoutPrefix_returnsListAllChildrenCommand() throws Exception {
-        ListChildrenCommand result = parser.parse("some random text");
-        ListChildrenCommand expected = new ListChildrenCommand();
-
-        assertEquals(expected, result);
+    public void parse_textWithoutPrefix_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parse("some random text"));
     }
 
     @Test
-    public void parse_multipleWordsWithoutPrefix_returnsListAllChildrenCommand() throws Exception {
-        ListChildrenCommand result = parser.parse("John Doe");
-        ListChildrenCommand expected = new ListChildrenCommand();
-
-        assertEquals(expected, result);
+    public void parse_multipleWordsWithoutPrefix_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parse("John Doe"));
     }
 }
