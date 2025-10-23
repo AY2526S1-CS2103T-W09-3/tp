@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -200,8 +199,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("Non Existent", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "Person not found: Non Existent",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Person not found: Non Existent", () ->
+                command.execute(model));
     }
 
     @Test
@@ -210,8 +209,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("Alice Tan", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "Person not found: Alice Tan",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Person not found: Alice Tan", () ->
+                command.execute(model));
     }
 
     // ========== Failure Cases - Class Not Found ==========
@@ -222,8 +221,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("Alice Tan", new ClassName("Non Existent Class"));
 
-        assertThrows(CommandException.class, "Class not found: Non Existent Class",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Class not found: Non Existent Class", () ->
+                command.execute(model));
     }
 
     @Test
@@ -232,8 +231,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("Alice Tan", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "Class not found: Math 101",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Class not found: Math 101", () ->
+                command.execute(model));
     }
 
     // ========== Failure Cases - Person Not In Class ==========
@@ -246,8 +245,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("Alice Tan", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "Alice Tan is not in class Math 101",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Alice Tan is not in class Math 101", () ->
+                command.execute(model));
     }
 
     @Test
@@ -258,8 +257,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("John Smith", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "John Smith is not in class Math 101",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "John Smith is not in class Math 101", () ->
+                command.execute(model));
     }
 
     @Test
@@ -271,8 +270,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("John Smith", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "John Smith is not in class Math 101",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "John Smith is not in class Math 101", () ->
+                command.execute(model));
     }
 
     // ========== Failure Cases - Parent ==========
@@ -284,8 +283,8 @@ public class RemoveFromClassCommandTest {
 
         RemoveFromClassCommand command = new RemoveFromClassCommand("Peter Tan", new ClassName("Math 101"));
 
-        assertThrows(CommandException.class, "Parent cannot be removed from class",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Parent cannot be removed from class", () ->
+                command.execute(model));
     }
 
     // ========== Edge Cases ==========

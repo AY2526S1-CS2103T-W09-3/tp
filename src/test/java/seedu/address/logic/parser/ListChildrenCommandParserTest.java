@@ -2,8 +2,6 @@ package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -83,37 +81,37 @@ public class ListChildrenCommandParserTest {
 
     @Test
     public void parse_emptyParentName_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Parent name cannot be empty. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("n/"));
+        assertThrows(ParseException.class, "Invalid command format! \n"
+                + "Parent name cannot be empty. " + ListChildrenCommand.MESSAGE_USAGE, () ->
+                parser.parse("n/"));
     }
 
     @Test
     public void parse_emptyParentNameWithWhitespace_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Parent name cannot be empty. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("n/   "));
+        assertThrows(ParseException.class, "Invalid command format! \n"
+                + "Parent name cannot be empty. " + ListChildrenCommand.MESSAGE_USAGE, () ->
+                parser.parse("n/   "));
     }
 
     @Test
     public void parse_textWithoutPrefix_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("some random text"));
+        assertThrows(ParseException.class, "Invalid command format! \n"
+                + "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE, () ->
+                parser.parse("some random text"));
     }
 
     @Test
     public void parse_multipleWordsWithoutPrefix_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("John Doe"));
+        assertThrows(ParseException.class, "Invalid command format! \n"
+                + "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE, () ->
+                parser.parse("John Doe"));
     }
 
     @Test
     public void parse_wrongPrefix_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("p/John Doe"));
+        assertThrows(ParseException.class, "Invalid command format! \n"
+                + "Invalid syntax. " + ListChildrenCommand.MESSAGE_USAGE, () ->
+                parser.parse("p/John Doe"));
     }
 
     @Test
@@ -126,9 +124,9 @@ public class ListChildrenCommandParserTest {
 
     @Test
     public void parse_prefixOnly_throwsParseException() {
-        assertThrows(ParseException.class, "Invalid command format! \n" +
-                "Parent name cannot be empty. " + ListChildrenCommand.MESSAGE_USAGE,
-                () -> parser.parse("n/"));
+        assertThrows(ParseException.class, "Invalid command format! \n"
+                + "Parent name cannot be empty. " + ListChildrenCommand.MESSAGE_USAGE, () ->
+                parser.parse("n/"));
     }
 
     @Test

@@ -231,16 +231,16 @@ public class ListParentsCommandTest {
 
         ListParentsCommand command = new ListParentsCommand("Non-existent Child");
 
-        assertThrows(CommandException.class, "Child not found: Non-existent Child",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Child not found: Non-existent Child", () ->
+                command.execute(model));
     }
 
     @Test
     public void execute_emptyAddressBookWithChildName_throwsCommandException() {
         ListParentsCommand command = new ListParentsCommand("Alice Tan");
 
-        assertThrows(CommandException.class, "Child not found: Alice Tan",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Child not found: Alice Tan", () ->
+                command.execute(model));
     }
 
     @Test
@@ -249,8 +249,8 @@ public class ListParentsCommandTest {
 
         ListParentsCommand command = new ListParentsCommand("Teacher Tom");
 
-        assertThrows(CommandException.class, "Child not found: Teacher Tom",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Child not found: Teacher Tom", () ->
+                command.execute(model));
     }
 
     @Test
@@ -259,8 +259,8 @@ public class ListParentsCommandTest {
 
         ListParentsCommand command = new ListParentsCommand("John Doe");
 
-        assertThrows(CommandException.class, "Child not found: John Doe",
-                () -> command.execute(model));
+        assertThrows(CommandException.class, "Child not found: John Doe", () ->
+                command.execute(model));
     }
 
     // ========== Edge Cases ==========
