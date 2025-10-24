@@ -40,6 +40,9 @@ public class ClassSession {
         if (parentClass == null) {
             throw new IllegalArgumentException("Parent class cannot be null for session: " + sessionName);
         }
+        if (parentClass.hasSessionName(sessionName)) {
+            throw new IllegalArgumentException("This session name already exists for this class: " + sessionName);
+        }
         this.parentClass = parentClass;
         this.sessionName = sessionName;
         this.dateTime = dateTime;

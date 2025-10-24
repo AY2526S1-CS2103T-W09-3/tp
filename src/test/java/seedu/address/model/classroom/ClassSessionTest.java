@@ -265,4 +265,51 @@ public class ClassSessionTest {
                 LocalDateTime.of(2025, 10, 21, 9, 0), "COM1");
         assertNotEquals(s1, s2);
     }
+
+    @Test
+    @DisplayName("addSession throws exception for duplicate session name")
+    void addSession_duplicateSessionName_throwsException() {
+        // Add first session via addSession method
+        parentClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1");
+
+        // Try to add session with same name
+        assertThrows(IllegalArgumentException.class, () ->
+                parentClass.addSession("Week 1 Tutorial", LocalDateTime.now().plusDays(1), "COM1")
+        );
+    }
+
+    @Test
+    @DisplayName("addSession throws exception for duplicate session name with whitespace")
+    void addSession_duplicateSessionNameWithWhitespace_throwsException() {
+        // Add first session
+        parentClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1");
+
+        // Try to add session with same name but extra whitespace
+        assertThrows(IllegalArgumentException.class, () ->
+                parentClass.addSession("  Week 1 Tutorial  ", LocalDateTime.now().plusDays(1), "COM1")
+        );
+    }
+
+    @Test
+    @DisplayName("addSession allows different session names")
+    void addSession_differentSessionNames_success() {
+        parentClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1");
+        parentClass.addSession("Week 2 Tutorial", LocalDateTime.now().plusDays(7), "COM1");
+        parentClass.addSession("Week 3 Tutorial", LocalDateTime.now().plusDays(14), "COM1");
+
+        assertEquals(3, parentClass.getAllSessions().size());
+    }
+
+    @Test
+    @DisplayName("addSession enforces case-insensitive session names")
+    void addSession_caseInsensitiveNames_rejectsDuplicates() {
+        parentClass.addSession("Tutorial", LocalDateTime.now(), "COM1");
+        // Should reject different case as they are treated as the same name
+        assertThrows(IllegalArgumentException.class, () ->
+                parentClass.addSession("tutorial", LocalDateTime.now().plusDays(1), "COM1")
+        );
+        assertThrows(IllegalArgumentException.class, () ->
+                parentClass.addSession("TUTORIAL", LocalDateTime.now().plusDays(1), "COM1")
+        );
+    }
 }

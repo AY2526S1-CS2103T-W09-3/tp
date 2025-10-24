@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -124,6 +125,17 @@ public class ModelManager implements Model {
 
     @Override
     public void deleteClass(TuitionClass target) {
+        requireNonNull(target);
+        ArrayList<Student> studentsToRemove = new ArrayList<>(target.getStudents());
+        for (Student s : studentsToRemove) {
+            s.removeClassSafely(target);
+            target.removeStudent(s);
+        }
+
+        if (target.isAssignedToTutor()) {
+            target.setTutor(null);
+        }
+
         addressBook.removeClass(target);
     }
 
@@ -157,6 +169,13 @@ public class ModelManager implements Model {
      * Returns an unmodifiable view of the list of {@code Person} or list of {@code TuitionClass}
      * backed by the internal list of {@code versionedAddressBook}
      */
+
+    @Override
+    public ObservableList<Person> getPersonList() {
+        return this.addressBook.getPersonList();
+    }
+
+
     @Override
     public ObservableList<Person> getFilteredPersonList() {
         return filteredPersons;

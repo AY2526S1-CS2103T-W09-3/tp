@@ -64,7 +64,7 @@ public class JoinClassCommand extends Command {
         requireNonNull(model);
 
         // Find the person by name
-        List<Person> personList = model.getFilteredPersonList();
+        List<Person> personList = model.getPersonList();
         Person toJoin = personList.stream()
                 .filter(p -> p.getName().fullName.equals(personName))
                 .findFirst()

@@ -54,6 +54,14 @@ public class Tutor extends Person {
     }
 
     /**
+     * Safely removes a tuition class from this tutor's list without throwing exception.
+     * @return true if the class was removed, false if not teaching
+     */
+    public boolean removeClassSafely(TuitionClass tuitionClass) {
+        return tuitionClasses.remove(tuitionClass);
+    }
+
+    /**
      * Removes this tutor from all tuition classes.
      */
     public void removeFromAllClasses() {

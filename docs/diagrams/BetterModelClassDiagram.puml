@@ -1,4 +1,8 @@
 @startuml
+' Simplified Model Class Diagram focusing on Person entity composition
+' Shows how AddressBook contains UniquePersonList and UniqueTagList
+' Person entities (Student/Tutor/Parent) have Name, Phone, Email, Address attributes
+' Tags allow flexible categorization of persons in the tuition centre
 !include style.puml
 skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR

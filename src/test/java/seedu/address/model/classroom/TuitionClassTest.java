@@ -265,4 +265,65 @@ public class TuitionClassTest {
         assertTrue(classWithoutTutor.getStudents().isEmpty());
         assertTrue(classWithoutTutor.getAllSessions().isEmpty());
     }
+
+    @Test
+    @DisplayName("hasSessionName returns true when session exists")
+    void hasSessionName_sessionExists_returnsTrue() {
+        tuitionClass.addStudent(alice);
+        tuitionClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1-B103");
+
+        assertTrue(tuitionClass.hasSessionName("Week 1 Tutorial"));
+    }
+
+    @Test
+    @DisplayName("hasSessionName returns false when session does not exist")
+    void hasSessionName_sessionDoesNotExist_returnsFalse() {
+        tuitionClass.addStudent(alice);
+        tuitionClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1-B103");
+
+        assertFalse(tuitionClass.hasSessionName("Week 2 Tutorial"));
+    }
+
+    @Test
+    @DisplayName("hasSessionName handles whitespace correctly")
+    void hasSessionName_withWhitespace_handlesCorrectly() {
+        tuitionClass.addStudent(alice);
+        tuitionClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1-B103");
+
+        // Should match even with extra whitespace
+        assertTrue(tuitionClass.hasSessionName("  Week 1 Tutorial  "));
+        assertTrue(tuitionClass.hasSessionName(" Week 1 Tutorial"));
+        assertTrue(tuitionClass.hasSessionName("Week 1 Tutorial "));
+    }
+
+    @Test
+    @DisplayName("hasSessionName returns false for empty list")
+    void hasSessionName_emptySessionList_returnsFalse() {
+        assertFalse(tuitionClass.hasSessionName("Week 1 Tutorial"));
+    }
+
+    @Test
+    @DisplayName("hasSessionName is case insensitive")
+    void hasSessionName_caseInsensitive() {
+        tuitionClass.addStudent(alice);
+        tuitionClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1-B103");
+
+        assertTrue(tuitionClass.hasSessionName("week 1 tutorial"));
+        assertTrue(tuitionClass.hasSessionName("WEEK 1 TUTORIAL"));
+        assertTrue(tuitionClass.hasSessionName("WeeK 1 TuToRiAl"));
+    }
+
+    @Test
+    @DisplayName("hasSessionName works with multiple sessions")
+    void hasSessionName_multipleSessions_worksCorrectly() {
+        tuitionClass.addStudent(alice);
+        tuitionClass.addSession("Week 1 Tutorial", LocalDateTime.now(), "COM1-B103");
+        tuitionClass.addSession("Week 2 Tutorial", LocalDateTime.now().plusDays(7), "COM1-B103");
+        tuitionClass.addSession("Week 3 Tutorial", LocalDateTime.now().plusDays(14), "COM1-B103");
+
+        assertTrue(tuitionClass.hasSessionName("Week 1 Tutorial"));
+        assertTrue(tuitionClass.hasSessionName("Week 2 Tutorial"));
+        assertTrue(tuitionClass.hasSessionName("Week 3 Tutorial"));
+        assertFalse(tuitionClass.hasSessionName("Week 4 Tutorial"));
+    }
 }

@@ -136,6 +136,6 @@ public class ListClassCommandTest {
         CommandResult result = command.execute(model);
 
         String feedback = result.getFeedbackToUser();
-        assertTrue(feedback.contains("Sec1-Math-A: David Lim"));
+        assertTrue(feedback.contains("Sec1-Math-A (Tutor: Unassigned): David Lim"));
     }
 }

@@ -1,6 +1,8 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_ATTENDANCE_STATUS;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SESSION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
@@ -13,7 +15,7 @@ import seedu.address.logic.commands.AttendCommand;
 import seedu.address.model.person.Name;
 
 /**
- * Contains unit tests for AttendCommandParser.
+ * Contains unit tests for {@code AttendCommandParser}.
  */
 public class AttendCommandParserTest {
 
@@ -21,77 +23,181 @@ public class AttendCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Name expectedName = new Name("Alice Pauline");
-        String expectedSessionId = "1";
-        String expectedStatus = "PRESENT";
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "PRESENT";
 
-        // normal case
-        assertParseSuccess(parser,
-                        " " + PREFIX_NAME + "Alice Pauline " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "PRESENT",
-                        new AttendCommand(expectedName, expectedSessionId, expectedStatus));
+        AttendCommand expectedCommand = new AttendCommand(
+                new Name("Alice Pauline"),
+                "Math101",
+                "Session1",
+                true
+        );
 
-        // lowercase status gets converted to uppercase
-        assertParseSuccess(parser,
-                        " " + PREFIX_NAME + "Alice Pauline " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "present",
-                        new AttendCommand(expectedName, expectedSessionId, expectedStatus));
-
-        // mixed case status gets converted to uppercase
-        assertParseSuccess(parser,
-                        " " + PREFIX_NAME + "Alice Pauline " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "PrEsEnT",
-                        new AttendCommand(expectedName, expectedSessionId, expectedStatus));
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
-    public void parse_absentStatus_success() {
-        Name expectedName = new Name("Bob");
-        String expectedSessionId = "2";
-        String expectedStatus = "ABSENT";
+    public void parse_allFieldsPresentAbsentStatus_success() {
+        String userInput = " " + PREFIX_NAME + "Bob Tan "
+                + PREFIX_CLASS + "Science101 "
+                + PREFIX_SESSION + "Session2 "
+                + PREFIX_STATUS + "ABSENT";
 
-        assertParseSuccess(parser, " " + PREFIX_NAME + "Bob " + PREFIX_SESSION + "2 " + PREFIX_STATUS + "ABSENT ",
-                        new AttendCommand(expectedName, expectedSessionId, expectedStatus));
+        AttendCommand expectedCommand = new AttendCommand(
+                new Name("Bob Tan"),
+                "Science101",
+                "Session2",
+                false
+        );
 
-        // lowercase absent
-        assertParseSuccess(parser, " " + PREFIX_NAME + "Bob " + PREFIX_SESSION + "2 " + PREFIX_STATUS + "absent ",
-                        new AttendCommand(expectedName, expectedSessionId, expectedStatus));
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
-    public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE);
+    public void parse_allFieldsPresentLowercaseStatus_success() {
+        String userInput = " " + PREFIX_NAME + "Charlie Lee "
+                + PREFIX_CLASS + "English101 "
+                + PREFIX_SESSION + "Session3 "
+                + PREFIX_STATUS + "PRESENT";
 
-        // missing name prefix
-        assertParseFailure(parser, " " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "PRESENT", expectedMessage);
+        AttendCommand expectedCommand = new AttendCommand(
+                new Name("Charlie Lee"),
+                "English101",
+                "Session3",
+                true
+        );
 
-        // missing session prefix
-        assertParseFailure(parser, " " + PREFIX_NAME + "Alice " + PREFIX_STATUS + "PRESENT", expectedMessage);
-
-        // missing status prefix
-        assertParseFailure(parser, " " + PREFIX_NAME + "Alice " + PREFIX_SESSION + "1", expectedMessage);
-
-        // all prefixes missing
-        assertParseFailure(parser, " Alice 1 PRESENT", expectedMessage);
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
-    public void parse_invalidValue_failure() {
-        // invalid name (contains special characters not allowed)
-        assertParseFailure(parser, " " + PREFIX_NAME + "Alice@#$ " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "PRESENT",
-                        Name.MESSAGE_CONSTRAINTS);
+    public void parse_allFieldsPresentWithWhitespace_success() {
+        String userInput = " " + PREFIX_NAME + "David Ng "
+                + PREFIX_CLASS + "  History101  "
+                + PREFIX_SESSION + "  Session4  "
+                + PREFIX_STATUS + "  ABSENT  ";
 
-        // invalid status (not PRESENT or ABSENT)
-        assertParseFailure(parser, " " + PREFIX_NAME + "Alice " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "MAYBE",
-                        "Status must be either PRESENT or ABSENT");
+        AttendCommand expectedCommand = new AttendCommand(
+                new Name("David Ng"),
+                "History101",
+                "Session4",
+                false
+        );
 
-        assertParseFailure(parser, " " + PREFIX_NAME + "Alice " + PREFIX_SESSION + "1 " + PREFIX_STATUS + "YES",
-                        "Status must be either PRESENT or ABSENT");
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_missingNamePrefix_failure() {
+        String userInput = " " + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "PRESENT";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_missingClassPrefix_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "PRESENT";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_missingSessionPrefix_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_STATUS + "PRESENT";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_missingStatusPrefix_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_missingAllPrefixes_failure() {
+        String userInput = " Alice Pauline Math101 Session1 PRESENT";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_preamblePresent_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE);
+        String userInput = "some preamble " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "PRESENT";
 
-        // non-empty preamble
-        assertParseFailure(parser, "some random text " + PREFIX_NAME + "Alice " + PREFIX_SESSION + "1 " + PREFIX_STATUS
-                        + "PRESENT", expectedMessage);
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_invalidName_failure() {
+        String userInput = " " + PREFIX_NAME + " "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "PRESENT";
+
+        assertParseFailure(parser, userInput, Name.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_invalidStatus_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "MAYBE";
+
+        assertParseFailure(parser, userInput, MESSAGE_INVALID_ATTENDANCE_STATUS);
+    }
+
+    @Test
+    public void parse_emptyClassName_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS + "PRESENT";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_emptySessionName_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION
+                + PREFIX_STATUS + "PRESENT";
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AttendCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_emptyStatus_failure() {
+        String userInput = " " + PREFIX_NAME + "Alice Pauline "
+                + PREFIX_CLASS + "Math101 "
+                + PREFIX_SESSION + "Session1 "
+                + PREFIX_STATUS;
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_ATTENDANCE_STATUS, AttendCommand.MESSAGE_USAGE));
     }
 }

@@ -255,4 +255,14 @@ public class TuitionClass {
                 .filter(s -> s.getDateTime().isBefore(now))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Returns boolean if sessionName already exists in past sessions
+     * Ensures sessionName is unique within a class (case-insensitive)
+     */
+    public boolean hasSessionName(String sessionName) {
+        requireNonNull(sessionName);
+        return sessions.stream()
+            .anyMatch(s -> s.getSessionName().trim().equalsIgnoreCase(sessionName.trim()));
+    }
 }

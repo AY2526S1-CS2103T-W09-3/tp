@@ -1,4 +1,7 @@
 @startuml
+' TutBook Delete Command Sequence Diagram
+' Shows the flow when deleting a person (Student/Tutor/Parent) from the system
+' Handles cascading relationship updates: removes students from classes, updates parent-child links
 !include style.puml
 skinparam ArrowFontStyle plain
 

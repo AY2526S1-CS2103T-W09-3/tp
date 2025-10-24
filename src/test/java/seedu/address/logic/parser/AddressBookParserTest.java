@@ -144,7 +144,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_attend() throws Exception {
-        String commandString = AttendCommand.COMMAND_WORD + " n/Alice session/1 status/PRESENT";
+        String commandString = AttendCommand.COMMAND_WORD + " n/Alice c/className session/sessionName status/PRESENT";
         assertTrue(parser.parseCommand(commandString) instanceof AttendCommand);
     }
 

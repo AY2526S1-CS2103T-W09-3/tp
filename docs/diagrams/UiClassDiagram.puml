@@ -1,4 +1,9 @@
 @startuml
+' TutBook UI Component Class Diagram
+' JavaFX-based GUI for tuition centre management
+' CommandBox: CLI input for commands (add, edit, delete, addClass, join, link, attend)
+' PersonListPanel: Displays students, tutors, and parents with their details
+' ResultDisplay: Shows command execution results and feedback
 !include style.puml
 skinparam arrowThickness 1.1
 skinparam arrowColor UI_COLOR_T4

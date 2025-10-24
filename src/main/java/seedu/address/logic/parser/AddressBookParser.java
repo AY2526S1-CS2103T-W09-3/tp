@@ -10,11 +10,13 @@ import java.util.regex.Pattern;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddClassCommand;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddSessionCommand;
 import seedu.address.logic.commands.AttendCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteClassCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteSessionCommand;
 import seedu.address.logic.commands.EditClassCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
@@ -27,6 +29,7 @@ import seedu.address.logic.commands.ListChildrenCommand;
 import seedu.address.logic.commands.ListClassCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListParentsCommand;
+import seedu.address.logic.commands.ListSessionCommand;
 import seedu.address.logic.commands.RemoveFromClassCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -70,6 +73,9 @@ public class AddressBookParser {
         case AddClassCommand.COMMAND_WORD:
             return new AddClassCommandParser().parse(arguments);
 
+        case AddSessionCommand.COMMAND_WORD:
+            return new AddSessionCommandParser().parse(arguments);
+
         case EditClassCommand.COMMAND_WORD:
             return new EditClassCommandParser().parse(arguments);
 
@@ -78,6 +84,9 @@ public class AddressBookParser {
 
         case DeleteClassCommand.COMMAND_WORD:
             return new DeleteClassCommandParser().parse(arguments);
+
+        case DeleteSessionCommand.COMMAND_WORD:
+            return new DeleteSessionCommandParser().parse(arguments);
 
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);
@@ -102,6 +111,9 @@ public class AddressBookParser {
 
         case ListClassCommand.COMMAND_WORD:
             return new ListClassCommand();
+
+        case ListSessionCommand.COMMAND_WORD:
+            return new ListSessionParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();

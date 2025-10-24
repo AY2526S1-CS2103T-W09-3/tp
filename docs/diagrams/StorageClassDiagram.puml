@@ -1,4 +1,8 @@
 @startuml
+' TutBook Storage Component Class Diagram
+' Handles persistence of tuition centre data to JSON files
+' Stores: Students, Tutors, Parents, TuitionClasses, ClassSessions with relationships preserved
+' Ensures bidirectional relationships are maintained across save/load cycles
 !include style.puml
 skinparam arrowThickness 1.1
 skinparam arrowColor STORAGE_COLOR

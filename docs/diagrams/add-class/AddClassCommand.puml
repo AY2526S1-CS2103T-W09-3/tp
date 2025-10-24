@@ -1,0 +1,38 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+Class "{abstract}\nCommand" as Command {
+  +execute(Model): CommandResult
+}
+Class AddClassCommand {
+  +COMMAND_WORD: String
+  +MESSAGE_USAGE: String
+  +MESSAGE_SUCCESS: String
+  +MESSAGE_DUPLICATE_CLASS: String
+  +MESSAGE_TUTOR_NOT_FOUND: String
+  +MESSAGE_TUTOR_AMBIGUOUS: String
+  -classNameRaw: String
+  -tutorNameRaw: String
+  +AddClassCommand(String)
+  +AddClassCommand(String, String)
+  +execute(Model): CommandResult
+  -findTutorByName(Model, String): Tutor
+  +equals(Object): boolean
+}
+Class CommandException
+Class CommandResult
+Class Model
+Class TuitionClass
+Class ClassName
+Class Tutor
+
+AddClassCommand -up-|> Command
+Command ..> CommandException: throws >
+AddClassCommand .right.> CommandException: throws >
+AddClassCommand .right.> CommandResult: creates >
+AddClassCommand .right.> Model: uses >
+AddClassCommand .right.> TuitionClass: creates >
+AddClassCommand .right.> ClassName: creates >
+AddClassCommand .right.> Tutor: finds >
+@enduml

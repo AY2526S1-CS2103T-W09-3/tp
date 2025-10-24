@@ -90,6 +90,14 @@ public class Student extends Person {
     }
 
     /**
+     * Safely removes this student from a tuition class without throwing exception.
+     * @return true if the class was removed, false if not enrolled
+     */
+    public boolean removeClassSafely(TuitionClass tuitionClass) {
+        return tuitionClasses.remove(tuitionClass);
+    }
+
+    /**
      * Removes this student from all tuition classes.
      */
     public void removeFromAllClasses() {

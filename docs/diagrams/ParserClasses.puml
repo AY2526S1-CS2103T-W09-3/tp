@@ -1,4 +1,8 @@
 @startuml
+' TutBook Parser Classes Diagram
+' Parsers for tuition centre commands: AddCommand, EditCommand, DeleteCommand, AddClassCommand
+' JoinCommand (student enrollment), LinkCommand (parent-child), AttendCommand (mark attendance)
+' Each parser validates and transforms CLI input into executable commands
 !include style.puml
 skinparam arrowThickness 1.1
 skinparam arrowColor LOGIC_COLOR_T4

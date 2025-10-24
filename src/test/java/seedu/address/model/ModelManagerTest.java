@@ -25,6 +25,7 @@ import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Student;
 import seedu.address.model.person.Tutor;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
@@ -178,5 +179,174 @@ public class ModelManagerTest {
         modelManager.assignTutorToClass(tutor, tuitionClass);
 
         assertTrue(tuitionClass.hasTutor(tutor));
+    }
+
+    @Test
+    public void deleteClass_removesAllReferences() {
+        // Setup
+        ModelManager testModelManager = new ModelManager();
+
+        // Create a student
+        Student student = new Student(
+            new Name("Alice"),
+            new Phone("12345678"),
+            new Email("alice@example.com"),
+            new Address("123 Street"),
+            new HashSet<Tag>()
+        );
+        testModelManager.addPerson(student);
+
+        // Create a tutor
+        Tutor tutor = new Tutor(
+            new Name("Bob"),
+            new Phone("87654321"),
+            new Email("bob@example.com"),
+            new Address("456 Avenue"),
+            new HashSet<Tag>()
+        );
+        testModelManager.addPerson(tutor);
+
+        // Create a class
+        TuitionClass mathClass = new TuitionClass(new ClassName("Math101"));
+        testModelManager.addClass(mathClass);
+
+        // Link student and tutor to class
+        testModelManager.addStudentToClass(student, mathClass);
+        testModelManager.assignTutorToClass(tutor, mathClass);
+
+        // Verify relationships are established
+        assertTrue(student.getTuitionClasses().contains(mathClass),
+                   "Student should be enrolled in Math101");
+        assertTrue(tutor.getTuitionClasses().contains(mathClass),
+                   "Tutor should be teaching Math101");
+        assertTrue(mathClass.hasStudent(student),
+                   "Math101 should contain student");
+        assertTrue(mathClass.hasTutor(tutor),
+                   "Math101 should have tutor");
+
+        // Delete the class
+        testModelManager.deleteClass(mathClass);
+
+        // Verify all references are cleaned up
+        assertFalse(student.getTuitionClasses().contains(mathClass),
+                    "Student should NOT have reference to deleted Math101");
+        assertFalse(tutor.getTuitionClasses().contains(mathClass),
+                    "Tutor should NOT have reference to deleted Math101");
+        assertFalse(testModelManager.hasClass(mathClass),
+                    "ModelManager should NOT contain Math101");
+
+        // Verify no stale references
+        assertEquals(0, student.getTuitionClasses().size(),
+                     "Student should have 0 classes");
+        assertEquals(0, tutor.getTuitionClasses().size(),
+                     "Tutor should have 0 classes");
+    }
+
+    @Test
+    public void deleteClass_withMultipleStudents_removesAllReferences() {
+        // Setup
+        ModelManager testModelManager = new ModelManager();
+
+        // Create multiple students
+        Student alice = new Student(
+            new Name("Alice"),
+            new Phone("11111111"),
+            new Email("alice@example.com"),
+            new Address("1 Street"),
+            new HashSet<Tag>()
+        );
+        Student bob = new Student(
+            new Name("Bob Student"),
+            new Phone("22222222"),
+            new Email("bobstudent@example.com"),
+            new Address("2 Street"),
+            new HashSet<Tag>()
+        );
+        Student charlie = new Student(
+            new Name("Charlie"),
+            new Phone("33333333"),
+            new Email("charlie@example.com"),
+            new Address("3 Street"),
+            new HashSet<Tag>()
+        );
+
+        testModelManager.addPerson(alice);
+        testModelManager.addPerson(bob);
+        testModelManager.addPerson(charlie);
+
+        // Create a class and enroll all students
+        TuitionClass mathClass = new TuitionClass(new ClassName("Math101"));
+        testModelManager.addClass(mathClass);
+
+        testModelManager.addStudentToClass(alice, mathClass);
+        testModelManager.addStudentToClass(bob, mathClass);
+        testModelManager.addStudentToClass(charlie, mathClass);
+
+        // Verify all enrolled
+        assertEquals(3, mathClass.getStudents().size());
+        assertTrue(alice.getTuitionClasses().contains(mathClass));
+        assertTrue(bob.getTuitionClasses().contains(mathClass));
+        assertTrue(charlie.getTuitionClasses().contains(mathClass));
+
+        // Delete the class
+        testModelManager.deleteClass(mathClass);
+
+        // Verify all students have no references
+        assertEquals(0, alice.getTuitionClasses().size(),
+                     "Alice should have no classes");
+        assertEquals(0, bob.getTuitionClasses().size(),
+                     "Bob should have no classes");
+        assertEquals(0, charlie.getTuitionClasses().size(),
+                     "Charlie should have no classes");
+        assertFalse(testModelManager.hasClass(mathClass),
+                    "Class should be removed from ModelManager");
+    }
+
+    @Test
+    public void deleteClass_withNoStudentsOrTutor_success() {
+        // Setup - class with no relationships
+        ModelManager testModelManager = new ModelManager();
+        TuitionClass emptyClass = new TuitionClass(new ClassName("EmptyClass"));
+        testModelManager.addClass(emptyClass);
+
+        assertTrue(testModelManager.hasClass(emptyClass));
+
+        // Delete the class
+        testModelManager.deleteClass(emptyClass);
+
+        // Verify deletion
+        assertFalse(testModelManager.hasClass(emptyClass),
+                    "Empty class should be deleted successfully");
+    }
+
+    @Test
+    public void deleteClass_withOnlyTutor_removesReferences() {
+        // Setup
+        ModelManager testModelManager = new ModelManager();
+
+        Tutor tutor = new Tutor(
+            new Name("Mr Teacher"),
+            new Phone("99999999"),
+            new Email("teacher@example.com"),
+            new Address("Teacher Street"),
+            new HashSet<Tag>()
+        );
+        testModelManager.addPerson(tutor);
+
+        TuitionClass mathClass = new TuitionClass(new ClassName("Math101"));
+        testModelManager.addClass(mathClass);
+        testModelManager.assignTutorToClass(tutor, mathClass);
+
+        // Verify relationship
+        assertTrue(tutor.getTuitionClasses().contains(mathClass));
+        assertTrue(mathClass.hasTutor(tutor));
+
+        // Delete class
+        testModelManager.deleteClass(mathClass);
+
+        // Verify cleanup
+        assertEquals(0, tutor.getTuitionClasses().size(),
+                     "Tutor should have no classes after deletion");
+        assertFalse(testModelManager.hasClass(mathClass));
     }
 }

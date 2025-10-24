@@ -1,87 +1,146 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SESSION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
+import java.util.List;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.classroom.ClassSession;
+import seedu.address.model.classroom.TuitionClass;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Student;
 
 /**
- * Marks attendance for a person in a specific session.
+ * Marks attendance for a student in a specific class session.
+ * The command updates the attendance record by marking the student as either present or absent.
  */
 public class AttendCommand extends Command {
 
     public static final String COMMAND_WORD = "attend";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks attendance for a person in a session. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks attendance for a student in a session. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
-            + PREFIX_SESSION + "SESSION_ID "
+            + PREFIX_CLASS + "CLASS_NAME "
+            + PREFIX_SESSION + "SESSION_NAME "
             + PREFIX_STATUS + "STATUS (PRESENT or ABSENT)\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
-            + PREFIX_SESSION + "1 "
+            + PREFIX_SESSION + "MATH101 "
+            + PREFIX_SESSION + "Session 1 "
             + PREFIX_STATUS + "PRESENT";
 
     public static final String MESSAGE_SUCCESS = "Attendance marked: %1$s";
+    public static final String MESSAGE_SESSION_NOT_FOUND = "Session '%s' not found in class '%s'";
+    public static final String MESSAGE_STUDENT_NOT_FOUND = "Student '%s' not found";
 
     private final Name name;
-    private final String sessionId;
-    private final String status;
+    private final String className;
+    private final String sessionName;
+    private final Boolean present;
 
     /**
-     * Creates an AttendCommand to mark attendance for the specified person.
-     * Note: sessionId should ideally reference the ID of a Session instance in the model.
-     * Future implementation should replace String sessionId with a proper Session object
-     * or validate that the sessionId corresponds to an existing Session.
+     * Creates an AttendCommand to mark attendance for the specified student.
+     *
+     * @param name the name of the student whose attendance is being marked
+     * @param className the name of the class containing the session
+     * @param sessionName the name of the session within the class
+     * @param present {@code true} if marking present, {@code false} if marking absent
+     * @throws NullPointerException if any parameter is null
      */
-    public AttendCommand(Name name, String sessionId, String status) {
-        requireNonNull(name);
-        requireNonNull(sessionId);
-        requireNonNull(status);
-        this.name = name;
-        this.sessionId = sessionId;
-        this.status = status;
+    public AttendCommand(Name name, String className, String sessionName, Boolean present) {
+        this.name = requireNonNull(name, "name cannot be null");
+        this.className = requireNonNull(className, "className cannot be null");
+        this.sessionName = requireNonNull(sessionName, "sessionName cannot be null");
+        this.present = requireNonNull(present, "present cannot be null");
     }
 
+    /**
+     * Executes the attend command to mark a student's attendance in a specific session.
+     *
+     * @param model the model containing the class list and person list
+     * @return the command result with success message
+     * @throws CommandException if the session or student cannot be found
+     * @throws NullPointerException if model is null
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
+        requireNonNull(model, "model cannot be null");
 
-        // TODO: Implement actual attendance marking logic
-        String result = String.format("Name: %s, Session: %s, Status: %s",
-                name, sessionId, status);
+        // Find the session in the specified class
+        List<TuitionClass> classList = model.getFilteredClassList();
+        ClassSession session = classList.stream()
+                .filter(c -> c.getClassName().equals(this.className))
+                .flatMap(c -> c.getAllSessions().stream())
+                .filter(s -> s.getSessionName().equals(this.sessionName))
+                .findFirst()
+                .orElse(null);
+
+        if (session == null) {
+            throw new CommandException(String.format(MESSAGE_SESSION_NOT_FOUND, sessionName, className));
+        }
+
+        // Find the student by name
+        Student student = model.getFilteredPersonList().stream()
+                .filter(Student.class::isInstance)
+                .map(Student.class::cast)
+                .filter(s -> s.getName().equals(this.name))
+                .findFirst()
+                .orElse(null);
+
+        if (student == null) {
+            throw new CommandException(String.format(MESSAGE_STUDENT_NOT_FOUND, name));
+        }
+
+        // Mark attendance based on present flag
+        if (present) {
+            session.markPresent(student);
+        } else {
+            session.markAbsent(student);
+        }
+
+        String result = String.format("Name: %s, Class: %s, Session: %s, Status: %s",
+                name, className, sessionName, present ? "PRESENT" : "ABSENT");
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, result));
     }
 
+    /**
+     * Checks if this AttendCommand is equal to another object.
+     *
+     * @param other the object to compare with
+     * @return {@code true} if both objects are AttendCommand instances with identical parameters
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof AttendCommand)) {
             return false;
         }
 
         AttendCommand otherCommand = (AttendCommand) other;
         return name.equals(otherCommand.name)
-                && sessionId.equals(otherCommand.sessionId)
-                && status.equals(otherCommand.status);
+                && className.equals(otherCommand.className)
+                && sessionName.equals(otherCommand.sessionName)
+                && present.equals(otherCommand.present);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("name", name)
-                .add("sessionId", sessionId)
-                .add("status", status)
+                .add("className", className)
+                .add("sessionName", sessionName)
+                .add("present", present)
                 .toString();
     }
 }

@@ -39,16 +39,18 @@ public class ListClassCommand extends Command {
      */
     private String formatClassWithStudents(TuitionClass tuitionClass) {
         String className = tuitionClass.getClassName();
+
+        String tutorLabel = tuitionClass.isAssignedToTutor()
+            ? tuitionClass.getTutor().getName().fullName
+            : "Unassigned";
+
         List<Student> students = tuitionClass.getStudents();
+        String studentsLabel = students.isEmpty()
+                ? "[No students]"
+                : students.stream()
+                        .map(s -> s.getName().fullName)
+                        .collect(Collectors.joining(", "));
 
-        if (students.isEmpty()) {
-            return className + ": [No students]";
-        }
-
-        String studentNames = students.stream()
-                .map(student -> student.getName().fullName)
-                .collect(Collectors.joining(", "));
-
-        return className + ": " + studentNames;
+        return String.format("%s (Tutor: %s): %s", className, tutorLabel, studentsLabel);
     }
 }

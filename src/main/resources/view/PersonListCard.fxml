@@ -2,35 +2,34 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <GridPane HBox.hgrow="ALWAYS">
-    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
-    </columnConstraints>
-    <VBox alignment="CENTER_LEFT" minHeight="105" GridPane.columnIndex="0">
-      <padding>
-        <Insets top="5" right="5" bottom="5" left="15" />
-      </padding>
-      <HBox spacing="0.5" alignment="CENTER_LEFT">
-        <Label fx:id="id" styleClass="cell_big_label">
-          <minWidth>
-            <!-- Ensures that the label text is never truncated -->
-            <Region fx:constant="USE_PREF_SIZE" />
-          </minWidth>
-        </Label>
-        <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
-      </HBox>
-      <Label fx:id="role" styleClass="role_label" />
-      <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
-      <Label fx:id="address" styleClass="cell_small_label" text="\$address" />
-      <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
-      <Label fx:id="enrolledClasses" styleClass="cell_small_label" text="\$enrolledClasses" />
-    </VBox>
-  </GridPane>
+<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" styleClass="modern-card" spacing="20">
+  <padding>
+    <Insets top="16" right="20" bottom="16" left="20" />
+  </padding>
+
+  <!-- Left: Role icon -->
+  <VBox alignment="CENTER" spacing="8">
+    <ImageView fx:id="roleIcon" styleClass="role-icon" fitWidth="32" fitHeight="32" preserveRatio="true" />
+  </VBox>
+
+  <!-- Center: Main info -->
+  <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+    <HBox spacing="8" alignment="CENTER_LEFT">
+      <Label fx:id="id" styleClass="card-id" />
+      <Label fx:id="name" text="\$first" styleClass="card-name" />
+    </HBox>
+    <Label fx:id="email" styleClass="card-email" text="\$email" />
+    <Label fx:id="role" styleClass="role-label" />
+    <Label fx:id="enrolledClasses" styleClass="card-email" text="\$enrolledClasses" />
+  </VBox>
+
+  <!-- Right: Contact info -->
+  <VBox alignment="CENTER_RIGHT" spacing="2">
+    <Label fx:id="phone" styleClass="card-phone" text="\$phone" />
+    <Label fx:id="address" styleClass="card-address" text="\$address" />
+  </VBox>
 </HBox>

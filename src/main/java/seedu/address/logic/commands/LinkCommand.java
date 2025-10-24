@@ -63,7 +63,7 @@ public class LinkCommand extends Command {
         requireNonNull(model);
 
         // Find the parent by name
-        List<Person> personList = model.getFilteredPersonList();
+        List<Person> personList = model.getPersonList();
         Person parentPerson = personList.stream()
                 .filter(p -> p.getName().fullName.equals(parentName))
                 .findFirst()

@@ -1,4 +1,8 @@
 @startuml
+' TutBook Architecture Diagram - High-level component overview
+' Shows the main architectural components for the tuition centre management system
+' Components handle student/tutor/parent management, class enrollment, and attendance tracking
+
 !include <office/Concepts/globe_internet>
 !include <office/Concepts/documents>
 !include <office/Users/user>
