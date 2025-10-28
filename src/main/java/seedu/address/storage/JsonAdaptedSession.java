@@ -10,6 +10,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javafx.util.Pair;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.classroom.ClassSession;
 import seedu.address.model.person.Student;
@@ -55,10 +56,11 @@ public class JsonAdaptedSession {
         absentStudents = new ArrayList<>();
 
         // Convert attendance record to present/absent lists
-        Map<Student, Boolean> attendanceRecord = source.getAttendanceRecord();
-        for (Map.Entry<Student, Boolean> entry : attendanceRecord.entrySet()) {
+        Map<Student, Pair<Boolean, LocalDateTime>> attendanceRecord = source.getAttendanceRecord();
+        for (Map.Entry<Student, Pair<Boolean, LocalDateTime>> entry : attendanceRecord.entrySet()) {
             Student student = entry.getKey();
-            Boolean isPresent = entry.getValue();
+            Pair<Boolean, LocalDateTime> attendanceInfo = entry.getValue();
+            Boolean isPresent = attendanceInfo != null ? attendanceInfo.getKey() : null;
             String studentName = student.getName().fullName;
 
             if (isPresent != null && isPresent) {
