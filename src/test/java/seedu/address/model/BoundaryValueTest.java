@@ -31,11 +31,14 @@ public class BoundaryValueTest {
 
     @Test
     public void index_maxValue_throwsException() {
-        // Test that Integer.MAX_VALUE causes issues
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            Index index = Index.fromOneBased(Integer.MAX_VALUE);
-            // The zero-based index would overflow to negative
-            assertTrue(index.getZeroBased() < 0);
+        // Integer.MAX_VALUE is actually valid for Index.fromOneBased
+        // The parser prevents it, but the Index class itself accepts it
+        Index index = Index.fromOneBased(Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE - 1, index.getZeroBased());
+
+        // Parser should reject it though
+        assertThrows(ParseException.class, () -> {
+            ParserUtil.parseIndex(String.valueOf(Integer.MAX_VALUE));
         });
     }
 
@@ -163,22 +166,21 @@ public class BoundaryValueTest {
 
     @Test
     public void tags_excessive_shouldLimit() {
-        // Test for BUG-188: No limit on tags (currently accepts unlimited)
+        // Bug fixed - now limits to 20 tags
         Set<Tag> tags = IntStream.range(0, 100)
                 .mapToObj(i -> new Tag("tag" + i))
                 .collect(Collectors.toSet());
 
-        // Create person with many tags
-        Student student = new Student(
-            new Name("Test"),
-            new Phone("12345678"),
-            new Email("test@test.com"),
-            new Address("Test Address"),
-            tags
-        );
-
-        // Currently accepts unlimited tags (bug)
-        assertEquals(100, student.getTags().size());
+        // Should throw exception when creating person with >20 tags
+        assertThrows(IllegalArgumentException.class, () -> {
+            Student student = new Student(
+                new Name("Test"),
+                new Phone("12345678"),
+                new Email("test@test.com"),
+                new Address("Test Address"),
+                tags
+            );
+        });
     }
 
     @Test
