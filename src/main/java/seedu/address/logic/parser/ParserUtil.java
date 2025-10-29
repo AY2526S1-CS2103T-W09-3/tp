@@ -155,7 +155,6 @@ public class ParserUtil {
     public static String parseClassName(String className) throws ParseException {
         requireNonNull(className);
         String trimmed = className.trim();
-        System.out.println(trimmed);
         if (trimmed.isEmpty()) {
             throw new ParseException(ClassName.MESSAGE_CONSTRAINTS);
         }
@@ -169,7 +168,6 @@ public class ParserUtil {
     public static String parseTutorName(String tutorName) throws ParseException {
         requireNonNull(tutorName);
         String trimmed = tutorName.trim();
-        System.out.println(trimmed);
         if (trimmed.isEmpty()) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
