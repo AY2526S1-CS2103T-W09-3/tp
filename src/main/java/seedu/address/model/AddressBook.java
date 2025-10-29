@@ -2,12 +2,14 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.classroom.TuitionClass;
 import seedu.address.model.classroom.UniqueClassList;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Student;
 import seedu.address.model.person.UniquePersonList;
 
 /**
@@ -101,7 +103,24 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         // Handle relationship updates before replacing
         boolean isTypeEdited = !target.getPersonType().equals(editedPerson.getPersonType());
-        target.handleEdit(editedPerson, isTypeEdited);
+
+        if (isTypeEdited && target instanceof Student) {
+            // When changing from Student to another type, ensure complete cleanup
+            Student student = (Student) target;
+            // Get list of classes before cleanup
+            ArrayList<TuitionClass> enrolledClasses = new ArrayList<>(student.getClasses());
+
+            // Perform cleanup
+            target.handleEdit(editedPerson, isTypeEdited);
+
+            // Double-check that the student is removed from each class's student list
+            for (TuitionClass tc : enrolledClasses) {
+                tc.getStudents().remove(student);
+            }
+        } else {
+            // Normal edit handling
+            target.handleEdit(editedPerson, isTypeEdited);
+        }
 
         persons.setPerson(target, editedPerson);
     }

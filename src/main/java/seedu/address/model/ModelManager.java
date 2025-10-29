@@ -146,6 +146,10 @@ public class ModelManager implements Model {
             target.setTutor(null);
         }
 
+        // Remove all sessions belonging to this class (cascade delete)
+        List<ClassSession> sessionsToRemove = target.getAllSessions();
+        sessionList.removeAll(sessionsToRemove);
+
         addressBook.unjoin(target);
     }
 
