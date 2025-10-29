@@ -108,7 +108,7 @@ public class AddressBook implements ReadOnlyAddressBook {
             // When changing from Student to another type, ensure complete cleanup
             Student student = (Student) target;
             // Get list of classes before cleanup
-            ArrayList<TuitionClass> enrolledClasses = new ArrayList<>(student.getClasses());
+            ArrayList<TuitionClass> enrolledClasses = new ArrayList<>(student.getTuitionClasses());
 
             // Perform cleanup
             target.handleEdit(editedPerson, isTypeEdited);
