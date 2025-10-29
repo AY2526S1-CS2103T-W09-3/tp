@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import seedu.address.model.Attendance;
 import seedu.address.model.person.Student;
@@ -170,8 +171,11 @@ public class ClassSession {
             Boolean present = pair == null ? false : pair.isPresent();
             LocalDateTime ts = pair == null ? null : pair.getTimestamp();
             String timeStr = (ts == null) ? "" : " (marked: " + ts.format(fmt) + ")";
-            String line = "- " + (student == null ? "Unknown student" : student.getName()) + timeStr
-                    + System.lineSeparator();
+            String studentName = "Unknown student";
+            if (student != null && student.getName() != null) {
+                studentName = student.getName().toString();
+            }
+            String line = "- " + studentName + timeStr + System.lineSeparator();
             if (Boolean.TRUE.equals(present)) {
                 presentSb.append(line);
             } else {
@@ -214,13 +218,13 @@ public class ClassSession {
             return false;
         }
         ClassSession that = (ClassSession) other;
-        return parentClass.equals(that.parentClass)
-                && sessionName.equals(that.sessionName)
-                && dateTime.equals(that.dateTime);
+        return Objects.equals(parentClass, that.parentClass)
+                && Objects.equals(sessionName, that.sessionName)
+                && Objects.equals(dateTime, that.dateTime);
     }
 
     @Override
     public int hashCode() {
-        return parentClass.hashCode() ^ sessionName.hashCode() ^ dateTime.hashCode();
+        return Objects.hash(parentClass, sessionName, dateTime);
     }
 }

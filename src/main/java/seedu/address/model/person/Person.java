@@ -16,6 +16,9 @@ import seedu.address.model.tag.Tag;
  */
 public abstract class Person {
 
+    // Constants
+    public static final int MAX_TAGS_PER_PERSON = 20;
+
     // Identity fields
     private final Name name;
     private final Phone phone;
@@ -41,6 +44,11 @@ public abstract class Person {
         this.phone = phone;
         this.email = email;
         this.address = address;
+        // Limit number of tags per person
+        if (tags.size() > MAX_TAGS_PER_PERSON) {
+            throw new IllegalArgumentException(
+                String.format("Too many tags. Maximum %d tags allowed per person.", MAX_TAGS_PER_PERSON));
+        }
         this.tags.addAll(tags);
     }
 

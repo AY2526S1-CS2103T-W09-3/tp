@@ -42,7 +42,12 @@ public class ParserUtil {
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
-        return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+        int index = Integer.parseInt(trimmedIndex);
+        // Prevent integer overflow issues with extremely large indices
+        if (index > 10000) {
+            throw new ParseException(MESSAGE_INVALID_INDEX);
+        }
+        return Index.fromOneBased(index);
     }
 
     /**
