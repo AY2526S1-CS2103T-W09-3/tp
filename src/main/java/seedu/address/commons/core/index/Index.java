@@ -42,8 +42,12 @@ public class Index {
 
     /**
      * Creates a new {@code Index} using a one-based index.
+     * @throws IndexOutOfBoundsException if {@code oneBasedIndex} is less than 1.
      */
     public static Index fromOneBased(int oneBasedIndex) {
+        if (oneBasedIndex < 1) {
+            throw new IndexOutOfBoundsException("Index should be a positive integer");
+        }
         return new Index(oneBasedIndex - 1);
     }
 
