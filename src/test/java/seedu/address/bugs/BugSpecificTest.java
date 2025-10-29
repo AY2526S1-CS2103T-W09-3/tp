@@ -61,37 +61,33 @@ public class BugSpecificTest {
     // ===== BUG-170: Debug output in production code =====
     @Test
     public void parserUtil_parseClassName_shouldNotPrintToConsole() throws ParseException {
-        // This test will fail until bug is fixed
         String className = "TestClass";
         String parsed = ParserUtil.parseClassName(className);
 
-        // Check that nothing was printed to console
-        // Bug has been fixed - should not print to console
         String consoleOutput = outContent.toString();
         assertFalse(consoleOutput.contains(className),
-            "BUG-170 FIXED: System.out.println removed from production code");
+            "System.out.println removed from production code");
     }
 
     @Test
     public void parserUtil_parseTutorName_shouldNotPrintToConsole() throws ParseException {
-        // This test will fail until bug is fixed
         String tutorName = "TestTutor";
         String parsed = ParserUtil.parseTutorName(tutorName);
 
         String consoleOutput = outContent.toString();
         assertFalse(consoleOutput.contains(tutorName),
-            "BUG-170 FIXED: System.out.println removed from production code");
+            "System.out.println removed from production code");
     }
 
     // ===== BUG-171: Integer overflow in Index parsing =====
     @Test
     public void index_maxValue_causesOverflow() {
-        // This test demonstrates the integer overflow bug
+        assertThrows(ParseException.class, () -> {
+            ParserUtil.parseIndex(String.valueOf(Integer.MAX_VALUE));
+        });
+
         assertThrows(IndexOutOfBoundsException.class, () -> {
-            Index index = Index.fromOneBased(Integer.MAX_VALUE);
-            // Zero-based would be MAX_VALUE - 1, which overflows to negative
-            int zeroBased = index.getZeroBased();
-            assertTrue(zeroBased < 0, "Integer overflow should cause negative index");
+            Index.fromOneBased(0);
         });
     }
 
@@ -140,10 +136,9 @@ public class BugSpecificTest {
         // This should clean up enrollments but currently doesn't (bug)
         model.setPerson(student, tutor);
 
-        // This test exposes the bug - cleanup doesn't happen
-        // After fix, should be: assertFalse(mathClass.hasStudent(student));
-        assertTrue(mathClass.hasStudent(student),
-            "BUG-172: Student not removed from class when changed to Tutor!");
+        // Bug has been fixed - cleanup now happens properly
+        assertFalse(mathClass.hasStudent(student),
+            "BUG-172 FIXED: Student properly removed from class when changed to Tutor");
     }
 
     // ===== BUG-173: NPE risk in session details with null student name =====
@@ -302,13 +297,12 @@ public class BugSpecificTest {
             true
         );
 
-        // This should work with case-insensitive comparison
-        // Currently fails due to case-sensitive equals() (bug)
+        // Bug has been fixed - now uses case-insensitive comparison
         try {
             command.execute(model);
-            fail("BUG-178: Should throw exception due to case-sensitive comparison");
+            // Should succeed now with case-insensitive matching
         } catch (Exception e) {
-            assertTrue(e.getMessage().contains("not found"));
+            fail("BUG-178 FIXED: Should succeed with case-insensitive comparison, but got: " + e.getMessage());
         }
     }
 
@@ -402,23 +396,35 @@ public class BugSpecificTest {
     // ===== BUG-188: No limit on number of tags per person =====
     @Test
     public void person_excessiveTags_shouldHaveLimit() {
-        // Test that there's no limit on tags (bug)
+        // Bug has been fixed - now enforces limit of 20 tags
         HashSet<seedu.address.model.tag.Tag> tags = new HashSet<>();
         for (int i = 0; i < 50; i++) {
             tags.add(new seedu.address.model.tag.Tag("tag" + i));
         }
 
+        // Should throw exception when trying to create person with >20 tags
+        assertThrows(IllegalArgumentException.class, () -> {
+            Student student = new Student(
+                new Name("Tagged"),
+                new Phone("12345678"),
+                new Email("tagged@test.com"),
+                new Address("Address"),
+                tags
+            );
+        }, "BUG-188 FIXED: Now enforces maximum of 20 tags per person");
+
+        // Verify that 20 tags is accepted
+        HashSet<seedu.address.model.tag.Tag> validTags = new HashSet<>();
+        for (int i = 0; i < 20; i++) {
+            validTags.add(new seedu.address.model.tag.Tag("tag" + i));
+        }
         Student student = new Student(
             new Name("Tagged"),
             new Phone("12345678"),
             new Email("tagged@test.com"),
             new Address("Address"),
-            tags
+            validTags
         );
-
-        // Currently accepts 50 tags without limit (bug)
-        // Should ideally have a reasonable limit
-        assertEquals(50, student.getTags().size(),
-            "BUG-188: No limit on number of tags!");
+        assertEquals(20, student.getTags().size());
     }
 }
