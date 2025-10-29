@@ -174,11 +174,8 @@ public class UniquePersonListTest {
         assertEquals(uniquePersonList.asUnmodifiableObservableList().toString(), uniquePersonList.toString());
     }
 
-    // ===== Additional tests for bug coverage =====
-
     @Test
     public void setPersons_emptyList_success() {
-        // Test edge case: empty list
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
         assertEquals(2, uniquePersonList.asUnmodifiableObservableList().size());
@@ -189,7 +186,6 @@ public class UniquePersonListTest {
 
     @Test
     public void contains_afterRemove_returnsFalse() {
-        // Test that contains works correctly after removal
         uniquePersonList.add(ALICE);
         assertTrue(uniquePersonList.contains(ALICE));
 
@@ -199,7 +195,6 @@ public class UniquePersonListTest {
 
     @Test
     public void setPerson_toSamePersonMultipleTimes_success() {
-        // Test multiple edits to same person
         uniquePersonList.add(ALICE);
 
         Person edited1 = new PersonBuilder(ALICE).withPhone("11111111").build();
@@ -219,7 +214,6 @@ public class UniquePersonListTest {
 
     @Test
     public void hashCode_sameList_consistent() {
-        // Test hashCode consistency
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
 
@@ -231,7 +225,6 @@ public class UniquePersonListTest {
 
     @Test
     public void equals_differentOrder_notEqual() {
-        // Test that order matters for equality
         UniquePersonList list1 = new UniquePersonList();
         UniquePersonList list2 = new UniquePersonList();
 
@@ -241,13 +234,11 @@ public class UniquePersonListTest {
         list2.add(BOB);
         list2.add(ALICE);
 
-        // Lists with different order should not be equal
         assertFalse(list1.equals(list2));
     }
 
     @Test
     public void iterator_iteratesThroughAllPersons() {
-        // Test iterator functionality
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
 
@@ -262,7 +253,6 @@ public class UniquePersonListTest {
 
     @Test
     public void setPersons_withNullInList_throwsNullPointerException() {
-        // Test null handling in list
         List<Person> listWithNull = Arrays.asList(ALICE, null, BOB);
         assertThrows(NullPointerException.class, () -> uniquePersonList.setPersons(listWithNull));
     }

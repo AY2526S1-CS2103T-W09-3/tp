@@ -68,13 +68,9 @@ public class IntegrationTest {
             new HashSet<>()
         );
 
-        // Replace student with tutor (simulating role change)
         model.setPerson(student, tutor);
 
-        // Student should no longer be in the class
-        // Note: This test exposes the bug - the cleanup doesn't happen properly
-        // After bug fix, this should pass
-        // assertFalse(mathClass.hasStudent(student));
+        assertFalse(mathClass.hasStudent(student));
     }
 
     @Test
@@ -109,12 +105,9 @@ public class IntegrationTest {
             new HashSet<>()
         );
 
-        // Replace tutor with student (simulating role change)
         model.setPerson(tutor, student);
 
-        // Tutor should no longer be assigned to the class
-        // Note: This test exposes the bug - the cleanup doesn't happen properly
-        // assertFalse(physicsClass.isAssignedToTutor());
+        assertFalse(physicsClass.isAssignedToTutor());
     }
 
     @Test
@@ -151,8 +144,6 @@ public class IntegrationTest {
         // Delete the student
         model.deletePerson(student);
 
-        // Student should be removed from all classes
-        // Note: This assumes cascade delete is implemented
         assertFalse(mathClass.hasStudent(student));
         assertFalse(scienceClass.hasStudent(student));
         assertFalse(englishClass.hasStudent(student));
@@ -208,11 +199,8 @@ public class IntegrationTest {
         // Verify sessions exist
         assertEquals(3, chemClass.getAllSessions().size());
 
-        // Delete the class
         model.deleteClass(chemClass);
 
-        // Sessions should be deleted with the class
-        // Note: Sessions are contained within the class, so they're deleted automatically
         assertFalse(model.getAddressBook().getClassList().contains(chemClass));
     }
 
@@ -255,12 +243,7 @@ public class IntegrationTest {
             new HashSet<>()
         );
 
-        // The relationship should be maintained after edit
-        // Note: This depends on proper implementation of handleEdit
         model.setPerson(parent, editedParent);
-
-        // Check if relationship is maintained (may fail if not implemented)
-        // assertTrue(editedParent.hasChild(student));
     }
 
     @Test
