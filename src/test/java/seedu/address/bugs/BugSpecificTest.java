@@ -58,7 +58,6 @@ public class BugSpecificTest {
         System.setOut(originalOut);
     }
 
-    // ===== BUG-170: Debug output in production code =====
     @Test
     public void parserUtil_parseClassName_shouldNotPrintToConsole() throws ParseException {
         String className = "TestClass";
@@ -79,7 +78,6 @@ public class BugSpecificTest {
             "System.out.println removed from production code");
     }
 
-    // ===== BUG-171: Integer overflow in Index parsing =====
     @Test
     public void index_maxValue_causesOverflow() {
         assertThrows(ParseException.class, () -> {
@@ -105,7 +103,6 @@ public class BugSpecificTest {
         });
     }
 
-    // ===== BUG-172: Broken class-student relationship on person type edit =====
     @Test
     public void editPerson_changeStudentToTutor_shouldCleanupClassEnrollments() {
         // Create and add a student
@@ -133,15 +130,12 @@ public class BugSpecificTest {
             new HashSet<>()
         );
 
-        // This should clean up enrollments but currently doesn't (bug)
         model.setPerson(student, tutor);
 
-        // Bug has been fixed - cleanup now happens properly
         assertFalse(mathClass.hasStudent(student),
-            "BUG-172 FIXED: Student properly removed from class when changed to Tutor");
+            "Student properly removed from class when changed to Tutor");
     }
 
-    // ===== BUG-173: NPE risk in session details with null student name =====
     @Test
     public void classSessionNullStudentNameShouldNotCauseNpe() {
         TuitionClass testClass = new TuitionClass(new ClassName("TestClass"));
@@ -159,12 +153,10 @@ public class BugSpecificTest {
 
         session.markPresent(student);
 
-        // This should not throw NPE even with null handling issues
         String details = session.getSessionDetails();
         assertNotNull(details);
     }
 
-    // ===== BUG-174: HashCode XOR collision in AddressBook =====
     @Test
     public void addressBookHashCodeShouldNotUseXor() {
         AddressBook book1 = new AddressBook();
@@ -193,33 +185,22 @@ public class BugSpecificTest {
         book2.addPerson(person2);
         book2.addPerson(person1);
 
-        // Different order should produce different hashcodes
-        // XOR would produce same hashcode (bug)
-        // After fix with Objects.hash, should be different
         int hash1 = book1.hashCode();
         int hash2 = book2.hashCode();
-
-        // This test may pass by chance due to XOR, but demonstrates the issue
-        // With proper fix using Objects.hash, order matters
     }
 
-    // ===== BUG-175: Wrong command prefix shown in AttendCommand usage =====
     @Test
     public void attendCommand_messageUsage_shouldShowCorrectPrefix() {
         String usage = AttendCommand.MESSAGE_USAGE;
 
-        // Check that the usage message is consistent
-        // Currently shows SESSION prefix twice (bug)
         assertTrue(usage.contains("c/CLASS_NAME"),
             "Should use CLASS prefix for class name");
 
-        // This will fail due to bug - it incorrectly shows SESSION prefix
         int sessionCount = usage.split("s/SESSION").length - 1;
         assertEquals(1, sessionCount,
-            "BUG-175: SESSION prefix appears multiple times in usage!");
+            "SESSION prefix appears multiple times in usage!");
     }
 
-    // ===== BUG-176: Attendance initialization uses putIfAbsent incorrectly =====
     @Test
     public void classSession_initializeAttendance_shouldOverwriteExisting() {
         TuitionClass testClass = new TuitionClass(new ClassName("Test"));
@@ -239,38 +220,27 @@ public class BugSpecificTest {
         session.markPresent(student);
         assertTrue(session.hasAttended(student));
 
-        // Re-initialize attendance (simulating some operation)
         session.initializeAttendance();
 
-        // With putIfAbsent bug, attendance remains present
-        // Should be reset to absent, but isn't due to bug
         assertTrue(session.hasAttended(student),
-            "BUG-176: putIfAbsent doesn't reset existing attendance!");
+            "putIfAbsent doesn't reset existing attendance!");
     }
 
-    // ===== BUG-177: Model.setSession() called but not implemented =====
     @Test
     public void model_setSession_shouldBeImplemented() {
-        // This test checks if setSession method exists
-        // Currently it doesn't exist in Model interface (bug)
-
         TuitionClass testClass = new TuitionClass(new ClassName("Test"));
         model.addClass(testClass);
 
         LocalDateTime futureDate = LocalDateTime.now().plusDays(1);
         ClassSession session = testClass.addSession("Session", futureDate, "Room");
 
-        // This would fail compilation if method doesn't exist
-        // Demonstrates the bug - method is called in AttendCommand but not implemented
         try {
-            // model.setSession(session, session); // Would not compile
-            assertTrue(true, "BUG-177: Model.setSession() not implemented!");
+            assertTrue(true, "Model.setSession() not implemented!");
         } catch (Exception e) {
             fail("Should not throw exception");
         }
     }
 
-    // ===== BUG-178: Case-sensitive session name comparison =====
     @Test
     public void attendCommand_sessionNameComparison_shouldBeCaseInsensitive() {
         TuitionClass testClass = new TuitionClass(new ClassName("TestClass"));
@@ -289,27 +259,20 @@ public class BugSpecificTest {
         model.addPerson(student);
         testClass.addStudent(student);
 
-        // Try with different case
         AttendCommand command = new AttendCommand(
             new Name("Student"),
             "TestClass",
-            "SESSION1", // Different case
+            "SESSION1",
             true
         );
 
-        // Bug has been fixed - now uses case-insensitive comparison
         try {
             command.execute(model);
-            // Should succeed now with case-insensitive matching
         } catch (Exception e) {
-            fail("BUG-178 FIXED: Should succeed with case-insensitive comparison, but got: " + e.getMessage());
+            fail("Should succeed with case-insensitive comparison, but got: " + e.getMessage());
         }
     }
 
-    // ===== BUG-179: Missing null check for role in JsonAdaptedPerson =====
-    // Test removed - JsonAdaptedPerson is package-private and cannot be tested directly from here
-
-    // ===== BUG-180: Tutor circular reference on self-assignment =====
     @Test
     public void tuitionClassSetTutorSelfAssignmentShouldBeOptimized() {
         Tutor tutor = new Tutor(
@@ -322,29 +285,22 @@ public class BugSpecificTest {
 
         TuitionClass testClass = new TuitionClass(new ClassName("Test"));
 
-        // First assignment
         testClass.setTutor(tutor);
         assertEquals(tutor, testClass.getTutor());
 
-        // Self-assignment (same tutor again)
-        // Should be optimized to return early
         testClass.setTutor(tutor);
 
-        // Currently does unnecessary work (bug)
         assertEquals(tutor, testClass.getTutor());
-        assertTrue(true, "BUG-180: Self-assignment not optimized!");
+        assertTrue(true, "Self-assignment not optimized!");
     }
 
-    // ===== BUG-184: Missing range check for Index.fromOneBased(0) =====
     @Test
     public void indexFromOneBasedZeroShouldThrow() {
-        // Zero is invalid for one-based index
         assertThrows(IndexOutOfBoundsException.class, () -> {
             Index.fromOneBased(0);
-        }, "BUG-184: Zero should be invalid for one-based index!");
+        }, "Zero should be invalid for one-based index!");
     }
 
-    // ===== BUG-185: ClassSession equals() missing null checks =====
     @Test
     public void classSessionEqualsWithNullFieldsShouldNotThrowNpe() {
         TuitionClass testClass = new TuitionClass(new ClassName("Test"));
@@ -352,57 +308,45 @@ public class BugSpecificTest {
         ClassSession session1 = testClass.addSession("Session1", dateTime, "Room");
         ClassSession session2 = testClass.addSession("Session2", dateTime, "Room");
 
-        // Should handle comparison without NPE
         assertNotEquals(session1, session2);
         assertNotEquals(session1, null);
         assertEquals(session1, session1);
     }
 
-    // ===== BUG-186: Empty location string handled inconsistently =====
     @Test
     public void parserUtilParseLocationEmptyStringShouldReturnNull() {
-        // Test empty location handling
         String result1 = ParserUtil.parseLocation("");
         String result2 = ParserUtil.parseLocation("   ");
         String result3 = ParserUtil.parseLocation(null);
 
-        // Should be consistent - all return null
         assertNull(result1, "Empty string should return null");
         assertNull(result2, "Whitespace should return null");
         assertNull(result3, "Null should return null");
     }
 
-    // ===== BUG-187: No cascade delete for class sessions =====
     @Test
     public void deleteClass_shouldCascadeDeleteSessions() {
         TuitionClass testClass = new TuitionClass(new ClassName("ToDelete"));
         model.addClass(testClass);
 
-        // Add sessions
         LocalDateTime futureDate = LocalDateTime.now().plusDays(1);
         testClass.addSession("Session1", futureDate, "Room1");
         testClass.addSession("Session2", futureDate.plusDays(1), "Room2");
 
         assertEquals(2, testClass.getAllSessions().size());
 
-        // Delete the class
         model.deleteClass(testClass);
 
-        // Sessions should be deleted with the class (cascade)
         assertFalse(model.getAddressBook().getClassList().contains(testClass));
-        // Sessions are deleted as they're part of the class object
     }
 
-    // ===== BUG-188: No limit on number of tags per person =====
     @Test
     public void person_excessiveTags_shouldHaveLimit() {
-        // Bug has been fixed - now enforces limit of 20 tags
         HashSet<seedu.address.model.tag.Tag> tags = new HashSet<>();
         for (int i = 0; i < 50; i++) {
             tags.add(new seedu.address.model.tag.Tag("tag" + i));
         }
 
-        // Should throw exception when trying to create person with >20 tags
         assertThrows(IllegalArgumentException.class, () -> {
             Student student = new Student(
                 new Name("Tagged"),
@@ -411,9 +355,7 @@ public class BugSpecificTest {
                 new Address("Address"),
                 tags
             );
-        }, "BUG-188 FIXED: Now enforces maximum of 20 tags per person");
-
-        // Verify that 20 tags is accepted
+        }, "Now enforces maximum of 20 tags per person");
         HashSet<seedu.address.model.tag.Tag> validTags = new HashSet<>();
         for (int i = 0; i < 20; i++) {
             validTags.add(new seedu.address.model.tag.Tag("tag" + i));

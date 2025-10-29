@@ -177,12 +177,9 @@ public class BoundaryValueTest {
 
     @Test
     public void tags_excessive_shouldLimit() {
-        // Bug fixed - now limits to 20 tags
         Set<Tag> tags = IntStream.range(0, 100)
                 .mapToObj(i -> new Tag("tag" + i))
                 .collect(Collectors.toSet());
-
-        // Should throw exception when creating person with >20 tags
         assertThrows(IllegalArgumentException.class, () -> {
             Student student = new Student(
                 new Name("Test"),
