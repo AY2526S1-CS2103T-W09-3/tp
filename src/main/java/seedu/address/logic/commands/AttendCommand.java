@@ -35,7 +35,7 @@ public class AttendCommand extends Command {
             + PREFIX_STATUS + "STATUS (PRESENT or ABSENT)\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
-            + PREFIX_SESSION + "MATH101 "
+            + PREFIX_CLASS + "MATH101 "
             + PREFIX_SESSION + "Session 1 "
             + PREFIX_STATUS + "PRESENT";
 
