@@ -46,7 +46,7 @@ public class LinkCommand extends Command {
      * Creates a LinkCommand to link the specified parent to the specified child.
      *
      * @param parentName The name of the parent.
-     * @param childName The name of the child (student).
+     * @param childName  The name of the child (student).
      */
     public LinkCommand(String parentName, String childName) {
         requireNonNull(parentName);
@@ -70,7 +70,7 @@ public class LinkCommand extends Command {
         // Find the parent by name
         List<Person> personList = model.getPersonList();
         Person parentPerson = personList.stream()
-                .filter(p -> p.getName().fullName.equals(parentName))
+                .filter(p -> p.getName().fullName.equalsIgnoreCase(parentName))
                 .findFirst()
                 .orElse(null);
 
@@ -86,7 +86,7 @@ public class LinkCommand extends Command {
 
         // Find the child by name
         Person childPerson = personList.stream()
-                .filter(p -> p.getName().fullName.equals(childName))
+                .filter(p -> p.getName().fullName.equalsIgnoreCase(childName))
                 .findFirst()
                 .orElse(null);
 

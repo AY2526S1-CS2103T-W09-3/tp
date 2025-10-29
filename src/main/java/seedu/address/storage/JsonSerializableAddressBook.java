@@ -17,6 +17,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.classroom.ClassSession;
 import seedu.address.model.classroom.TuitionClass;
+import seedu.address.model.person.Parent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Student;
 import seedu.address.model.person.Tutor;
@@ -73,6 +74,7 @@ class JsonSerializableAddressBook {
 
         // Step 1: Add all persons first
         Map<String, Person> personMap = new HashMap<>();
+        Map<String, JsonAdaptedPerson> jsonPersonMap = new HashMap<>();
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
             if (addressBook.hasPerson(person)) {
@@ -81,6 +83,23 @@ class JsonSerializableAddressBook {
             addressBook.addPerson(person);
             // Store person by their unique identifier (name) for lookup
             personMap.put(person.getName().fullName, person);
+            jsonPersonMap.put(person.getName().fullName, jsonAdaptedPerson);
+        }
+
+        // Step 1.5: Restore parent-child relationships
+        for (JsonAdaptedPerson jsonPerson : persons) {
+            Person person = personMap.get(jsonPerson.toModelType().getName().fullName);
+
+            // Restore children for parents
+            if (person instanceof Parent) {
+                Parent parent = (Parent) person;
+                for (String childName : jsonPerson.getChildrenNames()) {
+                    Person child = personMap.get(childName);
+                    if (child instanceof Student) {
+                        parent.addChild((Student) child);
+                    }
+                }
+            }
         }
 
         // Step 2: Add all classes (without tutor/students initially)

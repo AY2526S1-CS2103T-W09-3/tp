@@ -3,192 +3,250 @@ layout: page
 title: User Guide
 ---
 
-TutBook is a **desktop app for tuition centre admins to manage contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). This release represents a significant enhancement over AB3, transforming it into a comprehensive tuition centre management system.
+# TutBook User Guide
+
+TutBook helps tuition centre administrators **manage students, tutors, parents, and classes efficiently**.  
+It combines the speed of a Command Line Interface (CLI) with the convenience of a Graphical User Interface (GUI).
+
+This guide will help you **set up TutBook**, understand its features, and make the most out of its commands — even if you are new to CLI-based applications.
 
 * Table of Contents
 {:toc}
 
---------------------------------------------------------------------------------------------------------------------
+---
 
-## Quick start
+## About This Guide
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   Installation instructions can be found [here](https://www.java.com/en/download/help/download_options.html) <br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+This User Guide is written for **tuition centre admins** with minimal technical background.  
+It covers how to install TutBook, perform common tasks, and troubleshoot issues.
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-W09-3/tp/releases).
+### Conventions Used
 
-1. Copy the file to the folder you want to use as the _home folder_ for your TutBook.
+* Commands are shown in `monospace`.  
+* Parameters are in `UPPER_CASE` (e.g., `add n/NAME`).  
+* Square brackets `[ ]` mark optional elements.  
+* Ellipsis `…` means the parameter can appear multiple times.  
+* Tips appear in blue boxes, and cautions in yellow boxes.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar tutbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+---
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
+## Getting Started
 
-   * `list` : Lists all contacts.
+Follow these steps to set up TutBook on your computer.
 
-   * `listclass` : Lists all classes.
+1. **Install Java 17 or above.**  
+   Download it [here](https://www.java.com/en/download/help/download_options.html).  
+   **Mac users:** Follow [this guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) for the correct JDK setup.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 ro/student` : Adds a student named `John Doe` to the Address Book.
+2. **Download TutBook.**  
+   Get the latest `.jar` file from the [Releases page](https://github.com/AY2526S1-CS2103T-W09-3/tp/releases).
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+3. **Set up your TutBook folder.**  
+   Copy the `.jar` file into a folder of your choice. This will be your TutBook **home folder**.
 
-   * `clear` : Deletes all contacts.
+4. **Run the application.**  
+   Open a command terminal, `cd` into the folder, and run:
 
-   * `exit` : Exits the app.
+   ```
+   java -jar tutbook.jar
+   ```
 
-1. Refer to the [Features](#features) below for details of each command.
+   A window like the one below should appear:  
+   ![UI](images/Ui.png)
 
---------------------------------------------------------------------------------------------------------------------
+5. **Try a few example commands.**
+   * `help` — Opens the help window.  
+   * `list` — Lists all contacts.  
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John Street ro/student` — Adds a student.  
+   * `delete 3` — Deletes the 3rd contact.  
+   * `exit` — Exits the app.
+
+6. **Refer to [Features](#features)** for details on each command.
+
+---
+
+## User Interface Overview
+
+   ![UI Overview](images/AnnotatedUi.png)
+
+This is the main interface of TutBook. It consists of:
+
+* People List
+* Class/Session List
+  * This section switches intelligently with your command
+* Command box
+  * This is where you enter commands to interact with TutBook
+
+---
 
 ## Features
 
+### Notes on Command Format
+
 <div markdown="block" class="alert alert-info">
 
-**:information_source: Notes about the command format:**<br>
+**Command syntax:**
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
-
-* Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
-
-* Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
-
-* Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `listclass`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+* `UPPER_CASE` → parameters (e.g. `add n/NAME`)  
+* `[ ]` → optional items  
+* `…` → can appear multiple times  
+* Parameters can be in any order  
+* Extra parameters for non-parameter commands are ignored  
 
 </div>
 
-### Viewing help : `help`
+---
 
-Shows a message explaining how to access the help page.
+### Viewing Help — `help`
 
-Format: `help`
+Use this command to view instructions within the app.
 
+**Format:** `help`  
 ![help message](images/helpMessageNew.png)
 
-### Adding a person: `add`
+---
 
-Adds a person to the address book.
+### Adding a Person — `add`
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS ro/PERSON_TYPE [t/TAG]…​`
+Add a student, tutor, or parent to your contact list.
 
-* `PERSON_TYPE` can be `student`, `tutor`, or `parent`
+**Format:**  
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
+```
+add n/NAME p/PHONE e/EMAIL a/ADDRESS ro/PERSON_TYPE [t/TAG]…
+```
+
+**Parameters:**
+
+* `PERSON_TYPE`: `student`, `tutor`, or `parent`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**  
+A person can have any number of tags, including none.  
 </div>
 
-Examples:
+**Examples:**
 
 * `add n/Ms Lim p/91234567 e/mslim@example.com a/Clementi Ave 2 ro/tutor t/experienced`
-* `add n/Yi Hao p/98765432 e/johnd@example.com a/31 John street, block 123, #01-01 ro/student`
+* `add n/Yi Hao p/98765432 e/johnd@example.com a/31 John Street ro/student`
 
 ![add command](images/addCommand.png)
 
-### Listing all persons : `list`
+---
 
-Shows a list of all persons in the address book.
+### Listing All Persons — `list`
 
-Format: `list`
+Displays all persons currently stored in TutBook.
 
+**Format:** `list`  
 ![list command](images/listCommand.png)
 
-### Filtering persons by role : `filter`
+---
 
-Filters and displays persons by their role (student, tutor, or parent).
+### Filtering by Role — `filter`
 
-Format: `filter ro/PERSON_TYPE`
+Focus on a specific group, such as only students or tutors.
 
-* Shows only persons matching the specified role
+**Format:**  
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-Commands like `edit` and `delete` operate on the index of the **currently displayed list**. After using `filter`, the indexes will change. For example, `delete 1` will delete the first person in the *filtered list*, not the first person in the main address book.
-</div> <br>
+```
+filter ro/PERSON_TYPE
+```
 
-Examples:
+**Example:**  
+`filter ro/tutor` shows only tutors.  
+`filter ro/student` shows only students.
 
-* `filter ro/tutor` shows all tutors
-* `filter ro/student` shows all students
+<div markdown="span" class="alert alert-warning">
+
+:exclamation: **Caution:**  
+Commands like `edit` and `delete` operate on the index of the **currently
+displayed list**. After using `filter`, the indexes will change.
+For example, `delete 1` will delete the first person in the *filtered list*, not
+the first person in the main address book.
+
+</div>
 
 ![filter command](images/filterCommand.png)
 
-### Editing a person : `edit`
+---
 
-Edits an existing person in the address book.
+### Editing a Person — `edit`
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Update contact information for an existing person.
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+**Format:**  
+
+```
+edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…
+```
+
+**Examples:**
+
+* `edit 1 p/87438807 e/alex@gmail.com`
+* `edit 2 n/Betsy Crower t/`
+
+**Notes:**
+
+* This command edits the person at the specified `INDEX`. The index refers to
+the index number shown in the displayed person list. The index **must be a
+positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
+* When editing tags, the existing tags of the person will be removed i.e adding
+of tags is not cumulative.
 * You can remove all the person’s tags by typing `t/` without
     specifying any tags after it.
 
-Examples:
+![edit command](images/editCommand.png)
 
-* `edit 1 p/87438807 e/alex@gmail.com` Edits the phone number and email address of the 1st person to be `87438807` and `alex@gmail.com` respectively.
-* `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+---
 
-![edit command](images/editCommandReal.png)
+### Finding a Person — `find`
 
-### Locating persons by name: `find`
+Search for persons by name.
 
-Finds persons whose names contain any of the given keywords.
+**Format:** `find KEYWORD [MORE_KEYWORDS]`  
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+* Case-insensitive  
+* Matches full words  
+* Returns results containing any keyword
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+**Example:**  
+`find David Damian` returns `David Li` and `Damian`.
 
-Examples:
+![find command](images/findCommand.png)
 
-* `find John` returns `john` and `John Doe`
-* `find david damian` returns `David Li`, `Damian`<br>
-  ![result for 'find david damian'](images/findCommand.png)
+---
 
-### Deleting a person : `delete`
+### Deleting a Person — `delete`
 
-Deletes the specified person from the address book.
+Remove a person from your contact list.
 
-Format: `delete INDEX`
+**Format:** `delete INDEX`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+**Example:**  
+`list` followed by `delete 2` deletes the 2nd listed person.
 
-Examples:
+`find Betsy` followed by `delete 1` deletes the 1st person in the results of the
+`find` command.
 
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+---
 
-### Linking a parent to a child : `link`
+### Linking Parent and Child — `link`
 
-Links a parent to a student (child), establishing a parent-child relationship.
+Connects a parent to a student.
 
-Format: `link parent/PARENT_NAME child/CHILD_NAME`
+**Format:**  
+
+```
+link parent/PARENT_NAME child/CHILD_NAME
+```
 
 * Both parent and child must already exist in the address book
 * The parent must have the role `parent` and the child must have the role `student`
 * Names are case-sensitive
 
-Examples:
-
-* `link parent/Bernice Yu child/Damian` links parent Bernice Yu to child Damian
+**Example:**  
+`link parent/Bernice Yu child/Damian`
 
 ![link command](images/linkCommand.png)
 
@@ -206,224 +264,234 @@ Example:
 
 ![children command](images/childrenCommand.png)
 
-### Adding a class : `addclass`
+---
 
-Adds a new tuition class to the system.
+### Adding a Class — `addclass`
 
-Format: `addclass c/CLASS_NAME [tu/TUTOR_NAME]`
+Create a new tuition class and add to the address book.
+
+**Format:**  
+
+```
+addclass c/CLASS_NAME [tu/TUTOR_NAME]
+```
 
 * `CLASS_NAME` can contain spaces
 * `TUTOR_NAME` is optional; if provided, the tutor must already exist in the address book
 
-Examples:
+**Examples:**
 
-* `addclass c/Sec2-Math-A` creates a class without a tutor
-* `addclass c/CS2101 tu/Alex Yeoh` creates a class and assigns Alex Yeoh as the tutor
+* `addclass c/Sec2-Math-A`  
+* `addclass c/CS2101 tu/Alex Yeoh`
 
 ![add class command](images/addClassCommand.png)
 
-### Listing all classes : `listclass`
+---
 
-Lists all tuition classes with their enrolled students.
+### Listing Classes — `listclass`
 
-Format: `listclass`
+Displays all classes and their enrolled students.  
+**Format:** `listclass`
 
 ![list class command](images/listClassCommand.png)
 
-### Editing a class : `editclass`
+---
 
-Renames an existing class.
+### Editing a Class — `editclass`
 
-Format: `editclass o/OLD_CLASS_NAME c/NEW_CLASS_NAME`
+Rename an existing class while keeping all students and tutors.
 
-* Class names can contain spaces
-* All students and tutor assignments are preserved
+**Format:**  
 
-Examples:
+```
+editclass o/OLD_CLASS_NAME c/NEW_CLASS_NAME
+```
 
-* `editclass o/Sec3 Math c/Sec4 Math` renames the class from Sec3 Math to Sec4 Math
+**Example:**  
+`editclass o/Sec3 Math c/Sec4 Math`
 
 ![edit class command](images/editClassCommand.png)
 
-### Deleting a class : `deleteclass`
+---
 
-Deletes a class from the system.
+### Deleting a Class — `deleteclass`
 
+Remove a class permanently.
 Format: `deleteclass c/CLASS_NAME`
 
-* Class name can contain spaces
-
-Examples:
+**Example:**  
 
 * `deleteclass c/Sec3-Math-A` deletes the class Sec3-Math-A
 
-### Joining a class : `join`
+---
 
-Adds a student or tutor to a class.
+### Joining a Class — `join`
 
-Format: `join n/NAME c/CLASS`
+Add a tutor or student to an existing class.  
+**Format:**  
+
+```
+join n/NAME c/CLASS
+```
 
 * The person and class must already exist in the address book
 * Students will be enrolled in the class
 * Tutors will be assigned to teach the class
 
-Examples:
+**Examples:**  
 
-* `join n/Damian c/Sec4 Math` enrolls student Damian in Sec4 Math
-* `join n/Ms Lim c/Sec2-Math-A` assigns tutor Ms Lim to Sec2-Math-A
+* `join n/Damian c/Sec4 Math`  
+* `join n/Ms Lim c/Sec2-Math-A`
 
 ![join command](images/joinCommand.png)
 
-### Removing from a class : `unjoin`
+---
 
-Removes a student or tutor from a class.
+### Removing from a Class — `unjoin`
 
-Format: `unjoin n/NAME c/CLASS`
+Remove a student or tutor from a class.  
+**Format:**  
+
+```
+unjoin n/NAME c/CLASS
+```
 
 * The person must be enrolled or assigned to the class
 * Works for both students and tutors
 
-Examples:
-* `unjoin n/Damian c/Sec4 Math` removes student Damian from Sec4 Math
-* `unjoin n/Ms Lim c/Sec2-Math-A` removes tutor Ms Lim from Sec2-Math-A
+**Examples:**  
 
-### Adding a session : `addsession`
+* `unjoin n/Damian c/Sec4 Math`  
+* `unjoin n/Ms Lim c/Sec2-Math-A`
 
-Adds a session to an existing class.
+---
 
-Format: `addsession c/CLASS_NAME s/SESSION_NAME dt/DATETIME [l/LOCATION]`
+### Adding a Session — `addsession`
+
+Record a session for a class.  
+**Format:**  
+
+```
+addsession c/CLASS_NAME s/SESSION_NAME dt/DATETIME [l/LOCATION]
+```
 
 * The class must already exist
 * `DATETIME` format: `YYYY-MM-DD HH:mm` (e.g., 2024-03-15 14:30)
 * Location is optional
 * Session names must be unique within a class
 
-Examples:
+**Example:**  
+`addsession c/Math101 s/Week 3 Tutorial dt/2024-03-15 14:30 l/COM1-B103`
 
-* `addsession c/Math101 s/Week 3 Tutorial dt/2024-03-15 14:30 l/COM1-B103`
-* `addsession c/Physics s/Lab Session 1 dt/2024-03-20 10:00`
+---
 
-### Deleting a session : `deletesession`
+### Deleting a Session — `deletesession`
 
-Removes a session from a class.
+Remove a session and its attendance records.  
+**Format:**  
 
-Format: `deletesession c/CLASS_NAME s/SESSION_NAME`
+```
+deletesession c/CLASS_NAME s/SESSION_NAME
+```
 
 * The session must exist in the specified class
-* All attendance records for the session will be deleted
 
-Examples:
+**Example:**  
+`deletesession c/Math101 s/Week 3 Tutorial`
 
-* `deletesession c/Math101 s/Week 3 Tutorial`
-* `deletesession c/Physics s/Lab Session 1`
+---
 
-### Viewing a session : `viewsession`
+### Viewing a Session — `viewsession`
 
-Shows detailed information about a specific session, including attendance records.
+Check details and attendance for a class session.  
+**Format:**  
 
-Format: `viewsession c/CLASS_NAME s/SESSION_NAME`
+```
+viewsession c/CLASS_NAME s/SESSION_NAME
+```
 
-* Displays session details (date, time, location)
-* Shows attendance status for all enrolled students
+* Displays date, time, location and remarks for the session
 
-Examples:
+`viewsession c/Physics s/Lab Session 1`
 
-* `viewsession c/Math101 s/Week 3 Tutorial`
-* `viewsession c/Physics s/Lab Session 1`
+---
 
-### Listing sessions : `listsession`
+### Listing Sessions — `listsessions`
 
-Lists all sessions for a specific class.
+View all sessions for a class in chronological order.  
+**Format:**  
 
-Format: `listsessions c/CLASS_NAME`
+```
+listsessions c/CLASS_NAME
+```
 
-* Shows all sessions chronologically
 * Displays date, time, and location for each session
 
-Examples:
-* `listsessions c/Math101`
-* `listsessions c/Physics`
+**Example:**  
+`listsessions c/Math101`
 
-### Listing parents : `listparents`
+---
 
-Lists all parents or the parents of a specific child.
+### Listing Parents — `parentsof`
 
-Format: `listparents [n/CHILD_NAME]`
+Show parents of a specific child.  
+**Format:**  
 
-* Without parameters, lists all parents in the system
-* With a child's name, shows only that child's parents
+```
+parentsof n/CHILD_NAME
+```
 
-Examples:
+**Example:**  
+`parentsof n/Damian`
 
-* `listparents` lists all parents
-* `listparents n/Damian` lists Damian's parents
+---
 
-### Marking attendance : `attend`
+### Marking Attendance — `attend`
 
-Marks attendance for a student in a specific class session.
+Record attendance for a class session.  
+**Format:**  
 
-Format: `attend n/NAME c/CLASS_NAME s/SESSION_NAME st/STATUS`
+```
+attend n/NAME c/CLASS_NAME s/SESSION_NAME st/STATUS
+```
 
 * The student must be enrolled in the specified class
 * The session must exist in the class
 * `STATUS` must be either `PRESENT` or `ABSENT`
-* Attendance records are persistent and can be viewed with `viewsession`
+* Attendance records can be viewed with [`viewsession`](#viewsession)
 
-Examples:
+**Example:**  
+`attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT`
 
-* `attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT` marks John Doe as present
-* `attend n/Jane Smith c/Physics s/Lab Session 1 st/ABSENT` marks Jane Smith as absent
+---
 
-### Clearing all entries : `clear`
+### Clearing All Data — `clear`
 
-Clears all entries from the address book.
+Deletes all data in TutBook.  
+**Format:** `clear`
 
-Format: `clear`
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**  
+This action is **irreversible**. Please be careful when using this command.
+</div>
 
-### Exiting the program : `exit`
+### Exiting the Program — `exit`
 
-Exits the program.
+Closes TutBook.  
+**Format:** `exit`
 
-Format: `exit`
+---
 
-### Saving the data
+### Saving and Editing Data
 
-TutBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+TutBook automatically saves your data after every change.  
+Files are stored in `[JAR file location]/data/addressbook.json`.
 
-### Editing the data file
-
-TutBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
-
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, TutBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**  
+If you edit the JSON file incorrectly, TutBook will reset to an empty file. Always back up before editing.  
 Furthermore, certain edits can cause the TutBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
-
---------------------------------------------------------------------------------------------------------------------
-
-## FAQ
-
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TutBook home folder.<br>
-
-**Q**: Can I undo a delete or clear command?<br>
-**A**: No. All destructive commands (like `delete`, `deleteclass`, and `clear`) are irreversible and cannot be undone.<br>
-
-**Q**: Why is the `link` command failing?<br>
-**A**: This is typically due to two reasons: 1) The names do not exactly match (the command is case-sensitive). 2) The persons do not have the correct roles. The parent must have the parent role, and the child must have the student role. Use `list` or `filter ro/parent` to check.<br>
-
---------------------------------------------------------------------------------------------------------------------
-
-## Known issues
-
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
-
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Command summary
 
@@ -441,7 +509,7 @@ Action | Format, Examples
 **Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [ro/PERSON_TYPE [t/TAGS]​` <br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Edit Class** | `editclass o/OLD_CLASS_NAME c/NEW_CLASS_NAME` <br> e.g., `editclass o/Sec2-Math-A c/Sec3-Math-A`
 **Exit** | `exit`
-**Filter** | `filter ro/STUDENT|TUTOR|PARENT` <br> e.g., `filter ro/student`
+**Filter** | `filter ro/STUDENT\|TUTOR\|PARENT` <br> e.g., `filter ro/student`
 **Find** | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake`
 **Help** | `help`
 **Join** | `join n/NAME c/CLASS` <br> e.g., `join n/John Doe c/Sec2-Math-A`
@@ -452,3 +520,31 @@ Action | Format, Examples
 **List Session** | `listsession c/CLASS_NAME` <br> e.g., `listsession c/Math101`
 **Remove From** | `unjoin n/NAME c/CLASS` <br> e.g., `unjoin n/Damian c/Sec4 Math`
 **View Session** | `viewsession c/CLASS_NAME s/SESSION_NAME` <br> e.g., `viewsession c/Math101 s/Week 3 Tutorial`
+
+---
+
+## Troubleshooting
+
+| Problem | Possible Cause | Solution |
+|----------|----------------|-----------|
+| `link` command fails | Wrong roles | Check spelling; ensure parent/child roles are correct |
+| GUI opens off-screen | Moved app between displays | Delete `preferences.json` before restarting |
+| `help` window not appearing | Window minimized | Restore manually from taskbar |
+| App fails to start | Java not installed | Install Java 17 or above |
+
+---
+
+## FAQ
+
+**Q:** How do I transfer my data to another computer?  
+**A:** Install TutBook on the new computer and replace its empty data file with your saved `addressbook.json` from the old system.  
+
+**Q:** Can I undo a delete or clear command?  
+**A:** No. Destructive commands are irreversible.  
+
+**Q:** Can try the app without fully committing to it?
+**A:** Yes, [sample data](./sample-data/README.md) is pre-loaded for you to explore features. Use the `clear` command to start fresh.
+
+---
+
+*TutBook v1.0 – Empowering tuition centre management through simplicity and speed.*

@@ -13,9 +13,11 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Parent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonType;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Student;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -31,6 +33,8 @@ class JsonAdaptedPerson {
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final PersonType role;
+    private final List<String> childrenNames = new ArrayList<>();
+    private final List<String> parentNames = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -41,7 +45,9 @@ class JsonAdaptedPerson {
                     @JsonProperty("email") String email,
                     @JsonProperty("address") String address,
                     @JsonProperty("tags") List<JsonAdaptedTag> tags,
-                    @JsonProperty("role") PersonType role) {
+                    @JsonProperty("role") PersonType role,
+                    @JsonProperty("childrenNames") List<String> childrenNames,
+                    @JsonProperty("parentNames") List<String> parentNames) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -50,6 +56,12 @@ class JsonAdaptedPerson {
             this.tags.addAll(tags);
         }
         this.role = role;
+        if (childrenNames != null) {
+            this.childrenNames.addAll(childrenNames);
+        }
+        if (parentNames != null) {
+            this.parentNames.addAll(parentNames);
+        }
     }
 
     /**
@@ -62,6 +74,21 @@ class JsonAdaptedPerson {
         address = source.getAddress().value;
         tags.addAll(source.getTags().stream().map(JsonAdaptedTag::new)
                         .collect(Collectors.toList()));
+
+        // Store parent-child relationships
+        if (source instanceof Parent) {
+            Parent parent = (Parent) source;
+            childrenNames.addAll(parent.getChildren().stream()
+                    .map(child -> child.getName().fullName)
+                    .collect(Collectors.toList()));
+        }
+        if (source instanceof Student) {
+            Student student = (Student) source;
+            parentNames.addAll(student.getParents().stream()
+                    .map(parent -> parent.getName().fullName)
+                    .collect(Collectors.toList()));
+        }
+
         switch (source.getClass().getSimpleName().toLowerCase()) {
         case "student":
             role = PersonType.STUDENT;
@@ -134,6 +161,20 @@ class JsonAdaptedPerson {
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return Person.newPerson(modelName, modelPhone, modelEmail, modelAddress,
                         modelTags, role);
+    }
+
+    /**
+     * Returns the list of children names for this person.
+     */
+    public List<String> getChildrenNames() {
+        return childrenNames;
+    }
+
+    /**
+     * Returns the list of parent names for this person.
+     */
+    public List<String> getParentNames() {
+        return parentNames;
     }
 
 }

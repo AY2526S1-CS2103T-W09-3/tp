@@ -107,7 +107,7 @@ public class ClassSession {
      */
     public void initializeAttendance() {
         for (Student s : parentClass.getStudents()) {
-            attendanceRecord.putIfAbsent(s, new Attendance(false, null));
+            attendanceRecord.putIfAbsent(s, new Attendance(false, LocalDateTime.MIN));
         }
     }
 
