@@ -1,0 +1,100 @@
+@startuml
+' Extended domain model: Classes, Sessions, Attendance, Relationships
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+package Model as ModelPkg {
+  class AddressBook
+  class ModelManager
+  interface Model
+  interface ReadOnlyAddressBook
+
+  class Person {
+    +Name name
+    +Phone phone
+    +Email email
+    +Address address
+    +Role role   ' STUDENT/TUTOR/PARENT
+    +Set<Tag> tags
+  }
+
+  class TuitionClass {
+    +ClassName name
+    +List<Person> students
+    +List<Person> tutors
+    +List<ClassSession> sessions
+    +addStudent(p: Person)
+    +removeStudent(p: Person)
+    +addTutor(p: Person)
+    +removeTutor(p: Person)
+    +addSession(s: ClassSession)
+    +removeSession(sessionName: String)
+    +getSessionByName(name: String): ClassSession
+  }
+
+  class ClassSession {
+    +String sessionName
+    +LocalDateTime dateTime
+    +String location
+    +Map<Person, AttendanceStatus> attendance
+    +setAttendance(p: Person, status: AttendanceStatus)
+  }
+
+  enum AttendanceStatus {
+    PRESENT
+    ABSENT
+  }
+
+  class RelationshipIndex {
+    ' Optional helper if you maintain lookups for parent<->child
+    +Map<Person, Set<Person>> parentsOf
+    +Map<Person, Set<Person>> childrenOf
+  }
+
+  class Tag
+  class Name
+  class Phone
+  class Email
+  class Address
+  enum Role {
+    STUDENT
+    TUTOR
+    PARENT
+  }
+
+  AddressBook .up.|> ReadOnlyAddressBook
+  ModelManager .up.|> Model
+  Model -right-> ReadOnlyAddressBook
+  ModelManager -left-> AddressBook
+
+  AddressBook "1" *-- "*" Person
+  AddressBook "1" *-- "*" TuitionClass
+  AddressBook ..> RelationshipIndex : maintains
+
+  TuitionClass "1" *-- "*" ClassSession
+  TuitionClass "*" o-- "*" Person : students
+  TuitionClass "*" o-- "*" Person : tutors
+
+  ClassSession "*" o-- "0..*" Person : attendance for
+  ClassSession ..> AttendanceStatus
+
+  Person *-- Name
+  Person *-- Phone
+  Person *-- Email
+  Person *-- Address
+  Person *-- Role
+  Person *-- "*" Tag
+
+  ' Notes
+  note right of TuitionClass
+    A class aggregates students, tutors, and sessions.
+    Enrollment is validated by role (STUDENT/TUTOR).
+  end note
+
+  note bottom of ClassSession
+    Attendance is per-session, keyed by Person (student).
+  end note
+}
+@enduml

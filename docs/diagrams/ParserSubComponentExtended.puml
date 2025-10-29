@@ -1,0 +1,61 @@
+@startuml
+' Show new parsers added beyond AB3
+!include style.puml
+skinparam packageStyle rectangle
+skinparam classBackgroundColor LOGIC_COLOR
+skinparam arrowColor LOGIC_COLOR
+
+package "Parser Classes" as ParserPkg {
+  class AddressBookParser
+
+  interface Parser
+
+  class AddClassCommandParser
+  class EditClassCommandParser
+  class DeleteClassCommandParser
+  class JoinClassCommandParser
+  class UnjoinClassCommandParser
+
+  class AddSessionCommandParser
+  class DeleteSessionCommandParser
+  class ViewSessionCommandParser
+  class ListSessionCommandParser
+
+  class ListClassCommandParser
+  class ListStudentsCommandParser
+
+  class LinkCommandParser
+  class AttendCommandParser
+  class FilterCommandParser
+}
+
+Parser <|.. AddClassCommandParser
+Parser <|.. EditClassCommandParser
+Parser <|.. DeleteClassCommandParser
+Parser <|.. JoinClassCommandParser
+Parser <|.. UnjoinClassCommandParser
+Parser <|.. AddSessionCommandParser
+Parser <|.. DeleteSessionCommandParser
+Parser <|.. ViewSessionCommandParser
+Parser <|.. ListSessionCommandParser
+Parser <|.. ListClassCommandParser
+Parser <|.. ListStudentsCommandParser
+Parser <|.. LinkCommandParser
+Parser <|.. AttendCommandParser
+Parser <|.. FilterCommandParser
+
+AddressBookParser ..> AddClassCommandParser : <<create>>
+AddressBookParser ..> EditClassCommandParser
+AddressBookParser ..> DeleteClassCommandParser
+AddressBookParser ..> JoinClassCommandParser
+AddressBookParser ..> UnjoinClassCommandParser
+AddressBookParser ..> AddSessionCommandParser
+AddressBookParser ..> DeleteSessionCommandParser
+AddressBookParser ..> ViewSessionCommandParser
+AddressBookParser ..> ListSessionCommandParser
+AddressBookParser ..> ListClassCommandParser
+AddressBookParser ..> ListStudentsCommandParser
+AddressBookParser ..> LinkCommandParser
+AddressBookParser ..> AttendCommandParser
+AddressBookParser ..> FilterCommandParser
+@enduml

@@ -1,0 +1,73 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":UnjoinClassCommandParser" as UnjoinParser LOGIC_COLOR
+participant "uc:UnjoinClassCommand" as UnjoinCmd LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "c:TuitionClass" as Class MODEL_COLOR
+end box
+
+[-> LogicManager : execute("unjoin n/Alice Doe c/Sec2-Math-A")
+activate LogicManager
+LogicManager -> AddressBookParser : parseCommand(...)
+activate AddressBookParser
+create UnjoinParser
+AddressBookParser -> UnjoinParser
+activate UnjoinParser
+UnjoinParser --> AddressBookParser
+deactivate UnjoinParser
+
+AddressBookParser -> UnjoinParser : parse("n/Alice Doe c/Sec2-Math-A")
+activate UnjoinParser
+UnjoinParser -> UnjoinParser : tokenize & validate
+create UnjoinCmd
+UnjoinParser -> UnjoinCmd
+activate UnjoinCmd
+UnjoinParser --> AddressBookParser : uc
+deactivate UnjoinParser
+deactivate AddressBookParser
+
+LogicManager -> UnjoinCmd : execute(m)
+activate UnjoinCmd
+
+UnjoinCmd -> Model : get person by name
+activate Model
+Model --> UnjoinCmd : person
+deactivate Model
+UnjoinCmd -> UnjoinCmd : assert role == STUDENT || TUTOR
+
+UnjoinCmd -> Model : getClassByName("Sec2-Math-A")
+activate Model
+Model --> UnjoinCmd : c
+deactivate Model
+
+UnjoinCmd -> Class : isMember(person)?
+UnjoinCmd -> Class : remove(person)
+UnjoinCmd -> Model : updateClass(c) & save
+activate Model
+Model --> UnjoinCmd
+deactivate Model
+
+create CommandResult
+UnjoinCmd -> CommandResult
+UnjoinCmd --> LogicManager : r
+deactivate UnjoinCmd
+[<-- LogicManager
+deactivate LogicManager
+
+note right of UnjoinCmd
+  Errors:
+  - Person not found/ambiguous
+  - Role not allowed
+  - Class not found
+  - Person not enrolled/assigned
+end note
+@enduml

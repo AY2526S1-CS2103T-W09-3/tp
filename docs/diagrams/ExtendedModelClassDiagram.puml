@@ -1,0 +1,41 @@
+@startuml
+!include style.puml
+skinparam classBackgroundColor MODEL_COLOR
+
+package Model {
+  class Person {
+    - name : Name
+    - phone : Phone
+    - email : Email
+    - address : Address
+    - role : Role
+    - tag : Tag
+  }
+
+  class Student
+  class Tutor
+  class Parent
+  class TuitionClass {
+    - className : String
+    - students : List<Student>
+    - tutors : List<Tutor>
+    - sessions : List<ClassSession>
+  }
+  class ClassSession {
+    - sessionName : String
+    - dateTime : LocalDateTime
+    - location : String
+    - attendance : Map<Student, Status>
+  }
+  class Status
+}
+
+Person <|-- Student
+Person <|-- Tutor
+Person <|-- Parent
+TuitionClass *-- "0..*" ClassSession
+TuitionClass "0..*" --> "0..*" Student : enrolled
+TuitionClass "0..*" --> "0..*" Tutor : teaches
+Parent "0..*" --> "0..*" Student : children
+Student "0..*" --> "0..*" Parent : parents
+@enduml

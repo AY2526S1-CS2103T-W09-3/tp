@@ -1,0 +1,50 @@
+@startuml
+' Extend storage to show session/class adapters
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+package Storage {
+  interface Storage
+  interface AddressBookStorage
+  interface UserPrefStorage
+
+  class StorageManager
+  class JsonAddressBookStorage
+  class JsonUserPrefsStorage
+
+  class JsonSerializableAddressBook
+  class JsonAdaptedPerson
+  class JsonAdaptedTag
+
+  class JsonAdaptedClass {
+    +String className
+    +List<String> tutors
+    +List<String> students
+    +List<JsonAdaptedSession> sessions
+  }
+
+  class JsonAdaptedSession {
+    +String sessionName
+    +String dateTime
+    +String location
+    +Map<String,String> attendance  ' name -> PRESENT/ABSENT
+  }
+}
+
+Storage o-- AddressBookStorage
+Storage o-- UserPrefStorage
+
+StorageManager .up.|> Storage
+JsonAddressBookStorage .up.|> AddressBookStorage
+JsonUserPrefsStorage .up.|> UserPrefStorage
+
+StorageManager -right-> JsonAddressBookStorage
+StorageManager -left-> JsonUserPrefsStorage
+
+JsonSerializableAddressBook *-- "*" JsonAdaptedPerson
+JsonSerializableAddressBook *-- "*" JsonAdaptedClass
+JsonAdaptedClass *-- "*" JsonAdaptedSession
+JsonAdaptedPerson *-- "*" JsonAdaptedTag
+@enduml

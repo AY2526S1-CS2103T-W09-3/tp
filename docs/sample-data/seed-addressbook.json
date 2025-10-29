@@ -86,7 +86,7 @@
       "email": "rachel.lim@tutors.com",
       "address": "Blk 111 Bishan Street 12, #14-22",
       "role": "TUTOR",
-      "tags": [ "mathematics", "experienced", "MOE-certified" ]
+      "tags": [ "mathematics", "experienced", "MOECertified" ]
     },
     {
       "name": "Mr James Tan",
@@ -94,7 +94,7 @@
       "email": "james.tan@tutors.com",
       "address": "Blk 222 Bukit Timah Road, #09-33",
       "role": "TUTOR",
-      "tags": [ "science", "physics", "NIE-trained" ]
+      "tags": [ "science", "physics", "NIETrained" ]
     },
     {
       "name": "Ms Michelle Ng",
@@ -118,7 +118,7 @@
       "email": "jennifer.wong@tutors.com",
       "address": "Blk 555 Holland Village, #12-66",
       "role": "TUTOR",
-      "tags": [ "chinese", "MOE-certified" ]
+      "tags": [ "chinese", "MOECertified" ]
     },
     {
       "name": "Mr Andrew Tan",
@@ -126,7 +126,7 @@
       "email": "andrew.tan@parent.com",
       "address": "Blk 123 Ang Mo Kio Ave 3, #05-11",
       "role": "PARENT",
-      "tags": [ "PTA-member" ]
+      "tags": [ "PTAmember" ]
     },
     {
       "name": "Mrs Grace Wong",
@@ -158,7 +158,7 @@
       "email": "steven.koh@parent.com",
       "address": "Blk 567 Jurong West Street 52, #10-789",
       "role": "PARENT",
-      "tags": [ "PTA-committee" ]
+      "tags": [ "PTACommittee" ]
     },
     {
       "name": "Mrs Alice Ng",
@@ -190,7 +190,7 @@
       "email": "william.ong@parent.com",
       "address": "Blk 901 Tampines Street 86, #11-890",
       "role": "PARENT",
-      "tags": [ "PTA-treasurer" ]
+      "tags": [ "PTAtreasurer" ]
     },
     {
       "name": "Mrs Susan Goh",
@@ -210,7 +210,7 @@
         "email": "rachel.lim@tutors.com",
         "address": "Blk 111 Bishan Street 12, #14-22",
         "role": "TUTOR",
-        "tags": [ "mathematics", "experienced", "MOE-certified" ]
+        "tags": [ "mathematics", "experienced", "MOECertified" ]
       },
       "students": [
         {
@@ -261,7 +261,7 @@
         "email": "james.tan@tutors.com",
         "address": "Blk 222 Bukit Timah Road, #09-33",
         "role": "TUTOR",
-        "tags": [ "science", "physics", "NIE-trained" ]
+        "tags": [ "science", "physics", "NIETrained" ]
       },
       "students": [
         {
@@ -396,7 +396,7 @@
         "email": "rachel.lim@tutors.com",
         "address": "Blk 111 Bishan Street 12, #14-22",
         "role": "TUTOR",
-        "tags": [ "mathematics", "experienced", "MOE-certified" ]
+        "tags": [ "mathematics", "experienced", "MOECertified" ]
       },
       "students": [
         {
@@ -434,7 +434,7 @@
         "email": "jennifer.wong@tutors.com",
         "address": "Blk 555 Holland Village, #12-66",
         "role": "TUTOR",
-        "tags": [ "chinese", "MOE-certified" ]
+        "tags": [ "chinese", "MOECertified" ]
       },
       "students": [
         {
@@ -467,7 +467,7 @@
         "email": "james.tan@tutors.com",
         "address": "Blk 222 Bukit Timah Road, #09-33",
         "role": "TUTOR",
-        "tags": [ "science", "physics", "NIE-trained" ]
+        "tags": [ "science", "physics", "NIETrained" ]
       },
       "students": [
         {

@@ -1,0 +1,23 @@
+@startuml
+!include style.puml
+skinparam componentStyle rectangle
+
+package "TutBook Application" {
+  [UI] as UI
+  [Logic] as Logic
+  [Model] as Model
+  [Storage] as Storage
+  [Commons] as Commons
+}
+
+UI --> Logic : execute(command)
+Logic --> Model : modify/query data
+Model --> Storage : read/write JSON
+Storage --> Model : load/save entities
+Model --> UI : notify changes (ObservableList)
+
+Commons ..> UI
+Commons ..> Logic
+Commons ..> Model
+Commons ..> Storage
+@enduml

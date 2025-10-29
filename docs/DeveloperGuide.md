@@ -3,14 +3,21 @@ layout: page
 title: Developer Guide
 ---
 
-- Table of Contents
-  {:toc}
+# TutBook Developer Guide
+
+TutBook helps tuition centre administrators **manage students, tutors, parents, and classes efficiently**.  
+It combines the speed of a **Command Line Interface (CLI)** with the convenience of a **Graphical User Interface (GUI)**, designed to streamline administrative tasks in a tuition centre.
+
+This guide explains the **architecture, design decisions, implementation details, and testing strategy** behind TutBook. It also documents the rationale for major features, sequence diagrams, and proposed future enhancements.
+
+* Table of Contents
+{:toc}
 
 ---
 
 ## **Acknowledgements**
 
-- Adapted the undo/redo mechanism from the original AB3 implementation.
+- Adapted the undo/redo mechanism from the original AB3 implementation as proposed features.
 - Uses [JavaFX](https://openjfx.io/) for GUI rendering.
 - Icons from [Material Design Icons](https://materialdesignicons.com/).
 - Diagram styling adapted from [PlantUML Standard Library](https://plantuml.com/stdlib).
@@ -57,7 +64,6 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
@@ -116,17 +122,27 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 
 <img src="images/ParserClasses.png" width="600"/>
 
-Additional concrete commands and parsers:
+**Additional concrete commands and parsers:**
 
 - `ListSessionCommand`, `ListSessionCommandParser` (command word: `listsessions`)
 - `ViewSessionCommand`, `ViewSessionCommandParser` (command word: `viewsession`)
 - `ListStudentsCommand`, `ListStudentsCommandParser` (command word: `liststudents`)
 - `UnjoinClassCommand`, `UnjoinClassCommandParser` (command word: `unjoin`)
+- `JoinClassCommand`, `JoinClassCommandParser` (command word: `join`)
+- `AddSessionCommand`, `AddSessionCommandParser` (command word: `addsession`)
+- `DeleteSessionCommand`, `DeleteSessionCommandParser` (command word: `deletesession`)
+- `AttendCommand`, `AttendCommandParser` (command word: `attend`)
+- `ListClassCommand`, `ListClassCommandParser` (command word: `listclass`)
+- `ListParentsCommand`, `ListParentsCommandParser` (command word: `parentsof`)
+- `ListChildrenCommand`, `ListChildrenCommandParser` (command word: `childrenof`)
+- `EditClassCommand`, `EditClassCommandParser` (command word: `editclass`)
+- `DeleteClassCommand`, `DeleteClassCommandParser` (command word: `deleteclass`)
+- `AddClassCommand`, `AddClassCommandParser` (command word: `addclass`)
+- `LinkCommand`, `LinkCommandParser` (command word: `link`)
 
-How the parsing works:
+**Extended parser subcomponent diagram (new):**
 
-- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-- All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+<img src="images/ParserSubcomponentExtended.png" width="1000"/>
 
 ### Model component
 
@@ -147,6 +163,12 @@ The `Model` component,
 
 </div>
 
+**Extended domain model (new):**
+
+> TutBook introduces `TuitionClass` (with `students`, `tutors`, `sessions`) and `ClassSession` (per-session `attendance`). Relationships are validated by roles (`STUDENT`, `TUTOR`, `PARENT`). Attendance is stored per session as a map from student to `AttendanceStatus`.
+
+<img src="images/DomainModelExtended.png" width="650"/>
+
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-W09-3/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
@@ -159,6 +181,12 @@ The `Storage` component,
 - inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 - depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+**Extended JSON adapters (new):**
+
+> Classes and sessions are serialized via `JsonAdaptedClass` and `JsonAdaptedSession`, with attendance encoded as a string map.
+
+<img src="images/StorageClassDiagramExtended.png" width="650"/>
+
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
@@ -168,6 +196,41 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Class Enrollment (join / unjoin)
+
+**Join** validates that the person is a `STUDENT`, prevents duplicate enrollment, updates the class roster, and persists changes.  
+![Join Sequence](images/JoinClassSequenceDiagram.png)
+
+**Unjoin** removes a `STUDENT` or `TUTOR` from a class, with guardrails if not a member.  
+![Unjoin Sequence](images/UnjoinClassSequenceDiagram.png)
+
+### Session Management
+
+**Add session** enforces unique `sessionName` per class and saves date/time/location.  
+![Add Session](images/AddSessionSequenceDiagram.png)
+
+**Mark attendance** validates student enrollment and updates per-session attendance.  
+![Attend](images/AttendCommandSequenceDiagram.png)
+
+**View session** aggregates meta and attendance summary for display.  
+![View Session](images/ViewSessionSequenceDiagram.png)
+
+### Parent–Child Linking
+
+Links are bidirectional and role-validated (`PARENT` ↔ `STUDENT`), with idempotency for already-linked pairs.  
+![Link](images/LinkParentChildSequenceDiagram.png)
+
+### Deleting a Class (cascade cleanup)
+
+Deleting a class removes enrollments, unassigns tutors, and clears sessions before persisting.  
+![Delete Class Cascade](images/DeleteClassCascadeSequenceDiagram.png)
+
+### Storage Extensions
+
+Classes/sessions are serialized via `JsonAdaptedClass` and `JsonAdaptedSession`; attendance is a string map (`name → PRESENT/ABSENT`).  
+![Storage Extended](images/StorageClassDiagramExtended.png)
+
 
 ### \[Proposed\] Undo/redo feature
 
@@ -253,10 +316,6 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
 ### Session Management Feature
 
 #### Implementation
@@ -283,17 +342,16 @@ The session management feature allows users to create, view, and manage class se
 
 3. **Viewing Sessions**: `ViewSessionCommand` retrieves detailed session information including all attendance records for enrolled students.
 
-The following sequence diagram illustrates the add session operation:
+**Sequence diagrams (new):**
 
-```
-User -> AddSessionCommand: addsession c/Math101 s/Week1 dt/2024-03-15 14:30
-AddSessionCommand -> Model: getClassByName("Math101")
-Model -> AddSessionCommand: TuitionClass
-AddSessionCommand -> ClassSession: new ClassSession(name, dateTime, location)
-AddSessionCommand -> TuitionClass: addSession(session)
-TuitionClass -> Model: update
-Model -> Storage: save
-```
+- Add Session  
+  <img src="images/AddSessionSequenceDiagram.png" width="650"/>
+
+- Mark Attendance  
+  <img src="images/AttendCommandSequenceDiagram.png" width="650"/>
+
+- View Session  
+  <img src="images/ViewSessionSequenceDiagram.png" width="650"/>
 
 **List sessions for a class**
 
@@ -372,6 +430,17 @@ The remove from class feature provides the inverse operation of the join command
 1. **Remove Student**: Removes a student from the class's enrollment list
 2. **Remove Tutor**: Removes a tutor from the class's assigned tutors
 3. **Cascade Handling**: When a person is deleted, they are automatically removed from all associated classes
+
+**Sequence diagrams (new):**
+
+- Join to Class  
+  <img src="images/JoinClassSequenceDiagram.png" width="650"/>
+
+- Unjoin from Class  
+  <img src="images/UnjoinClassSequenceDiagram.png" width="650"/>
+
+- Delete Class (cascade)  
+  <img src="images/DeleteClassCascadeSequenceDiagram.png" width="650"/>
 
 The command validates:
 
@@ -1124,6 +1193,33 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
+### **Requirements implemented in the current version (v1.5)**
+
+| ID | Requirement | Type | How it is implemented |
+|:--|:--|:--|:--|
+| FR-1 | Add and delete contacts (students, tutors, parents) | Functional | `add`, `delete` commands manage contact creation and removal via `UniquePersonList`. |
+| FR-2 | Link parents to students | Functional | `link` command validates roles and adds bidirectional relationship. |
+| FR-3 | Filter contacts by role | Functional | `filter` command updates filtered list in `Model` based on role. |
+| FR-4 | Create classes and assign tutors | Functional | `addclass` creates `TuitionClass`, assigns tutor if provided. |
+| FR-5 | Join and unjoin students from classes | Functional | `join` / `unjoin` commands modify class rosters with role validation. |
+| FR-6 | Add, view, and delete sessions | Functional | `addsession`, `viewsession`, `deletesession` operate on `ClassSession` objects. |
+| FR-7 | Mark attendance per session | Functional | `attend` command updates attendance map in `ClassSession`. |
+| FR-8 | Cascade cleanup when deleting class or person | Functional | `ModelManager` handles referential integrity for parent-child and class links. |
+| FR-9 | Persistent local storage | Non-Functional | Implemented in `JsonAddressBookStorage`, auto-save after each command. |
+| FR-10 | Cross-platform desktop CLI | Non-Functional | Java 17 + JavaFX GUI, works on Win/macOS/Linux. |
+
+### **Requirements yet to be implemented**
+
+| ID | Requirement | Status | Planned Implementation |
+|:--|:--|:--|:--|
+| FR-11 | Undo / Redo feature | Proposed | `VersionedAddressBook` with bounded history (see Planned Enhancements). |
+| FR-12 | Data archiving / restore snapshots | Proposed | `ArchiveManager` to create timestamped JSON backups. |
+| FR-13 | Search by partial keyword / tag | Backlog | Extend `FindCommand` to use substring matching. |
+| FR-14 | Attendance statistics dashboard | Backlog | Aggregate attendance rate per class for UI display. |
+| FR-15 | Auto daily backup policy | Planned | Integrate with archiving scheduler. |
+
+---
+
 ## **Appendix: Instructions for manual testing**
 
 Given below are instructions to test the app manually.
@@ -1501,3 +1597,51 @@ testers are expected to do more *exploratory* testing.
 
    1. Test case: Delete addressbook.json file, restart the application<br>
       Expected: Application starts with sample data preloaded.
+
+---
+
+## **Appendix: Planned Enhancements**
+
+| # | Enhancement | Current Limitation | Proposed Fix | Impact |
+|:--|:--|:--|:--|:--|
+| 1 | More specific error for invalid roles in `link` | Generic error message | Add role-based feedback ("Only a PARENT can link to a STUDENT") | Improved UX |
+| 2 | Alphabetical sorting of classes | Unordered list output | Add `Comparator` in `Model#updateFilteredClassList()` | Better readability |
+| 3 | Allow multiple tutors per class | One tutor only | Change `TuitionClass` → `List<Tutor>` | Realistic multi-tutor support |
+| 4 | Edit session details (date/time) | Not editable | Add `editsession` command | Flexibility |
+| 5 | Filter attendance by status | Always shows all | Add `status/` parameter in `viewsession` | Faster lookup |
+| 6 | Display children in `listparents` | Not shown | Enhance `ListParentsCommand#format()` | Clearer relationships |
+| 7 | Implement `archive` / `restorearchive` commands | No data versioning | Use `ArchiveManager` | Data safety |
+| 8 | Implement Undo/Redo | Not available | Add `VersionedAddressBook` and `commit()` hooks | Error recovery |
+| 9 | Prevent joining tutors as students | Possible by mistake | Add pre-check in `JoinCommand` | Data integrity |
+| 10 | UI dark-mode theme | Visual inconsistency | Add CSS theme toggle | Accessibility |
+
+---
+
+## **Appendix C: Effort**
+
+### **Overall difficulty**
+Compared to AB3, which manages a single entity (`Person`), TutBook introduces five inter-linked entities — `Student`, `Tutor`, `Parent`, `TuitionClass`, and `ClassSession` — each with its own constraints and bidirectional links. This raised design and testing complexity significantly.
+
+### **Technical challenges**
+
+| Area | Challenge | Resolution |
+|:--|:--|:--|
+| Model | Maintaining referential integrity when deleting classes or contacts | Implemented cascade cleanup in `ModelManager`. |
+| Storage | Serialising nested objects (Class → Session → Attendance) | Created `JsonAdaptedClass` and `JsonAdaptedSession`. |
+| Logic | Avoiding duplication across commands | Introduced `ClassCommandUtil` helper. |
+| Parser | Supporting many prefixes (`c/`, `s/`, `status/`) | Extended `ArgumentTokenizer` to nested prefix structure. |
+| Testing | Creating realistic linked test data | Added `TypicalClasses` and `TypicalSessions` fixtures. |
+
+### **Team effort**
+- 5 developers over 9 weeks, ~30 commits each.  
+- ≈ 70 % of AB3 refactored or re-engineered.  
+- CI/CD with GitHub Actions and Codecov for every PR.
+
+### **Code reuse and efficiency**
+- ~15 % of AB3 code reused (core parser/UI logic).  
+
+### **Achievements**
+- Delivered full multi-role contact management and session tracking.  
+- Achieved > 80 % coverage in `logic`; > 80 % overall.  
+- Extended DG/UG with new diagrams and testing sections.  
+- Maintained consistent code style, peer reviews, and iteration deadlines.

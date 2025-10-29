@@ -1,8 +1,4 @@
 @startuml
-' TutBook Parser Classes Diagram
-' Parsers for tuition centre commands: AddCommand, EditCommand, DeleteCommand, AddClassCommand
-' JoinCommand (student enrollment), LinkCommand (parent-child), AttendCommand (mark attendance), AddSessionCommand, DeleteSessionCommand
-' Each parser validates and transforms CLI input into executable commands
 !include style.puml
 skinparam arrowThickness 1.1
 skinparam arrowColor LOGIC_COLOR_T4
@@ -11,32 +7,29 @@ skinparam classBackgroundColor LOGIC_COLOR
 Class "{abstract}\nCommand" as Command
 Class XYZCommand
 
-package "Parser classes"{
-Class "<<interface>>\nParser" as Parser
-Class AddressBookParser
-Class XYZCommandParser
-Class CliSyntax
-Class ParserUtil
-Class ArgumentMultimap
-Class ArgumentTokenizer
-Class Prefix
+package "Parser classes" {
+  Class "<<interface>>\nParser" as Parser
+  Class AddressBookParser
+  Class XYZCommandParser
+  Class CliSyntax
+  Class ParserUtil
+  Class ArgumentMultimap
+  Class ArgumentTokenizer
+  Class Prefix
+
+  AddressBookParser .down.> XYZCommandParser: <<create>>
+  XYZCommandParser ..> XYZCommand : <<create>>
+  AddressBookParser ..> Command : <<use>>
+  XYZCommandParser .up.|> Parser
+  XYZCommandParser ..> ArgumentMultimap
+  XYZCommandParser ..> ArgumentTokenizer
+  ArgumentTokenizer .left.> ArgumentMultimap
+  XYZCommandParser ..> CliSyntax
+  CliSyntax ..> Prefix
+  XYZCommandParser ..> ParserUtil
+  ParserUtil .down.> Prefix
+  ArgumentTokenizer .down.> Prefix
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> AddressBookParser
-
-AddressBookParser .down.> XYZCommandParser: <<create>>
-
-XYZCommandParser ..> XYZCommand : <<create>>
-AddressBookParser ..> Command : <<use>>
-XYZCommandParser .up.|> Parser
-XYZCommandParser ..> ArgumentMultimap
-XYZCommandParser ..> ArgumentTokenizer
-ArgumentTokenizer .left.> ArgumentMultimap
-XYZCommandParser ..> CliSyntax
-CliSyntax ..> Prefix
-XYZCommandParser ..> ParserUtil
-ParserUtil .down.> Prefix
-ArgumentTokenizer .down.> Prefix
 XYZCommand -up-|> Command
 @enduml
