@@ -108,9 +108,7 @@ public class ClassSession {
      */
     public void initializeAttendance() {
         for (Student s : parentClass.getStudents()) {
-            // Use put() to ensure all current students are included
-            // even if they were added after initial session creation
-            attendanceRecord.put(s, new Attendance(false, null));
+            attendanceRecord.putIfAbsent(s, new Attendance(false, LocalDateTime.MIN));
         }
     }
 

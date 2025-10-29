@@ -62,7 +62,8 @@ public class JsonAdaptedSession {
             Boolean isPresent = entry.getValue().isPresent();
             LocalDateTime timestamp = entry.getValue().getTimestamp();
             String studentName = student.getName().fullName;
-            String timestampStr = timestamp.format(FORMATTER);
+            String timestampStr = timestamp != null ? timestamp.format(FORMATTER)
+                    : LocalDateTime.MIN.format(FORMATTER);
 
             if (isPresent != null && isPresent) {
                 presentStudents.add(new ArrayList<>(List.of(studentName, timestampStr)));

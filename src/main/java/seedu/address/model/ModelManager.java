@@ -200,7 +200,7 @@ public class ModelManager implements Model {
     public TuitionClass getClassByName(String className) {
         requireNonNull(className);
         for (TuitionClass c : addressBook.getClassList()) {
-            if (c.getName().value.equals(className)) {
+            if (c.getName().value.equalsIgnoreCase(className)) {
                 return c;
             }
         }

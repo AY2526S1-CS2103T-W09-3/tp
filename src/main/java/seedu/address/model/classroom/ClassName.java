@@ -37,7 +37,7 @@ public class ClassName {
         return value; }
 
     @Override public boolean equals(Object other) {
-        return other == this || (other instanceof ClassName && value.equals(((ClassName) other).value));
+        return other == this || (other instanceof ClassName && value.equalsIgnoreCase(((ClassName) other).value));
     }
 
     @Override public int hashCode() {

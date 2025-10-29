@@ -83,7 +83,7 @@ public class JoinClassCommand extends Command {
         // Find the class
         List<TuitionClass> classList = model.getFilteredClassList();
         TuitionClass tuitionClass = classList.stream()
-                .filter(c -> c.getName().value.equals(className))
+                .filter(c -> c.getName().value.equalsIgnoreCase(className))
                 .findFirst()
                 .orElse(null);
 
