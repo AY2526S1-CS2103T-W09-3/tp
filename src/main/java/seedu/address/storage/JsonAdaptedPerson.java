@@ -158,6 +158,11 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
+        if (role == null) {
+            throw new IllegalValueException(
+                    String.format(MISSING_FIELD_MESSAGE_FORMAT, "PersonType"));
+        }
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return Person.newPerson(modelName, modelPhone, modelEmail, modelAddress,
                         modelTags, role);

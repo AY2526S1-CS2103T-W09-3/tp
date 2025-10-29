@@ -156,6 +156,11 @@ public class TuitionClass {
      * Replaces any existing tutor assignment.
      */
     public void setTutor(Tutor tutor) {
+        // Check for self-assignment
+        if (this.tutor != null && this.tutor.equals(tutor)) {
+            return;
+        }
+
         // Remove from old tutor's class list if exists
         if (this.tutor != null) {
             this.tutor.unjoin(this);

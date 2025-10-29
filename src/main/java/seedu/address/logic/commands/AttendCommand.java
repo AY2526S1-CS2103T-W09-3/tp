@@ -95,7 +95,7 @@ public class AttendCommand extends Command {
         }
 
         ClassSession session = tuitionClass.getAllSessions().stream()
-                .filter(s -> s.getSessionName().equals(this.sessionName))
+                .filter(s -> s.getSessionName().equalsIgnoreCase(this.sessionName))
                 .findFirst()
                 .orElse(null);
 
