@@ -84,10 +84,16 @@ public class BoundaryValueTest {
 
     @Test
     public void className_veryLong_success() {
-        // Test very long class names (should have reasonable limit)
+        // ClassName has 50 character limit
         String longName = "A".repeat(100);
-        ClassName className = new ClassName(longName);
-        assertEquals(longName, className.value);
+        assertThrows(IllegalArgumentException.class, () -> {
+            new ClassName(longName);
+        });
+
+        // But 50 chars should work
+        String maxName = "A".repeat(50);
+        ClassName className = new ClassName(maxName);
+        assertEquals(maxName, className.value);
     }
 
     @Test
