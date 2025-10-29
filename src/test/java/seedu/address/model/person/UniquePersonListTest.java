@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -171,5 +172,98 @@ public class UniquePersonListTest {
     @Test
     public void toStringMethod() {
         assertEquals(uniquePersonList.asUnmodifiableObservableList().toString(), uniquePersonList.toString());
+    }
+
+    // ===== Additional tests for bug coverage =====
+
+    @Test
+    public void setPersons_emptyList_success() {
+        // Test edge case: empty list
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+        assertEquals(2, uniquePersonList.asUnmodifiableObservableList().size());
+
+        uniquePersonList.setPersons(Collections.emptyList());
+        assertEquals(0, uniquePersonList.asUnmodifiableObservableList().size());
+    }
+
+    @Test
+    public void contains_afterRemove_returnsFalse() {
+        // Test that contains works correctly after removal
+        uniquePersonList.add(ALICE);
+        assertTrue(uniquePersonList.contains(ALICE));
+
+        uniquePersonList.remove(ALICE);
+        assertFalse(uniquePersonList.contains(ALICE));
+    }
+
+    @Test
+    public void setPerson_toSamePersonMultipleTimes_success() {
+        // Test multiple edits to same person
+        uniquePersonList.add(ALICE);
+
+        Person edited1 = new PersonBuilder(ALICE).withPhone("11111111").build();
+        uniquePersonList.setPerson(ALICE, edited1);
+        assertTrue(uniquePersonList.contains(edited1));
+
+        Person edited2 = new PersonBuilder(edited1).withEmail("new@email.com").build();
+        uniquePersonList.setPerson(edited1, edited2);
+        assertTrue(uniquePersonList.contains(edited2));
+
+        Person edited3 = new PersonBuilder(edited2).withAddress("New Address").build();
+        uniquePersonList.setPerson(edited2, edited3);
+        assertTrue(uniquePersonList.contains(edited3));
+
+        assertEquals(1, uniquePersonList.asUnmodifiableObservableList().size());
+    }
+
+    @Test
+    public void hashCode_sameList_consistent() {
+        // Test hashCode consistency
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+
+        int hash1 = uniquePersonList.hashCode();
+        int hash2 = uniquePersonList.hashCode();
+
+        assertEquals(hash1, hash2, "HashCode should be consistent");
+    }
+
+    @Test
+    public void equals_differentOrder_notEqual() {
+        // Test that order matters for equality
+        UniquePersonList list1 = new UniquePersonList();
+        UniquePersonList list2 = new UniquePersonList();
+
+        list1.add(ALICE);
+        list1.add(BOB);
+
+        list2.add(BOB);
+        list2.add(ALICE);
+
+        // Lists with different order should not be equal
+        assertFalse(list1.equals(list2));
+    }
+
+    @Test
+    public void iterator_iteratesThroughAllPersons() {
+        // Test iterator functionality
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+
+        int count = 0;
+        for (Person person : uniquePersonList) {
+            assertNotNull(person);
+            count++;
+        }
+
+        assertEquals(2, count);
+    }
+
+    @Test
+    public void setPersons_withNullInList_throwsNullPointerException() {
+        // Test null handling in list
+        List<Person> listWithNull = Arrays.asList(ALICE, null, BOB);
+        assertThrows(NullPointerException.class, () -> uniquePersonList.setPersons(listWithNull));
     }
 }

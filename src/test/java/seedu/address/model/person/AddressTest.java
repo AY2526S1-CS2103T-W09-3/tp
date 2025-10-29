@@ -3,6 +3,8 @@ package seedu.address.model.person;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.ModelTestUtil.testEquals;
+import static seedu.address.testutil.ModelTestUtil.testHashCode;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,21 +38,18 @@ public class AddressTest {
 
     @Test
     public void equals() {
-        Address address = new Address("Valid Address");
+        Address address1 = new Address("Valid Address");
+        Address address2 = new Address("Valid Address");
+        Address address3 = new Address("Other Valid Address");
 
-        // same values -> returns true
-        assertTrue(address.equals(new Address("Valid Address")));
+        testEquals(address1, address2, address3);
+    }
 
-        // same object -> returns true
-        assertTrue(address.equals(address));
+    @Test
+    public void hashCode_equalAddresses_sameHashCode() {
+        Address address1 = new Address("Valid Address");
+        Address address2 = new Address("Valid Address");
 
-        // null -> returns false
-        assertFalse(address.equals(null));
-
-        // different types -> returns false
-        assertFalse(address.equals(5.0f));
-
-        // different values -> returns false
-        assertFalse(address.equals(new Address("Other Valid Address")));
+        testHashCode(address1, address2);
     }
 }
