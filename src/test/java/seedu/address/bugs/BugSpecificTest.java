@@ -66,11 +66,10 @@ public class BugSpecificTest {
         String parsed = ParserUtil.parseClassName(className);
 
         // Check that nothing was printed to console
-        // Currently fails because System.out.println is present
-        // After fix, this should pass
+        // Bug has been fixed - should not print to console
         String consoleOutput = outContent.toString();
-        assertTrue(consoleOutput.contains(className),
-            "BUG-170: System.out.println found in production code!");
+        assertFalse(consoleOutput.contains(className),
+            "BUG-170 FIXED: System.out.println removed from production code");
     }
 
     @Test
@@ -80,8 +79,8 @@ public class BugSpecificTest {
         String parsed = ParserUtil.parseTutorName(tutorName);
 
         String consoleOutput = outContent.toString();
-        assertTrue(consoleOutput.contains(tutorName),
-            "BUG-170: System.out.println found in production code!");
+        assertFalse(consoleOutput.contains(tutorName),
+            "BUG-170 FIXED: System.out.println removed from production code");
     }
 
     // ===== BUG-171: Integer overflow in Index parsing =====
