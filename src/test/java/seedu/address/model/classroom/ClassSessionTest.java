@@ -181,9 +181,9 @@ public class ClassSessionTest {
 
         assertEquals(2, attendance.size());
         assertFalse(attendance.get(alice).isPresent());
-        assertEquals(null, attendance.get(alice).getTimestamp());
+        assertEquals(LocalDateTime.MIN, attendance.get(alice).getTimestamp());
         assertFalse(attendance.get(bob).isPresent());
-        assertEquals(null, attendance.get(bob).getTimestamp());
+        assertEquals(LocalDateTime.MIN, attendance.get(bob).getTimestamp());
     }
 
     @Test
@@ -218,7 +218,7 @@ public class ClassSessionTest {
 
         assertTrue(attendance.containsKey(charlie));
         assertFalse(attendance.get(charlie).isPresent()); // default false
-        assertEquals(null, attendance.get(charlie).getTimestamp());
+        assertEquals(LocalDateTime.MIN, attendance.get(charlie).getTimestamp());
         assertTrue(attendance.get(alice).isPresent());
     }
 
