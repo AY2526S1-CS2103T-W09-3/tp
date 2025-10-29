@@ -197,9 +197,9 @@ public class ErrorPathTest {
         TuitionClass class1 = new TuitionClass(new ClassName("Class1"));
         model.addClass(class1);
 
-        // Try to join with invalid student index
+        // Try to join with invalid student name
         JoinClassCommand joinCommand = new JoinClassCommand(
-            Index.fromOneBased(1), // No student at index 1
+            "NonExistentStudent",
             "Class1"
         );
 
@@ -222,7 +222,7 @@ public class ErrorPathTest {
 
         // Try to join non-existent class
         JoinClassCommand joinCommand = new JoinClassCommand(
-            Index.fromOneBased(1),
+            "Test Student",
             "NonExistentClass"
         );
 

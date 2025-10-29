@@ -250,8 +250,8 @@ public class IntegrationTest {
         student.addParent(parent);
 
         // Verify relationship
-        assertTrue(parent.hasChild(student));
-        assertTrue(student.hasParent(parent));
+        assertTrue(parent.getChildren().contains(student));
+        assertTrue(student.getParents().contains(parent));
 
         // Edit parent's phone number
         Parent editedParent = new Parent(
@@ -457,8 +457,8 @@ public class IntegrationTest {
         assertTrue(basicScience.hasStudent(student1));
         assertFalse(basicScience.hasStudent(student2));
 
-        assertTrue(parent.hasChild(student1));
-        assertTrue(student1.hasParent(parent));
+        assertTrue(parent.getChildren().contains(student1));
+        assertTrue(student1.getParents().contains(parent));
 
         assertTrue(mathSession.hasAttended(student1));
         assertFalse(mathSession.hasAttended(student2));
