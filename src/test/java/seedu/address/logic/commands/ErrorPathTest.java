@@ -15,14 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.AddCommandParser;
-import seedu.address.logic.parser.AttendCommandParser;
-import seedu.address.logic.parser.EditCommandParser;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
 import seedu.address.model.classroom.ClassName;
 import seedu.address.model.classroom.ClassSession;
 import seedu.address.model.classroom.TuitionClass;
@@ -30,10 +26,8 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PersonType;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Student;
-import seedu.address.model.person.Tutor;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 
@@ -234,14 +228,14 @@ public class ErrorPathTest {
     // ===== Parser Exception Tests =====
 
     @Test
-    public void parserUtil_parseIndex_null_throwsNullPointerException() {
+    public void parserUtilParseIndexNullThrowsNullPointerException() {
         assertThrows(NullPointerException.class, () -> {
             ParserUtil.parseIndex(null);
         });
     }
 
     @Test
-    public void parserUtil_parseIndex_invalidFormat_throwsParseException() {
+    public void parserUtilParseIndexInvalidFormatThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parseIndex("abc");
         });
@@ -268,14 +262,14 @@ public class ErrorPathTest {
     }
 
     @Test
-    public void parserUtil_parseName_null_throwsNullPointerException() {
+    public void parserUtilParseNameNullThrowsNullPointerException() {
         assertThrows(NullPointerException.class, () -> {
             ParserUtil.parseName(null);
         });
     }
 
     @Test
-    public void parserUtil_parseName_invalid_throwsParseException() {
+    public void parserUtilParseNameInvalidThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parseName("");
         });
@@ -291,7 +285,7 @@ public class ErrorPathTest {
     }
 
     @Test
-    public void parserUtil_parsePhone_invalid_throwsParseException() {
+    public void parserUtilParsePhoneInvalidThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parsePhone("12"); // Too short
         });
@@ -306,7 +300,7 @@ public class ErrorPathTest {
     }
 
     @Test
-    public void parserUtil_parseEmail_invalid_throwsParseException() {
+    public void parserUtilParseEmailInvalidThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parseEmail("notanemail");
         });
@@ -325,7 +319,7 @@ public class ErrorPathTest {
     }
 
     @Test
-    public void parserUtil_parseDateTime_invalid_throwsParseException() {
+    public void parserUtilParseDateTimeInvalidThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parseDateTime("not a date");
         });
@@ -340,7 +334,7 @@ public class ErrorPathTest {
     }
 
     @Test
-    public void parserUtil_parsePersonType_invalid_throwsParseException() {
+    public void parserUtilParsePersonTypeInvalidThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parsePersonType("invalid");
         });
@@ -355,7 +349,7 @@ public class ErrorPathTest {
     }
 
     @Test
-    public void parserUtil_parseAttendanceStatus_invalid_throwsParseException() {
+    public void parserUtilParseAttendanceStatusInvalidThrowsParseException() {
         assertThrows(ParseException.class, () -> {
             ParserUtil.parseAttendanceStatus("maybe");
         });

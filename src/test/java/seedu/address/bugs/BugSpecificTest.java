@@ -26,15 +26,13 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.classroom.ClassSession;
 import seedu.address.model.classroom.ClassName;
+import seedu.address.model.classroom.ClassSession;
 import seedu.address.model.classroom.TuitionClass;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
-import seedu.address.model.person.Parent;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PersonType;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Student;
 import seedu.address.model.person.Tutor;
@@ -99,7 +97,7 @@ public class BugSpecificTest {
     }
 
     @Test
-    public void parserUtil_parseIndex_nearMaxValue_shouldValidate() {
+    public void parseIndexNearMaxValueShouldValidate() {
         // Test parsing of large index values
         assertThrows(ParseException.class, () -> {
             // Should reject MAX_VALUE to prevent overflow
@@ -151,7 +149,7 @@ public class BugSpecificTest {
 
     // ===== BUG-173: NPE risk in session details with null student name =====
     @Test
-    public void classSession_nullStudentName_shouldNotCauseNPE() {
+    public void classSessionNullStudentNameShouldNotCauseNpe() {
         TuitionClass testClass = new TuitionClass(new ClassName("TestClass"));
         LocalDateTime futureDate = LocalDateTime.now().plusDays(1);
         ClassSession session = testClass.addSession("Session1", futureDate, "Room");
@@ -174,7 +172,7 @@ public class BugSpecificTest {
 
     // ===== BUG-174: HashCode XOR collision in AddressBook =====
     @Test
-    public void addressBook_hashCode_shouldNotUseXOR() {
+    public void addressBookHashCodeShouldNotUseXor() {
         AddressBook book1 = new AddressBook();
         AddressBook book2 = new AddressBook();
 
@@ -320,7 +318,7 @@ public class BugSpecificTest {
 
     // ===== BUG-180: Tutor circular reference on self-assignment =====
     @Test
-    public void tuitionClass_setTutor_selfAssignment_shouldBeOptimized() {
+    public void tuitionClassSetTutorSelfAssignmentShouldBeOptimized() {
         Tutor tutor = new Tutor(
             new Name("Tutor"),
             new Phone("99999999"),
@@ -346,7 +344,7 @@ public class BugSpecificTest {
 
     // ===== BUG-184: Missing range check for Index.fromOneBased(0) =====
     @Test
-    public void index_fromOneBased_zero_shouldThrow() {
+    public void indexFromOneBasedZeroShouldThrow() {
         // Zero is invalid for one-based index
         assertThrows(IndexOutOfBoundsException.class, () -> {
             Index.fromOneBased(0);
@@ -355,7 +353,7 @@ public class BugSpecificTest {
 
     // ===== BUG-185: ClassSession equals() missing null checks =====
     @Test
-    public void classSession_equals_withNullFields_shouldNotThrowNPE() {
+    public void classSessionEqualsWithNullFieldsShouldNotThrowNpe() {
         TuitionClass testClass = new TuitionClass(new ClassName("Test"));
         LocalDateTime dateTime = LocalDateTime.now().plusDays(1);
         ClassSession session1 = testClass.addSession("Session1", dateTime, "Room");
@@ -369,7 +367,7 @@ public class BugSpecificTest {
 
     // ===== BUG-186: Empty location string handled inconsistently =====
     @Test
-    public void parserUtil_parseLocation_emptyString_shouldReturnNull() {
+    public void parserUtilParseLocationEmptyStringShouldReturnNull() {
         // Test empty location handling
         String result1 = ParserUtil.parseLocation("");
         String result2 = ParserUtil.parseLocation("   ");
