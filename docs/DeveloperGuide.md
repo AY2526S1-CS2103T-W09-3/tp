@@ -3,8 +3,15 @@ layout: page
 title: Developer Guide
 ---
 
-- Table of Contents
-  {:toc}
+# TutBook Developer Guide
+
+TutBook helps tuition centre administrators **manage students, tutors, parents, and classes efficiently**.  
+It combines the speed of a **Command Line Interface (CLI)** with the convenience of a **Graphical User Interface (GUI)**, designed to streamline administrative tasks in a tuition centre.
+
+This guide explains the **architecture, design decisions, implementation details, and testing strategy** behind TutBook. It also documents the rationale for major features, sequence diagrams, and proposed future enhancements.
+
+* Table of Contents
+{:toc}
 
 ---
 
@@ -133,9 +140,6 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 - `AddClassCommand`, `AddClassCommandParser` (command word: `addclass`)
 - `LinkCommand`, `LinkCommandParser` (command word: `link`)
 
-**Extended parser subcomponent diagram (new):**
-
-<img src="images/ParserSubcomponentExtended.png" width="1000"/>
 
 ### Model component
 
@@ -198,6 +202,37 @@ This section describes some noteworthy details on how certain features are imple
 **Unjoin** removes a `STUDENT` or `TUTOR` from a class, with guardrails if not a member.  
 ![Unjoin Sequence](images/UnjoinClassSequenceDiagram.png)
 
+---
+
+### Remove From Class Feature
+
+#### Implementation
+
+The remove-from-class feature provides the inverse operation of the join command, allowing removal of students and tutors from classes.
+
+**Key Components**
+- `UnjoinClassCommand` - Handles removal logic  
+- Enhanced `TuitionClass` with removal methods for students and tutors  
+- Cascade cleanup when a person is deleted (removed from all classes)
+
+**Operations**
+- Removes student from class enrollment  
+- Removes tutor from class assignment  
+- Validates person role & class membership before removal
+
+**Sequence diagrams**
+
+- Join to Class  
+  <img src="images/JoinClassSequenceDiagram.png" width="650"/>
+
+- Unjoin from Class  
+  <img src="images/UnjoinClassSequenceDiagram.png" width="650"/>
+
+- Delete Class (cascade)  
+  <img src="images/DeleteClassCascadeSequenceDiagram.png" width="650"/>
+
+---
+
 ### Session Management
 
 **Add session** enforces unique `sessionName` per class and saves date/time/location.  
@@ -209,21 +244,144 @@ This section describes some noteworthy details on how certain features are imple
 **View session** aggregates meta and attendance summary for display.  
 ![View Session](images/ViewSessionSequenceDiagram.png)
 
+#### Implementation
+
+The session management feature allows users to create, view, and manage class sessions with attendance tracking.
+
+**Core Classes**
+- `ClassSession` – Represents a single session with date/time, location, and attendance records  
+- `TuitionClass` – Enhanced to store a list of sessions  
+- `AddSessionCommand`, `DeleteSessionCommand`, `ViewSessionCommand`, `ListSessionCommand`
+
+**Storage Implementation**
+- Sessions are persisted via `JsonAdaptedSession`  
+- Attendance per session stored as `studentName → PRESENT/ABSENT`
+
+**Key Operations**
+1. Adding a Session  
+2. Marking Attendance per session  
+3. Viewing Session details with attendance records  
+4. Listing sessions for a class  
+5. Listing students for attendance view
+
+**Sequence diagrams**
+
+- Add Session  
+  <img src="images/AddSessionSequenceDiagram.png" width="650"/>
+
+- Mark Attendance  
+  <img src="images/AttendCommandSequenceDiagram.png" width="650"/>
+
+- View Session  
+  <img src="images/ViewSessionSequenceDiagram.png" width="650"/>
+
+**List sessions for a class**
+- Command: `listsessions c/CLASS_NAME`  
+- Updates observable session list  
+- Shows count or `[No sessions]`
+
+**List students in a class**
+- Command: `liststudents c/CLASS_NAME`  
+- Filters left panel to only show enrolled students  
+
+#### Design Considerations
+
+**Aspect: Session Storage Structure**
+
+- **Chosen:** Store sessions within each class  
+  - Pros: clear ownership, easy class-scoped management  
+  - Cons: traverse class to find sessions  
+
+- **Alternative:** Standalone session store  
+  - Pros: direct session access  
+  - Cons: risk of orphan sessions, complexity
+
+---
+
 ### Parent–Child Linking
 
 Links are bidirectional and role-validated (`PARENT` ↔ `STUDENT`), with idempotency for already-linked pairs.  
 ![Link](images/LinkParentChildSequenceDiagram.png)
+
+#### Parent Management Feature
+
+Lists parents of a specific child.
+
+**Key Components**
+- `ListParentsCommand`  
+- Model filtering for parent lookups
+
+**Command format**
+parentsof n/CHILD_NAME
+
+markdown
+Copy code
+
+#### Children Management Feature
+
+Lists children of a specific parent.
+
+**Key Components**
+- `ListChildrenCommand`  
+- Model filtering for child lookups
+
+**Command format**
+childrenof n/PARENT_NAME
+
+yaml
+Copy code
+
+---
 
 ### Deleting a Class (cascade cleanup)
 
 Deleting a class removes enrollments, unassigns tutors, and clears sessions before persisting.  
 ![Delete Class Cascade](images/DeleteClassCascadeSequenceDiagram.png)
 
+---
+
 ### Storage Extensions
 
 Classes/sessions are serialized via `JsonAdaptedClass` and `JsonAdaptedSession`; attendance is a string map (`name → PRESENT/ABSENT`).  
 ![Storage Extended](images/StorageClassDiagramExtended.png)
 
+---
+
+### Enhanced Class Storage
+
+#### Implementation
+
+Classes now store comprehensive details including sessions and maintain persistent state across application restarts.
+
+**Storage Enhancements**
+- Classes store list of sessions and attendance records  
+- Session metadata (date, time, location) preserved  
+- Attendance history per student persisted
+
+**JSON Structure**
+
+```json
+{
+  "className": "Math101",
+  "tutors": ["Ms. Lim"],
+  "students": ["John Doe", "Jane Smith"],
+  "sessions": [
+    {
+      "sessionName": "Week 1 Tutorial",
+      "dateTime": "2024-03-15T14:30:00",
+      "location": "COM1-B103",
+      "attendanceRecords": {
+        "John Doe": "PRESENT",
+        "Jane Smith": "ABSENT"
+      }
+    }
+  ]
+}
+```
+
+This ensures all class-related data is cohesively stored and fully restored on app restart.
+
+---
 
 ### \[Proposed\] Undo/redo feature
 
@@ -294,7 +452,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 <img src="images/CommitActivityDiagram.png" width="250" />
 
-#### Design considerations:
+#### Design considerations
 
 **Aspect: How undo & redo executes:**
 
@@ -306,175 +464,6 @@ The following activity diagram summarizes what happens when a user executes a ne
   itself.
   - Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   - Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### Session Management Feature
-
-#### Implementation
-
-The session management feature allows users to create, view, and manage class sessions with attendance tracking. This is implemented through several key components:
-
-**Core Classes:**
-
-- `ClassSession` - Represents a single session with date/time, location, and attendance records
-- `TuitionClass` - Enhanced to store a list of sessions
-- `AddSessionCommand`, `DeleteSessionCommand`, `ViewSessionCommand`, `ListSessionCommand` - Command classes for session operations
-
-**Storage Implementation:**
-
-- Sessions are persisted in the JSON file through `JsonAdaptedSession`
-- Each session stores attendance records as a map of student names to attendance status
-- Sessions are associated with their parent class and stored within the class structure
-
-**Key Operations:**
-
-1. **Adding a Session**: Creates a new `ClassSession` object with the specified date/time and optional location, then adds it to the target class.
-
-2. **Marking Attendance**: The enhanced `AttendCommand` now works with specific sessions, updating the attendance map within the `ClassSession` object.
-
-3. **Viewing Sessions**: `ViewSessionCommand` retrieves detailed session information including all attendance records for enrolled students.
-
-**Sequence diagrams (new):**
-
-- Add Session  
-  <img src="images/AddSessionSequenceDiagram.png" width="650"/>
-
-- Mark Attendance  
-  <img src="images/AttendCommandSequenceDiagram.png" width="650"/>
-
-- View Session  
-  <img src="images/ViewSessionSequenceDiagram.png" width="650"/>
-
-**List sessions for a class**
-
-- Command: `listsessions c/CLASS_NAME`
-- Behavior: Resolves class (case-insensitive), calls `model.updateSessionListForClass(tuitionClass)` to refresh the observable session list; message shows count or `[No sessions]` if empty.
-- Errors: Class not found → `CommandException` with `Class not found: CLASS_NAME`.
-- Result: `CommandResult.DisplayType.SESSIONS`.
-
-**List students in a class**
-
-- Command: `liststudents c/CLASS_NAME`
-- Behavior: Builds a `List<Person>` from the class's enrolled `Student`s and filters the left panel via `model.updateFilteredPersonList(person -> studentPersons.contains(person))`.
-- Errors: Class not found → error message.
-- Result: Display message with count or `[No students in this class]`.
-
-#### Design Considerations
-
-**Aspect: Session Storage Structure**
-
-- **Alternative 1 (chosen)**: Store sessions within each class
-  - Pros: Maintains clear ownership relationship, easier to manage class-specific sessions
-  - Cons: Requires traversing class structure to access sessions
-- **Alternative 2**: Store sessions separately with class references
-  - Pros: Direct access to all sessions
-  - Cons: More complex relationship management, potential for orphaned sessions
-
-### Parent-Child Relationship Management Features
-
-#### Parent Management Feature
-
-The parent management feature allows users to list parents of a specific child.
-
-**Key Components:**
-
-- `ListParentsCommand` - Lists parents of a specific child
-- Enhanced filtering in `Model` to support parent-specific queries
-
-**Operation:**
-
-Given a child's name, the command finds all linked parents through the relationship system.
-
-**Command format:**
-
-- `parentsof n/CHILD_NAME` - Shows only parents linked to the specified child
-
-#### Children Management Feature
-
-The children management feature allows users to list children of a specific parent.
-
-**Key Components:**
-
-- `ListChildrenCommand` - Lists children of a specific parent
-- Enhanced filtering in `Model` to support parent-specific queries
-
-**Operation:**
-
-Given a parent's name, the command finds all linked children through the relationship system.
-
-**Command format:**
-
-- `childrenof n/PARENT_NAME` - Shows only children linked to the specified parent
-
-### Remove From Class Feature
-
-#### Implementation
-
-The remove from class feature provides the inverse operation of the join command, allowing removal of students and tutors from classes.
-
-**Key Components:**
-
-- `UnjoinClassCommand` - Handles removal logic
-- Enhanced `TuitionClass` with removal methods for students and tutors
-
-**Operations:**
-
-1. **Remove Student**: Removes a student from the class's enrollment list
-2. **Remove Tutor**: Removes a tutor from the class's assigned tutors
-3. **Cascade Handling**: When a person is deleted, they are automatically removed from all associated classes
-
-**Sequence diagrams (new):**
-
-- Join to Class  
-  <img src="images/JoinClassSequenceDiagram.png" width="650"/>
-
-- Unjoin from Class  
-  <img src="images/UnjoinClassSequenceDiagram.png" width="650"/>
-
-- Delete Class (cascade)  
-  <img src="images/DeleteClassCascadeSequenceDiagram.png" width="650"/>
-
-The command validates:
-
-- Person exists and has the appropriate role
-- Person is actually enrolled/assigned to the target class
-- Class exists in the system
-
-### Enhanced Class Storage
-
-#### Implementation
-
-Classes now store comprehensive details including sessions and maintain persistent state across application restarts.
-
-**Storage Enhancements:**
-
-- Classes store their complete list of sessions with all attendance records
-- Session details (date, time, location) are preserved
-- Attendance records maintain the history of each student's attendance
-
-**JSON Structure:**
-
-```json
-{
-  "className": "Math101",
-  "tutors": ["Ms. Lim"],
-  "students": ["John Doe", "Jane Smith"],
-  "sessions": [
-    {
-      "sessionName": "Week 1 Tutorial",
-      "dateTime": "2024-03-15T14:30:00",
-      "location": "COM1-B103",
-      "attendanceRecords": {
-        "John Doe": "PRESENT",
-        "Jane Smith": "ABSENT"
-      }
-    }
-  ]
-}
-```
-
-This structure ensures all class-related data is cohesively stored and can be fully reconstructed when the application restarts.
 
 ---
 
@@ -1186,7 +1175,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
-### **Requirements implemented in the current version (v1.5)**
+### Requirements implemented in the current version (v1.5)
 
 | ID | Requirement | Type | How it is implemented |
 |:--|:--|:--|:--|
@@ -1201,7 +1190,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | FR-9 | Persistent local storage | Non-Functional | Implemented in `JsonAddressBookStorage`, auto-save after each command. |
 | FR-10 | Cross-platform desktop CLI | Non-Functional | Java 17 + JavaFX GUI, works on Win/macOS/Linux. |
 
-### **Requirements yet to be implemented**
+### Requirements yet to be implemented
 
 | ID | Requirement | Status | Planned Implementation |
 |:--|:--|:--|:--|
@@ -1610,12 +1599,12 @@ testers are expected to do more *exploratory* testing.
 
 ---
 
-## **Appendix C: Effort**
+## **Appendix: Effort**
 
-### **Overall difficulty**
+### Overall difficulty
 Compared to AB3, which manages a single entity (`Person`), TutBook introduces five inter-linked entities — `Student`, `Tutor`, `Parent`, `TuitionClass`, and `ClassSession` — each with its own constraints and bidirectional links. This raised design and testing complexity significantly.
 
-### **Technical challenges**
+### Technical challenges
 
 | Area | Challenge | Resolution |
 |:--|:--|:--|
@@ -1625,15 +1614,15 @@ Compared to AB3, which manages a single entity (`Person`), TutBook introduces fi
 | Parser | Supporting many prefixes (`c/`, `s/`, `status/`) | Extended `ArgumentTokenizer` to nested prefix structure. |
 | Testing | Creating realistic linked test data | Added `TypicalClasses` and `TypicalSessions` fixtures. |
 
-### **Team effort**
+### Team effort
 - 5 developers over 9 weeks, ~30 commits each.  
 - ≈ 70 % of AB3 refactored or re-engineered.  
 - CI/CD with GitHub Actions and Codecov for every PR.
 
-### **Code reuse and efficiency**
+### Code reuse and efficiency
 - ~15 % of AB3 code reused (core parser/UI logic).  
 
-### **Achievements**
+### Achievements
 - Delivered full multi-role contact management and session tracking.  
 - Achieved > 80 % coverage in `logic`; > 80 % overall.  
 - Extended DG/UG with new diagrams and testing sections.  

@@ -19,6 +19,7 @@ It’s optimised for fast keyboard-driven workflows via a CLI, with a supportive
 - **Developers:** Start with the [Developer Guide](DeveloperGuide.html).
 
 **Shortcuts**
+
 - [Releases](https://github.com/AY2526S1-CS2103T-W09-3/tp/releases)
 - [Issue Tracker](https://github.com/AY2526S1-CS2103T-W09-3/tp/issues)
 - [CI](https://github.com/AY2526S1-CS2103T-W09-3/tp/actions) • [Coverage](https://app.codecov.io/gh/AY2526S1-CS2103T-W09-3/tp)
@@ -32,7 +33,7 @@ It’s optimised for fast keyboard-driven workflows via a CLI, with a supportive
   - Link parents ↔ students for family views
 - **Classes:** Create, rename, delete; assign tutors; enrol students
   - List all classes and rosters at a glance
-  - **Remove from class:** `removeClass n/NAME c/CLASS`
+  - **Remove from class:** `unjoin n/NAME c/CLASS`
 - **Sessions:** Per-class schedule with attendance
   - Add/delete sessions with date/time and optional location
   - **List sessions:** `listsessions c/CLASS`
