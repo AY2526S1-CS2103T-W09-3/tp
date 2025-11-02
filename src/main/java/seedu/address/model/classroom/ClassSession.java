@@ -170,7 +170,7 @@ public class ClassSession {
             Attendance pair = entry.getValue();
             Boolean present = pair == null ? false : pair.isPresent();
             LocalDateTime ts = pair == null ? null : pair.getTimestamp();
-            String timeStr = (ts == null) ? "" : " (marked: " + ts.format(fmt) + ")";
+            String timeStr = (ts == null || ts.equals(LocalDateTime.MIN)) ? " (unmarked)" : " (marked: " + ts.format(fmt) + ")";
             String studentName = "Unknown student";
             if (student != null && student.getName() != null) {
                 studentName = student.getName().toString();
