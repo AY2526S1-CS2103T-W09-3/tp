@@ -10,8 +10,8 @@ It combines the speed of a Command Line Interface (CLI) with the convenience of 
 
 This guide will help you **set up TutBook**, understand its features, and make the most out of its commands — even if you are new to CLI-based applications.
 
-* Table of Contents
-{:toc}
+- Table of Contents
+  {:toc}
 
 ---
 
@@ -22,11 +22,11 @@ It covers how to install TutBook, perform common tasks, and troubleshoot issues.
 
 ### Conventions Used
 
-* Commands are shown in `monospace`.
-* Parameters are in `UPPER_CASE` (e.g., `add n/NAME`).
-* Square brackets `[ ]` mark optional elements.
-* Ellipsis `…` means the parameter can appear multiple times.
-* Tips appear in blue boxes, and cautions in yellow boxes.
+- Commands are shown in `monospace`.
+- Parameters are in `UPPER_CASE` (e.g., `add n/NAME`).
+- Square brackets `[ ]` mark optional elements.
+- Ellipsis `…` means the parameter can appear multiple times.
+- Tips appear in blue boxes, and cautions in yellow boxes.
 
 ---
 
@@ -35,31 +35,32 @@ It covers how to install TutBook, perform common tasks, and troubleshoot issues.
 Follow these steps to set up TutBook on your computer.
 
 1. **Install Java 17 or above.**
- Download it [here](https://www.java.com/en/download/help/download_options.html).
- **Mac users:** Follow [this guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) for the correct JDK setup.
+   Download it [here](https://www.java.com/en/download/help/download_options.html).
+   **Mac users:** Follow [this guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) for the correct JDK setup.
 
 2. **Download TutBook.**
- Get the latest `.jar` file from the [Releases page](https://github.com/AY2526S1-CS2103T-W09-3/tp/releases).
+   Get the latest `.jar` file from the [Releases page](https://github.com/AY2526S1-CS2103T-W09-3/tp/releases).
 
 3. **Set up your TutBook folder.**
- Copy the `.jar` file into a folder of your choice. This will be your TutBook **home folder**.
+   Copy the `.jar` file into a folder of your choice. This will be your TutBook **home folder**.
 
 4. **Run the application.**
- Open a command terminal, `cd` into the folder, and run:
+   Open a command terminal, `cd` into the folder, and run:
 
- ```
- java -jar tutbook.jar
- ```
+```
+java -jar tutbook.jar
+```
 
- A window like the one below should appear:
- ![UI](images/Ui.png)
+A window like the one below should appear:
+![UI](images/Ui.png)
 
 5. **Try a few example commands.**
- * `help` — Opens the help window.
- * `list` — Lists all contacts.
- * `add n/John Doe p/98765432 e/johnd@example.com a/John Street ro/student` — Adds a student.
- * `delete 3` — Deletes the 3rd contact.
- * `exit` — Exits the app.
+
+- `help` — Opens the help window.
+- `list` — Lists all contacts.
+- `add n/John Doe p/98765432 e/johnd@example.com a/John Street ro/student` — Adds a student.
+- `delete 3` — Deletes the 3rd contact.
+- `exit` — Exits the app.
 
 6. **Refer to [Features](#features)** for details on each command.
 
@@ -67,15 +68,15 @@ Follow these steps to set up TutBook on your computer.
 
 ## User Interface Overview
 
- ![UI Overview](images/AnnotatedUi.png)
+![UI Overview](images/AnnotatedUi.png)
 
 This is the main interface of TutBook. It consists of:
 
-* People List
-* Class/Session List
-* This section switches intelligently with your command
-* Command box
-* This is where you enter commands to interact with TutBook
+- People List
+- Class/Session List
+- This section switches intelligently with your command
+- Command box
+- This is where you enter commands to interact with TutBook
 
 ---
 
@@ -87,11 +88,11 @@ This is the main interface of TutBook. It consists of:
 
 **Command syntax:**
 
-* `UPPER_CASE` → parameters (e.g. `add n/NAME`)
-* `[ ]` → optional items
-* `…` → can appear multiple times
-* Parameters can be in any order
-* Extra parameters for non-parameter commands are ignored
+- `UPPER_CASE` → parameters (e.g. `add n/NAME`)
+- `[ ]` → optional items
+- `…` → can appear multiple times
+- Parameters can be in any order
+- Extra parameters for non-parameter commands are ignored
 
 </div>
 
@@ -118,7 +119,7 @@ add n/NAME p/PHONE e/EMAIL a/ADDRESS ro/PERSON_TYPE [t/TAG]…
 
 **Parameters:**
 
-* `PERSON_TYPE`: `student`, `tutor`, or `parent`
+- `PERSON_TYPE`: `student`, `tutor`, or `parent`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tags, including none.
@@ -126,8 +127,8 @@ A person can have any number of tags, including none.
 
 **Examples:**
 
-* `add n/Ms Lim p/91234567 e/mslim@example.com a/Clementi Ave 2 ro/tutor t/experienced`
-* `add n/Yi Hao p/98765432 e/johnd@example.com a/31 John Street ro/student`
+- `add n/Ms Lim p/91234567 e/mslim@example.com a/Clementi Ave 2 ro/tutor t/experienced`
+- `add n/Yi Hao p/98765432 e/johnd@example.com a/31 John Street ro/student`
 
 ![add command](images/addCommand.png)
 
@@ -161,7 +162,7 @@ filter ro/PERSON_TYPE
 :exclamation: **Caution:**
 Commands like `edit` and `delete` operate on the index of the **currently
 displayed list**. After using `filter`, the indexes will change.
-For example, `delete 1` will delete the first person in the *filtered list*, not
+For example, `delete 1` will delete the first person in the _filtered list_, not
 the first person in the main address book.
 
 </div>
@@ -182,19 +183,19 @@ edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…
 
 **Examples:**
 
-* `edit 1 p/87438807 e/alex@gmail.com`
-* `edit 2 n/Betsy Crower t/`
+- `edit 1 p/87438807 e/alex@gmail.com`
+- `edit 2 n/Betsy Crower t/`
 
 **Notes:**
 
-* This command edits the person at the specified `INDEX`. The index refers to
-the index number shown in the displayed person list. The index **must be a
-positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* When editing tags, the existing tags of the person will be removed i.e adding
-of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-specifying any tags after it.
+- This command edits the person at the specified `INDEX`. The index refers to
+  the index number shown in the displayed person list. The index **must be a
+  positive integer** 1, 2, 3, …​
+- At least one of the optional fields must be provided.
+- When editing tags, the existing tags of the person will be removed i.e adding
+  of tags is not cumulative.
+- You can remove all the person’s tags by typing `t/` without
+  specifying any tags after it.
 
 ![edit command](images/editCommand.png)
 
@@ -206,9 +207,9 @@ Search for persons by name.
 
 **Format:** `find KEYWORD [MORE_KEYWORDS]`
 
-* Case-insensitive
-* Matches full words
-* Returns results containing any keyword
+- Case-insensitive
+- Matches full words
+- Returns results containing any keyword
 
 **Example:**
 `find David Damian` returns `David Li` and `Damian`.
@@ -241,9 +242,9 @@ Connects a parent to a student.
 link parent/PARENT_NAME child/CHILD_NAME
 ```
 
-* Both parent and child must already exist in the address book
-* The parent must have the role `parent` and the child must have the role `student`
-* Names are case-sensitive
+- Both parent and child must already exist in the address book
+- The parent must have the role `parent` and the child must have the role `student`
+- Names are case-sensitive
 
 **Example:**
 `link parent/Bernice Yu child/Damian`
@@ -256,11 +257,11 @@ Lists children of a specific parent.
 
 Format: `childrenof n/PARENT_NAME`
 
-* Displays all students linked to the specified parent
+- Displays all students linked to the specified parent
 
 Example:
 
-* `childrenof n/Bernice Yu` lists all children of Bernice Yu
+- `childrenof n/Bernice Yu` lists all children of Bernice Yu
 
 ![children command](images/childrenCommand.png)
 
@@ -276,13 +277,13 @@ Create a new tuition class and add to the address book.
 addclass c/CLASS_NAME [tu/TUTOR_NAME]
 ```
 
-* `CLASS_NAME` can contain spaces
-* `TUTOR_NAME` is optional; if provided, the tutor must already exist in the address book
+- `CLASS_NAME` can contain spaces
+- `TUTOR_NAME` is optional; if provided, the tutor must already exist in the address book
 
 **Examples:**
 
-* `addclass c/Sec2-Math-A`
-* `addclass c/CS2101 tu/Alex Yeoh`
+- `addclass c/Sec2-Math-A`
+- `addclass c/CS2101 tu/Alex Yeoh`
 
 ![add class command](images/addClassCommand.png)
 
@@ -321,7 +322,7 @@ Format: `deleteclass c/CLASS_NAME`
 
 **Example:**
 
-* `deleteclass c/Sec3-Math-A` deletes the class Sec3-Math-A
+- `deleteclass c/Sec3-Math-A` deletes the class Sec3-Math-A
 
 ---
 
@@ -334,14 +335,14 @@ Add a tutor or student to an existing class.
 join n/NAME c/CLASS
 ```
 
-* The person and class must already exist in the address book
-* Students will be enrolled in the class
-* Tutors will be assigned to teach the class
+- The person and class must already exist in the address book
+- Students will be enrolled in the class
+- Tutors will be assigned to teach the class
 
 **Examples:**
 
-* `join n/Damian c/Sec4 Math`
-* `join n/Ms Lim c/Sec2-Math-A`
+- `join n/Damian c/Sec4 Math`
+- `join n/Ms Lim c/Sec2-Math-A`
 
 ![join command](images/joinCommand.png)
 
@@ -356,13 +357,13 @@ Remove a student or tutor from a class.
 unjoin n/NAME c/CLASS
 ```
 
-* The person must be enrolled or assigned to the class
-* Works for both students and tutors
+- The person must be enrolled or assigned to the class
+- Works for both students and tutors
 
 **Examples:**
 
-* `unjoin n/Damian c/Sec4 Math`
-* `unjoin n/Ms Lim c/Sec2-Math-A`
+- `unjoin n/Damian c/Sec4 Math`
+- `unjoin n/Ms Lim c/Sec2-Math-A`
 
 ---
 
@@ -375,10 +376,10 @@ Record a session for a class.
 addsession c/CLASS_NAME s/SESSION_NAME dt/DATETIME [l/LOCATION]
 ```
 
-* The class must already exist
-* `DATETIME` format: `YYYY-MM-DD HH:mm` (e.g., 2024-03-15 14:30)
-* Location is optional
-* Session names must be unique within a class
+- The class must already exist
+- `DATETIME` format: `YYYY-MM-DD HH:mm` (e.g., 2024-03-15 14:30)
+- Location is optional
+- Session names must be unique within a class
 
 **Example:**
 `addsession c/Math101 s/Week 3 Tutorial dt/2024-03-15 14:30 l/COM1-B103`
@@ -394,7 +395,7 @@ Remove a session and its attendance records.
 deletesession c/CLASS_NAME s/SESSION_NAME
 ```
 
-* The session must exist in the specified class
+- The session must exist in the specified class
 
 **Example:**
 `deletesession c/Math101 s/Week 3 Tutorial`
@@ -410,7 +411,7 @@ Check details and attendance for a class session.
 viewsession c/CLASS_NAME s/SESSION_NAME
 ```
 
-* Displays date, time, location and remarks for the session
+- Displays date, time, location and remarks for the session
 
 `viewsession c/Physics s/Lab Session 1`
 
@@ -425,7 +426,7 @@ View all sessions for a class in chronological order.
 listsessions c/CLASS_NAME
 ```
 
-* Displays date, time, and location for each session
+- Displays date, time, and location for each session
 
 **Example:**
 `listsessions c/Math101`
@@ -452,13 +453,13 @@ Record attendance for a class session.
 **Format:**
 
 ```
-attend n/NAME c/CLASS_NAME s/SESSION_NAME st/STATUS
+attend n/NAME c/CLASS_NAME s/SESSION_NAME status/STATUS
 ```
 
-* The student must be enrolled in the specified class
-* The session must exist in the class
-* `STATUS` must be either `PRESENT` or `ABSENT`
-* Attendance records can be viewed with [`viewsession`](#viewsession)
+- The student must be enrolled in the specified class
+- The session must exist in the class
+- `STATUS` must be either `PRESENT` or `ABSENT`
+- Attendance records can be viewed with [`viewsession`](#viewsession)
 
 **Example:**
 `attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT`
@@ -495,42 +496,42 @@ Furthermore, certain edits can cause the TutBook to behave in unexpected ways (e
 
 ## Command summary
 
-Action | Format, Examples
---------|------------------
-**Add** | `add n/NAME p/PHONE e/EMAIL a/ADDRESS ro/PERSON_TYPE [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 ro/student`
-**Add Class** | `addclass c/CLASS_NAME [tu/TUTOR_NAME]` <br> e.g., `addclass c/Sec2-Math-A tu/Ms Lim`
-**Add Session** | `addsession c/CLASS_NAME s/SESSION_NAME dt/DATETIME [l/LOCATION]` <br> e.g., `addsession c/Math101 s/Week 3 Tutorial dt/2024-03-15 14:30 l/COM1-B103`
-**Attend** | `attend n/NAME c/CLASS_NAME s/SESSION_NAME st/STATUS` <br> e.g., `attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT`
-**Children** | `childrenof n/PARENT_NAME` <br> e.g., `childrenof n/John Doe`
-**Clear** | `clear`
-**Delete** | `delete INDEX` <br> e.g., `delete 3`
-**Delete Class** | `deleteclass c/CLASS_NAME` <br> e.g., `deleteclass c/Sec3-Math-A`
-**Delete Session** | `deletesession c/CLASS_NAME s/SESSION_NAME` <br> e.g., `deletesession c/Math101 s/Week 3 Tutorial`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [ro/PERSON_TYPE [t/TAGS]​` <br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
-**Edit Class** | `editclass o/OLD_CLASS_NAME c/NEW_CLASS_NAME` <br> e.g., `editclass o/Sec2-Math-A c/Sec3-Math-A`
-**Exit** | `exit`
-**Filter** | `filter ro/STUDENT\|TUTOR\|PARENT` <br> e.g., `filter ro/student`
-**Find** | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake`
-**Help** | `help`
-**Join** | `join n/NAME c/CLASS` <br> e.g., `join n/John Doe c/Sec2-Math-A`
-**Link** | `link parent/PARENT_NAME child/CHILD_NAME` <br> e.g., `link parent/John Doe child/Jane Doe`
-**List** | `list`
-**List Class** | `listclass`
-**List Parents** | `listparents [n/CHILD_NAME]` <br> e.g., `listparents n/Damian`
-**List Session** | `listsession c/CLASS_NAME` <br> e.g., `listsession c/Math101`
-**Remove From** | `unjoin n/NAME c/CLASS` <br> e.g., `unjoin n/Damian c/Sec4 Math`
-**View Session** | `viewsession c/CLASS_NAME s/SESSION_NAME` <br> e.g., `viewsession c/Math101 s/Week 3 Tutorial`
+| Action             | Format, Examples                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Add**            | `add n/NAME p/PHONE e/EMAIL a/ADDRESS ro/PERSON_TYPE [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 ro/student` |
+| **Add Class**      | `addclass c/CLASS_NAME [tu/TUTOR_NAME]` <br> e.g., `addclass c/Sec2-Math-A tu/Ms Lim`                                                                               |
+| **Add Session**    | `addsession c/CLASS_NAME s/SESSION_NAME dt/DATETIME [l/LOCATION]` <br> e.g., `addsession c/Math101 s/Week 3 Tutorial dt/2024-03-15 14:30 l/COM1-B103`               |
+| **Attend**         | `attend n/NAME c/CLASS_NAME s/SESSION_NAME status/STATUS` <br> e.g., `attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT`                                     |
+| **Children**       | `childrenof n/PARENT_NAME` <br> e.g., `childrenof n/John Doe`                                                                                                       |
+| **Clear**          | `clear`                                                                                                                                                             |
+| **Delete**         | `delete INDEX` <br> e.g., `delete 3`                                                                                                                                |
+| **Delete Class**   | `deleteclass c/CLASS_NAME` <br> e.g., `deleteclass c/Sec3-Math-A`                                                                                                   |
+| **Delete Session** | `deletesession c/CLASS_NAME s/SESSION_NAME` <br> e.g., `deletesession c/Math101 s/Week 3 Tutorial`                                                                  |
+| **Edit**           | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [ro/PERSON_TYPE [t/TAGS]​` <br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                              |
+| **Edit Class**     | `editclass o/OLD_CLASS_NAME c/NEW_CLASS_NAME` <br> e.g., `editclass o/Sec2-Math-A c/Sec3-Math-A`                                                                    |
+| **Exit**           | `exit`                                                                                                                                                              |
+| **Filter**         | `filter ro/STUDENT\|TUTOR\|PARENT` <br> e.g., `filter ro/student`                                                                                                   |
+| **Find**           | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake`                                                                                                         |
+| **Help**           | `help`                                                                                                                                                              |
+| **Join**           | `join n/NAME c/CLASS` <br> e.g., `join n/John Doe c/Sec2-Math-A`                                                                                                    |
+| **Link**           | `link parent/PARENT_NAME child/CHILD_NAME` <br> e.g., `link parent/John Doe child/Jane Doe`                                                                         |
+| **List**           | `list`                                                                                                                                                              |
+| **List Class**     | `listclass`                                                                                                                                                         |
+| **List Parents**   | `listparents [n/CHILD_NAME]` <br> e.g., `listparents n/Damian`                                                                                                      |
+| **List Session**   | `listsession c/CLASS_NAME` <br> e.g., `listsession c/Math101`                                                                                                       |
+| **Remove From**    | `unjoin n/NAME c/CLASS` <br> e.g., `unjoin n/Damian c/Sec4 Math`                                                                                                    |
+| **View Session**   | `viewsession c/CLASS_NAME s/SESSION_NAME` <br> e.g., `viewsession c/Math101 s/Week 3 Tutorial`                                                                      |
 
 ---
 
 ## Troubleshooting
 
-| Problem | Possible Cause | Solution |
-|----------|----------------|-----------|
-| `link` command fails | Wrong roles | Check spelling; ensure parent/child roles are correct |
-| GUI opens off-screen | Moved app between displays | Delete `preferences.json` before restarting |
-| `help` window not appearing | Window minimized | Restore manually from taskbar |
-| App fails to start | Java not installed | Install Java 17 or above |
+| Problem                     | Possible Cause             | Solution                                              |
+| --------------------------- | -------------------------- | ----------------------------------------------------- |
+| `link` command fails        | Wrong roles                | Check spelling; ensure parent/child roles are correct |
+| GUI opens off-screen        | Moved app between displays | Delete `preferences.json` before restarting           |
+| `help` window not appearing | Window minimized           | Restore manually from taskbar                         |
+| App fails to start          | Java not installed         | Install Java 17 or above                              |
 
 ---
 
@@ -547,4 +548,4 @@ Action | Format, Examples
 
 ---
 
-*TutBook v1.0 – Empowering tuition centre management through simplicity and speed.*
+_TutBook v1.0 – Empowering tuition centre management through simplicity and speed._
