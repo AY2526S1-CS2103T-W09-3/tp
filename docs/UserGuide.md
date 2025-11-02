@@ -462,7 +462,7 @@ attend n/NAME c/CLASS_NAME s/SESSION_NAME status/STATUS
 - Attendance records can be viewed with [`viewsession`](#viewsession)
 
 **Example:**
-`attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT`
+`attend n/John Doe c/Math101 s/Week 3 Tutorial status/PRESENT`
 
 ---
 
@@ -501,7 +501,7 @@ Furthermore, certain edits can cause the TutBook to behave in unexpected ways (e
 | **Add**            | `add n/NAME p/PHONE e/EMAIL a/ADDRESS ro/PERSON_TYPE [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 ro/student` |
 | **Add Class**      | `addclass c/CLASS_NAME [tu/TUTOR_NAME]` <br> e.g., `addclass c/Sec2-Math-A tu/Ms Lim`                                                                               |
 | **Add Session**    | `addsession c/CLASS_NAME s/SESSION_NAME dt/DATETIME [l/LOCATION]` <br> e.g., `addsession c/Math101 s/Week 3 Tutorial dt/2024-03-15 14:30 l/COM1-B103`               |
-| **Attend**         | `attend n/NAME c/CLASS_NAME s/SESSION_NAME status/STATUS` <br> e.g., `attend n/John Doe c/Math101 s/Week 3 Tutorial st/PRESENT`                                     |
+| **Attend**         | `attend n/NAME c/CLASS_NAME s/SESSION_NAME status/STATUS` <br> e.g., `attend n/John Doe c/Math101 s/Week 3 Tutorial status/PRESENT`                                 |
 | **Children**       | `childrenof n/PARENT_NAME` <br> e.g., `childrenof n/John Doe`                                                                                                       |
 | **Clear**          | `clear`                                                                                                                                                             |
 | **Delete**         | `delete INDEX` <br> e.g., `delete 3`                                                                                                                                |
