@@ -140,8 +140,7 @@ public abstract class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName())
-                && otherPerson.getPersonType().equals(getPersonType());
+                && otherPerson.getName().equals(getName());
     }
     // Abstract method for deletion
     public abstract void delete();
