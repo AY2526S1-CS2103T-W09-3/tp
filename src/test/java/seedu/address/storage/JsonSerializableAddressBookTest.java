@@ -14,7 +14,6 @@ import seedu.address.commons.util.JsonUtil;
 import seedu.address.model.AddressBook;
 import seedu.address.model.classroom.ClassSession;
 import seedu.address.model.classroom.TuitionClass;
-import seedu.address.model.person.Parent;
 import seedu.address.model.person.Student;
 import seedu.address.testutil.TypicalPersons;
 
