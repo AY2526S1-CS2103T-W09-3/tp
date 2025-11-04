@@ -26,9 +26,12 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Parent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonType;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Student;
+import seedu.address.model.person.Tutor;
 import seedu.address.model.tag.Tag;
 
 
@@ -53,23 +56,36 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_TYPE_CHANGE_DATA_LOSS = "Warning: Changing from %s to %s will delete:\n%s"
+            + "\nTo confirm this change, add --force to your command.\n"
+            + "Example: edit 1 ro/tutor --force";
 
     private static final Logger LOGGER = LogsCenter.getLogger(EditCommand.class);
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
+    private final boolean isForced;
 
     /**
      * @param index of the person in the filtered person list to edit
      * @param editPersonDescriptor details to edit the person with
      */
     public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
+        this(index, editPersonDescriptor, false);
+    }
+
+    /**
+     * @param index of the person in the filtered person list to edit
+     * @param editPersonDescriptor details to edit the person with
+     * @param isForced whether to force the edit even if it causes data loss
+     */
+    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor, boolean isForced) {
         requireNonNull(index);
         requireNonNull(editPersonDescriptor);
 
         this.index = index;
-        this.editPersonDescriptor = new EditPersonDescriptor(
-                        editPersonDescriptor);
+        this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.isForced = isForced;
     }
 
     @Override
@@ -95,12 +111,58 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
+        // Check for data loss when changing person type
+        if (editPersonDescriptor.getPersonType().isPresent()
+                && !personToEdit.getPersonType().equals(editPersonDescriptor.getPersonType().get())) {
+            String dataLossWarning = checkDataLoss(personToEdit, editPersonDescriptor.getPersonType().get());
+            if (!dataLossWarning.isEmpty() && !isForced) {
+                throw new CommandException(String.format(MESSAGE_TYPE_CHANGE_DATA_LOSS,
+                        personToEdit.getPersonType(),
+                        editPersonDescriptor.getPersonType().get(),
+                        dataLossWarning));
+            }
+        }
+
         model.setPerson(personToEdit, editedPerson);
 
         LOGGER.info("Successfully edited person: " + personToEdit.getName() + " -> " + editedPerson.getName());
 
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS,
                         Messages.format(editedPerson)));
+    }
+
+    private String checkDataLoss(Person person, PersonType newType) {
+        StringBuilder dataLoss = new StringBuilder();
+
+        if (person instanceof Student && !newType.equals(PersonType.STUDENT)) {
+            Student student = (Student) person;
+            if (!student.getParents().isEmpty()) {
+                dataLoss.append("• ").append(student.getParents().size())
+                        .append(" parent relationship(s)\n");
+            }
+            if (!student.getTuitionClasses().isEmpty()) {
+                dataLoss.append("• ").append(student.getTuitionClasses().size())
+                        .append(" class enrollment(s)\n");
+            }
+        }
+
+        if (person instanceof Parent && !newType.equals(PersonType.PARENT)) {
+            Parent parent = (Parent) person;
+            if (!parent.getChildren().isEmpty()) {
+                dataLoss.append("• ").append(parent.getChildren().size())
+                        .append(" child relationship(s)\n");
+            }
+        }
+
+        if (person instanceof Tutor && !newType.equals(PersonType.TUTOR)) {
+            Tutor tutor = (Tutor) person;
+            if (!tutor.getTuitionClasses().isEmpty()) {
+                dataLoss.append("• ").append(tutor.getTuitionClasses().size())
+                        .append(" class assignment(s)\n");
+            }
+        }
+
+        return dataLoss.toString();
     }
 
     /**
